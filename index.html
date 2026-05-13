@@ -1,58 +1,226 @@
-<!DOCTYPE HTML>
-<!--
-	Horizons by TEMPLATED
-	templated.co @templatedco
-	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
--->
-<html>
-	<head>
-		<style>html{visibility: hidden;opacity:0;}</style>
-		<title>Amsterdam Emotional Memory Lab</title>
-		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	    <meta name="description" content="Amsterdam Emotional Memory Lab">
-	    <meta name="keywords" content="Merel Kindt, Renee Visser, Vanessa van Ast, emotional memory, psychology, trauma, post-traumatic stress, phobia, Amsterdam, Universiteit van Amsterdam, University of Amsterdam, research, fear">
-	    <meta name="author" content="Renee Visser">
-	    <meta name="robots" content="index, follow">
-		<!--[if lte IE 8]><script src="css/ie/html5shiv.js"></script><![endif]-->
-		<noscript>
-			<link rel="stylesheet" href="css/skel.css" />
-			<link rel="stylesheet" href="css/style.css" />
-		</noscript>
-		<script src="js/jquery.min.js"></script>
-		<script src="js/jquery.dropotron.min.js"></script>
-		<script src="js/skel.min.js"></script>
-		<script src="js/skel-layers.min.js"></script>
-		<script src="js/init.js"></script>
-		<!--[if lte IE 8]><link rel="stylesheet" href="css/ie/v8.css" /><![endif]-->
-	</head>
-	<body class="homepage">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amsterdam Emotional Memory Lab</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
 
-		<!-- Header -->
-		<div id="header">
-			<div class="container">
+  <!-- ======================================================
+       NAV
+       ====================================================== -->
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav__inner">
+      <a href="index.html" class="nav__brand">Amsterdam Emotional Memory Lab</a>
 
-				<!-- Logo -->
-				<h2><a href="#" id="logo">Amsterdam Emotional Memory Lab</a></h2>
+      <ul class="nav__links" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="people.html">People</a></li>
+        <li><a href="publications.html">Publications</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
 
-				<!-- Nav -->
-				<nav id="nav">
-					<ul>
-						<li><a href="index.html">About</a></li>
-						<li><a href="people.html">People</a></li>
-						<li><a href="publications.html">Publications</a></li>
-						<li><a href="photos.html">Photos</a></li>
-						<li><a href="contact.html">Contact</a></li>
-					</ul>
-				</nav>
-			</div>
-		</div>
+      <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
 
-		<!-- Featured -->
-		<div id="main" class="wrapper style1">
-				<div class="container">
-					<h2>About us</h2>
-					<p>The Amsterdam Emotional Memory Lab is based at the Clinical Psychology Department at the University of Amsterdam and led by Professor Merel Kindt. Our research focuses on understanding neurobiological and psychological processes underlying the development and plasticity of emotional memory. Aside from addressing fundamental questions about memory malleability, we investigate mechanisms of change in the treatment of mental disorders and contribute to treatment innovation. Our lab harnesses a variety of paradigms and measures including behavioural experimentation, pharmacological manipulations, physiological measures (fear potentiated startle, skin conductance, pupillometry, facial electromyography), and functional magnetic resonance imaging (fMRI). Furthermore, we have structural collaborations with labs conducting research in non-human animals, as well as with science practitioners working with patients suffering from emotional disorders. This allows us to bring fundamental insights from basic neuroscience to the field of mental health, while using clinical observations to test theories about memory plasticity. Our research is funded by the European Research Council and the Dutch Research Council. </p>
-			</div>
-		</div>
-	</body>
+    <div class="nav__dropdown" id="mobile-nav" role="menu">
+      <a href="index.html" role="menuitem">Home</a>
+      <a href="people.html" role="menuitem">People</a>
+      <a href="publications.html" role="menuitem">Publications</a>
+      <a href="contact.html" role="menuitem">Contact</a>
+    </div>
+  </nav>
+
+  <!-- ======================================================
+       BANNER
+       ====================================================== -->
+  <header class="banner" role="banner">
+    <div class="banner__bg" aria-hidden="true"></div>
+    <div class="banner__overlay" aria-hidden="true"></div>
+    <div class="banner__content">
+      <h1 class="banner__title">Amsterdam Emotional Memory Lab</h1>
+      <p class="banner__sub">University of Amsterdam &mdash; Clinical Psychology</p>
+    </div>
+  </header>
+
+  <!-- ======================================================
+       HERO — Our Mission
+       ====================================================== -->
+  <section class="hero" id="mission">
+    <div class="hero__inner">
+      <span class="hero__label">About the lab</span>
+      <h2 class="hero__heading">Our Mission</h2>
+      <p class="hero__text">
+        Our mission is to understand how emotional memories (trans)form. Specifically, we investigate
+        how emotional experiences are stored, how they evolve over time both spontaneously and as the
+        result of therapeutic interventions, how they manifest and how they drive behaviour.
+      </p>
+    </div>
+  </section>
+
+  <!-- ======================================================
+       RESEARCH QUESTIONS CARDS
+       ====================================================== -->
+  <section class="research section" id="research">
+    <div class="container">
+      <div class="research__header">
+        <span class="research__label">What we study</span>
+        <h2 class="research__title">Key Research Questions</h2>
+      </div>
+
+      <div class="cards-grid">
+
+        <!-- Card 1 -->
+        <article class="card" role="button" tabindex="0" aria-expanded="false"
+          onkeydown="if(event.key==='Enter'||event.key===' '){this.click();event.preventDefault()}">
+          <div class="card__icon" aria-hidden="true">
+            <!-- magnifying glass / inquiry icon -->
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="13" cy="13" r="8" stroke="currentColor" stroke-width="2"/>
+              <line x1="19.5" y1="19.5" x2="28" y2="28" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <line x1="9" y1="13" x2="17" y2="13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <line x1="13" y1="9" x2="13" y2="17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3 class="card__title">What is emotional memory and how do we measure it?</h3>
+          <div class="card__body">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum vehicula felis at
+            malesuada consequat. Praesent sodales tortor vel neque posuere, vel facilisis odio
+            faucibus. Nulla facilisi. Sed convallis lorem ac purus auctor, at tincidunt eros malesuada.
+          </div>
+          <div class="card__footer">
+            <a href="publications.html" class="card__link" tabindex="-1">View key papers</a>
+            <div class="card__toggle" aria-hidden="true"></div>
+          </div>
+        </article>
+
+        <!-- Card 2 -->
+        <article class="card" role="button" tabindex="0" aria-expanded="false"
+          onkeydown="if(event.key==='Enter'||event.key===' '){this.click();event.preventDefault()}">
+          <div class="card__icon" aria-hidden="true">
+            <!-- brain / manifestation icon -->
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="2" y="8" width="28" height="16" rx="8" stroke="currentColor" stroke-width="2"/>
+              <circle cx="10" cy="16" r="3" stroke="currentColor" stroke-width="2"/>
+              <circle cx="22" cy="16" r="3" stroke="currentColor" stroke-width="2"/>
+              <line x1="13" y1="16" x2="19" y2="16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3 class="card__title">How does emotional memory manifest?</h3>
+          <div class="card__body">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tincidunt massa et libero
+            pharetra vehicula. Donec efficitur ligula sit amet mauris tincidunt, sed congue arcu
+            eleifend. Integer vel enim et enim fringilla sodales ut nec sapien.
+          </div>
+          <div class="card__footer">
+            <a href="publications.html" class="card__link" tabindex="-1">View key papers</a>
+            <div class="card__toggle" aria-hidden="true"></div>
+          </div>
+        </article>
+
+        <!-- Card 3 -->
+        <article class="card" role="button" tabindex="0" aria-expanded="false"
+          onkeydown="if(event.key==='Enter'||event.key===' '){this.click();event.preventDefault()}">
+          <div class="card__icon" aria-hidden="true">
+            <!-- change / transformation icon -->
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 16 C4 9.4 9.4 4 16 4 C19.3 4 22.3 5.3 24.5 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M28 16 C28 22.6 22.6 28 16 28 C12.7 28 9.7 26.7 7.5 24.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <polyline points="20,4 24.5,7.5 21,12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <polyline points="12,28 7.5,24.5 11,20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3 class="card__title">How do emotional memories change?</h3>
+          <div class="card__body">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus accumsan risus vel
+            ligula commodo, vel aliquam orci hendrerit. Aliquam erat volutpat. Maecenas euismod
+            turpis vel augue maximus, in vestibulum lorem auctor.
+          </div>
+          <div class="card__footer">
+            <a href="publications.html" class="card__link" tabindex="-1">View key papers</a>
+            <div class="card__toggle" aria-hidden="true"></div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================
+       LINKEDIN FEED PLACEHOLDER
+       ====================================================== -->
+  <section class="linkedin section" id="news">
+    <div class="container">
+      <div class="linkedin__header">
+        <span class="linkedin__label">Stay up to date</span>
+        <h2 class="linkedin__title">Latest from the Lab</h2>
+      </div>
+
+      <div class="linkedin__feed">
+        <!-- LINKEDIN PAGE PLUGIN: paste the embed code from
+             https://www.linkedin.com/developers/tools/embed
+             directly below this comment. Remove the placeholder
+             paragraph once the embed is in place. -->
+        <svg class="linkedin__icon" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect width="40" height="40" rx="6" fill="currentColor"/>
+          <rect x="8" y="15" width="7" height="18" fill="white"/>
+          <circle cx="11.5" cy="10.5" r="3.5" fill="white"/>
+          <path d="M18 15h7v3s2-3 6-3c5 0 7 3 7 8v10h-7V24c0-2-1-3-3-3s-3 1-3 3v9h-7V15z" fill="white"/>
+        </svg>
+        <p>
+          LinkedIn feed will be embedded here &mdash;
+          <a href="#">link to paste embed code</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================
+       FOOTER
+       ====================================================== -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer__inner">
+        <div class="footer__left">
+          <p>&copy; <span id="year"></span> Amsterdam Emotional Memory Lab</p>
+          <p>Department of Clinical Psychology &mdash; University of Amsterdam</p>
+          <p>Nieuwe Achtergracht 129-B, 1018 WS Amsterdam, The Netherlands</p>
+        </div>
+        <div class="footer__right">
+          <div class="footer__social">
+            <!-- LinkedIn -->
+            <a href="https://www.linkedin.com/company/amsterdam-emotional-memory-lab/"
+               target="_blank" rel="noopener" aria-label="LinkedIn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <rect width="24" height="24" rx="3" fill="currentColor"/>
+                <rect x="3" y="8" width="4" height="13" fill="var(--navy)"/>
+                <circle cx="5" cy="5" r="2" fill="var(--navy)"/>
+                <path d="M10 8h4v2s1-2 4-2c3 0 4 2 4 5v8h-4v-7c0-1-.5-2-2-2s-2 1-2 2v7h-4V8z" fill="var(--navy)"/>
+              </svg>
+            </a>
+          </div>
+          <nav class="footer__links" aria-label="Footer navigation">
+            <a href="contact.html">Contact</a>
+            <a href="people.html">People</a>
+            <a href="publications.html">Publications</a>
+          </nav>
+        </div>
+      </div>
+      <p class="footer__copy">
+        Amsterdam Emotional Memory Lab &mdash; University of Amsterdam
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+  <script src="js/main.js"></script>
+</body>
 </html>
