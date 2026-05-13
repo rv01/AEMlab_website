@@ -1,36 +1,24 @@
-/* AEM Lab — Team constellation + tag filter */
+/* AEM Lab — Team constellation
+   Physics: alpha-decay spring model (D3-force / Obsidian-inspired)
+   Rendering: GPU-accelerated CSS transform (no layout reflow) */
 (function () {
   'use strict';
 
-  /* ---- Tag taxonomy -------------------------------------- */
-  var RESEARCH_TAGS = [
-    'Autobiographical memory', 'Intrusive memory', 'Imagery rescripting',
-    'Contextual memory', 'Narrative formation', 'Theory development',
-    'Fear memory', 'Memory reconsolidation', 'Clinical populations',
-    'Conditioning', 'fMRI', 'Psychophysiology', 'Computational modeling',
-    'Network approach'
-  ];
+  /* ---- Mutable layout state (updated on resize) ----------- */
+  var nodeSize    = 170;   /* diameter in px */
+  var NODE_R      = 85;    /* radius */
+  var MIN_GAP     = 230;   /* min centre-to-centre distance (incl. label height) */
+  var MARGIN      = 100;   /* min distance from canvas edge to node centre */
+  var MARGIN_BOT  = 145;   /* larger bottom margin — keeps label above footer */
 
-  var POSITION_TAGS = ['Professor', 'Associate Professor', 'Postdoc', 'PhD student'];
+  /* ---- Physics constants ---------------------------------- */
+  var SPRING_K     = 0.004;   /* spring constant — slow graceful entry (~2.5 s) */
+  var VEL_DECAY    = 0.13;    /* per frame: velocity *= (1 - VEL_DECAY) — fluid feel */
+  var ALPHA_FACTOR = 0.980;   /* per frame decay */
+  var ALPHA_MIN    = 0.055;   /* floor — just enough for a barely-perceptible float */
+  var REPULSION_K  = 2.8;     /* repulsion multiplier */
 
-  var tagKeywords = {
-    'Autobiographical memory': ['autobiographical memory', 'autobiographical', 'episodic memory'],
-    'Intrusive memory':        ['intrusive', 'intrusion'],
-    'Imagery rescripting':     ['imagery rescripting'],
-    'Contextual memory':       ['contextual', 'contextualization', 'context'],
-    'Narrative formation':     ['narrative'],
-    'Theory development':      ['latent construct', 'latent-factor', 'theoretical construct'],
-    'Fear memory':             ['fear memory', 'fear and anxiety', 'fear conditioning', 'fear-conditioning', 'phobic', 'anxiety disorder'],
-    'Memory reconsolidation':  ['reconsolidation'],
-    'Clinical populations':    ['clinical', 'ptsd', 'post-traumatic', 'psychiatric disorder', 'psychopathology', 'mental health', 'affective disorder'],
-    'Conditioning':            ['conditioning'],
-    'fMRI':                    ['fmri', 'functional magnetic resonance', 'neuroimaging'],
-    'Psychophysiology':        ['psychophysiology', 'heart rate', 'startle', 'physiological', 'cortisol', 'neuroendocrinological'],
-    'Computational modeling':  ['computational', 'mediation analysis', 'statistical technique'],
-    'Network approach':        ['network model', 'network theory', 'network approach']
-  };
-
-  /* Lower = more central/top */
+  /* ---- Seniority ----------------------------------------- */
   var SENIORITY = {
     'Full Professor':      1,
     'Associate Professor': 2,
@@ -39,87 +27,309 @@
     'PhD Candidate':       4
   };
 
-  /* Zones as [xMin, xMax, yMin, yMax] fractions of canvas */
-  var ZONES = {
-    1: [0.30, 0.70, 0.04, 0.22],
-    2: [0.12, 0.88, 0.16, 0.44],
-    3: [0.08, 0.92, 0.34, 0.62],
-    4: [0.04, 0.96, 0.50, 0.96]
-  };
-
-  /* ---- Tag helpers --------------------------------------- */
-  function researchTagsFor(person) {
-    var text = (person.researchInterests || '').toLowerCase();
-    return RESEARCH_TAGS.filter(function (tag) {
-      return (tagKeywords[tag] || []).some(function (kw) {
-        return text.indexOf(kw) !== -1;
-      });
-    });
-  }
+  var POSITION_TAGS = ['Professor', 'Associate Professor', 'Postdoc', 'PhD student'];
+  var RESEARCH_TAGS = [
+    'Fear memory', 'Memory reconsolidation', 'Autobiographical memory',
+    'Intrusive memory', 'Contextual memory', 'Narrative formation',
+    'Network approach', 'Theory development', 'Clinical populations',
+    'Conditioning', 'fMRI', 'Psychophysiology'
+  ];
 
   function positionTagFor(role) {
-    if (role === 'Full Professor')      return 'Professor';
-    if (role === 'Associate Professor') return 'Associate Professor';
-    if (role === 'Assistant Professor') return 'Assistant Professor';
-    if (role.indexOf('Postdoc') !== -1) return 'Postdoc';
-    if (role.indexOf('PhD') !== -1)     return 'PhD student';
+    if (role === 'Full Professor')       return 'Professor';
+    if (role === 'Associate Professor')  return 'Associate Professor';
+    if (role === 'Assistant Professor')  return 'Assistant Professor';
+    if (role.indexOf('Postdoc') !== -1)  return 'Postdoc';
+    if (role.indexOf('PhD')    !== -1)   return 'PhD student';
     return null;
   }
 
-  /* ---- Placement ----------------------------------------- */
-  var NODE_D  = 150;
-  var MIN_GAP = NODE_D + 18;
-  var MARGIN  = NODE_D / 2 + 10;
-
-  function placeNodes(canvas, members) {
-    var W = canvas.offsetWidth;
-    var H = canvas.offsetHeight;
-
-    if (W < 50 || H < 50) {
-      setTimeout(function () { placeNodes(canvas, members); }, 80);
-      return;
-    }
-
-    var sorted = members.slice().sort(function (a, b) {
-      return (SENIORITY[a.role] || 4) - (SENIORITY[b.role] || 4);
-    });
-
-    var placed = [];
-
-    sorted.forEach(function (person, idx) {
-      var level = SENIORITY[person.role] || 4;
-      var zone  = ZONES[level];
-      var px, py, tries = 0;
-
-      do {
-        px = (zone[0] + Math.random() * (zone[1] - zone[0])) * W;
-        py = (zone[2] + Math.random() * (zone[3] - zone[2])) * H;
-        px = Math.max(MARGIN, Math.min(W - MARGIN, px));
-        py = Math.max(MARGIN, Math.min(H - MARGIN, py));
-        tries++;
-      } while (
-        tries < 300 &&
-        placed.some(function (p) {
-          var dx = p.x - px, dy = p.y - py;
-          return Math.sqrt(dx * dx + dy * dy) < MIN_GAP;
-        })
-      );
-
-      placed.push({ x: px, y: py });
-      spawnNode(canvas, person, px / W * 100, py / H * 100, H, idx);
-    });
+  function sharedTagCount(a, b) {
+    var ta = a.tags || [], tb = b.tags || [], c = 0;
+    for (var i = 0; i < ta.length; i++)
+      for (var j = 0; j < tb.length; j++)
+        if (ta[i] === tb[j]) c++;
+    return c;
   }
 
-  /* ---- Create DOM node ----------------------------------- */
-  function spawnNode(canvas, person, xPct, yPct, canvasH, index) {
-    var rTags = researchTagsFor(person);
+  /* ---- Responsive node sizing ----------------------------- */
+  function computeNodeSize() {
+    var w = window.innerWidth;
+    if (w <= 480)  return 95;
+    if (w <= 768)  return 120;
+    /* linear: 135 at 769 px → 170 at 1400 px */
+    return Math.round(Math.min(170, 135 + (170 - 135) * (w - 769) / (1400 - 769)));
+  }
+
+  /* ---- Force-directed target layout ----------------------- */
+  function computeTargets(members, W, H) {
+    var n   = members.length;
+    var pos = [], fx = [], fy = [], i, j;
+
+    /* Seed positions in a small ring at canvas centre */
+    for (i = 0; i < n; i++) {
+      var a = (i / n) * Math.PI * 2;
+      pos.push({ x: W / 2 + Math.cos(a) * 22, y: H / 2 + Math.sin(a) * 22 });
+      fx.push(0); fy.push(0);
+    }
+
+    var halfMin = Math.min(W, H) * 0.5;
+
+    for (var iter = 0; iter < 450; iter++) {
+      for (i = 0; i < n; i++) { fx[i] = 0; fy[i] = 0; }
+
+      /* Seniority radial force */
+      for (i = 0; i < n; i++) {
+        var level  = SENIORITY[members[i].role] || 4;
+        /* Professor=0, AssocProf=0.16, Postdoc=0.38, PhD=0.68 × halfMin */
+        var fracs  = [0, 0.16, 0.38, 0.68];
+        var idealR = fracs[level - 1] * halfMin;
+        var dx = pos[i].x - W / 2;
+        var dy = pos[i].y - H / 2;
+        var d  = Math.sqrt(dx * dx + dy * dy) || 1;
+        var err = d - idealR;
+        fx[i] -= (dx / d) * err * 0.030;
+        fy[i] -= (dy / d) * err * 0.030;
+      }
+
+      /* Tag affinity */
+      for (i = 0; i < n; i++) {
+        for (j = i + 1; j < n; j++) {
+          var shared = sharedTagCount(members[i], members[j]);
+          if (!shared) continue;
+          var dx = pos[j].x - pos[i].x;
+          var dy = pos[j].y - pos[i].y;
+          var d  = Math.sqrt(dx * dx + dy * dy) || 1;
+          var s  = shared * 0.009;
+          fx[i] += (dx / d) * s;  fy[i] += (dy / d) * s;
+          fx[j] -= (dx / d) * s;  fy[j] -= (dy / d) * s;
+        }
+      }
+
+      /* Repulsion */
+      for (i = 0; i < n; i++) {
+        for (j = i + 1; j < n; j++) {
+          var dx = pos[j].x - pos[i].x;
+          var dy = pos[j].y - pos[i].y;
+          var d  = Math.sqrt(dx * dx + dy * dy) || 1;
+          var minD = MIN_GAP * 1.35;
+          if (d < minD) {
+            var s = ((minD - d) / minD) * 0.95;
+            fx[i] -= (dx / d) * s;  fy[i] -= (dy / d) * s;
+            fx[j] += (dx / d) * s;  fy[j] += (dy / d) * s;
+          }
+        }
+      }
+
+      /* Apply forces with boundary clamping (bottom uses MARGIN_BOT for label clearance) */
+      for (i = 0; i < n; i++) {
+        pos[i].x = Math.max(MARGIN, Math.min(W - MARGIN,     pos[i].x + fx[i] * 10));
+        pos[i].y = Math.max(MARGIN, Math.min(H - MARGIN_BOT, pos[i].y + fy[i] * 10));
+      }
+    }
+
+    return pos;
+  }
+
+  /* ---- Background particle canvas ------------------------- */
+  var bgCtx, bgW, bgH, bgPts, bgRaf;
+
+  function initBgCanvas(bgCanvas, W, H) {
+    bgW = W; bgH = H;
+    bgCanvas.width  = W;
+    bgCanvas.height = H;
+    bgCtx = bgCanvas.getContext('2d');
+
+    var N = 55;
+    bgPts = [];
+    for (var i = 0; i < N; i++) {
+      bgPts.push({
+        x:  Math.random() * W,
+        y:  Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.32,
+        vy: (Math.random() - 0.5) * 0.32,
+        r:  Math.random() * 1.6 + 0.5
+      });
+    }
+
+    if (bgRaf) cancelAnimationFrame(bgRaf);
+    drawBg();
+  }
+
+  function resizeBgCanvas(bgCanvas, W, H) {
+    bgW = W; bgH = H;
+    bgCanvas.width  = W;
+    bgCanvas.height = H;
+    bgCtx = bgCanvas.getContext('2d');
+    /* Remap particles to new dimensions */
+    if (bgPts) {
+      bgPts.forEach(function (p) {
+        p.x = Math.random() * W;
+        p.y = Math.random() * H;
+      });
+    }
+  }
+
+  function drawBg() {
+    bgCtx.clearRect(0, 0, bgW, bgH);
+    var MAX_LINE = 180;
+    var i, j, dx, dy, d;
+
+    for (i = 0; i < bgPts.length; i++) {
+      bgPts[i].x += bgPts[i].vx;
+      bgPts[i].y += bgPts[i].vy;
+      if (bgPts[i].x < 0) bgPts[i].x = bgW;
+      if (bgPts[i].x > bgW) bgPts[i].x = 0;
+      if (bgPts[i].y < 0) bgPts[i].y = bgH;
+      if (bgPts[i].y > bgH) bgPts[i].y = 0;
+    }
+
+    /* Lines */
+    for (i = 0; i < bgPts.length; i++) {
+      for (j = i + 1; j < bgPts.length; j++) {
+        dx = bgPts[j].x - bgPts[i].x;
+        dy = bgPts[j].y - bgPts[i].y;
+        d  = Math.sqrt(dx * dx + dy * dy);
+        if (d < MAX_LINE) {
+          bgCtx.beginPath();
+          bgCtx.moveTo(bgPts[i].x, bgPts[i].y);
+          bgCtx.lineTo(bgPts[j].x, bgPts[j].y);
+          bgCtx.strokeStyle = 'rgba(70,114,162,' + ((1 - d / MAX_LINE) * 0.24).toFixed(3) + ')';
+          bgCtx.lineWidth   = 0.9;
+          bgCtx.stroke();
+        }
+      }
+    }
+
+    /* Dots */
+    for (i = 0; i < bgPts.length; i++) {
+      bgCtx.beginPath();
+      bgCtx.arc(bgPts[i].x, bgPts[i].y, bgPts[i].r, 0, Math.PI * 2);
+      bgCtx.fillStyle = 'rgba(70,114,162,0.58)';
+      bgCtx.fill();
+    }
+
+    bgRaf = requestAnimationFrame(drawBg);
+  }
+
+  /* ---- Physics state -------------------------------------- */
+  var phyNodes = [];
+  var phyW = 0, phyH = 0;
+  var alpha = 1.0;
+  var phyRaf;
+
+  function startPhysics(nodeObjects, targets) {
+    if (phyRaf) cancelAnimationFrame(phyRaf);
+    alpha = 1.0;
+
+    /* Initialise positions: spread randomly across canvas so nodes are already
+       separated — eliminates the explosive repulsion caused by starting stacked */
+    phyNodes = nodeObjects.map(function (obj, idx) {
+      var tx  = targets[idx].x;
+      var ty  = targets[idx].y;
+      return {
+        el:          obj.el,
+        wrap:        obj.wrap,
+        x:           MARGIN + Math.random() * (phyW - 2 * MARGIN),
+        y:           MARGIN + Math.random() * (phyH - MARGIN - MARGIN_BOT),
+        vx:          0,
+        vy:          0,
+        baseX:       tx,
+        baseY:       ty,
+        driftAngle:  Math.random() * Math.PI * 2,
+        driftSpeed:  0.0020 + Math.random() * 0.0025,
+        driftR:      8 + Math.random() * 7
+      };
+    });
+
+    /* Snap to start position before first paint */
+    phyNodes.forEach(function (n) { applyTransform(n); });
+
+    function loop() {
+      /* Alpha decay */
+      alpha = Math.max(ALPHA_MIN, alpha * ALPHA_FACTOR);
+
+      var i, j, a, b, dx, dy, d, force, n;
+
+      /* Spring toward (slowly drifting) target */
+      for (i = 0; i < phyNodes.length; i++) {
+        n = phyNodes[i];
+        n.driftAngle += n.driftSpeed;
+        /* Drift target orbits baseX/Y at constant amplitude (no alpha scaling) */
+        var dtx = n.baseX + Math.cos(n.driftAngle) * n.driftR;
+        var dty = n.baseY + Math.sin(n.driftAngle) * n.driftR;
+        n.vx += (dtx - n.x) * SPRING_K * alpha;
+        n.vy += (dty - n.y) * SPRING_K * alpha;
+        n.vx *= (1 - VEL_DECAY);
+        n.vy *= (1 - VEL_DECAY);
+      }
+
+      /* Repulsion — always active, keeps nodes apart */
+      for (i = 0; i < phyNodes.length; i++) {
+        for (j = i + 1; j < phyNodes.length; j++) {
+          a = phyNodes[i]; b = phyNodes[j];
+          dx = b.x - a.x; dy = b.y - a.y;
+          d  = Math.sqrt(dx * dx + dy * dy) || 0.1;
+          if (d < MIN_GAP) {
+            force = ((MIN_GAP - d) / MIN_GAP) * REPULSION_K;
+            a.vx -= (dx / d) * force;
+            a.vy -= (dy / d) * force;
+            b.vx += (dx / d) * force;
+            b.vy += (dy / d) * force;
+          }
+        }
+      }
+
+      /* Integrate + soft boundary */
+      for (i = 0; i < phyNodes.length; i++) {
+        n = phyNodes[i];
+        n.x += n.vx;
+        n.y += n.vy;
+        if (n.x < MARGIN)              { n.x = MARGIN;              n.vx =  Math.abs(n.vx) * 0.35; }
+        if (n.x > phyW - MARGIN)       { n.x = phyW - MARGIN;       n.vx = -Math.abs(n.vx) * 0.35; }
+        if (n.y < MARGIN)              { n.y = MARGIN;              n.vy =  Math.abs(n.vy) * 0.35; }
+        if (n.y > phyH - MARGIN_BOT)   { n.y = phyH - MARGIN_BOT;  n.vy = -Math.abs(n.vy) * 0.35; }
+      }
+
+      /* Hard-sphere position correction — no overlap ever */
+      for (i = 0; i < phyNodes.length; i++) {
+        for (j = i + 1; j < phyNodes.length; j++) {
+          a = phyNodes[i]; b = phyNodes[j];
+          dx = b.x - a.x; dy = b.y - a.y;
+          d  = Math.sqrt(dx * dx + dy * dy) || 0.1;
+          if (d < NODE_R * 1.9) {
+            var push = (NODE_R * 1.9 - d) * 0.5;
+            a.x -= (dx / d) * push; a.y -= (dy / d) * push;
+            b.x += (dx / d) * push; b.y += (dy / d) * push;
+          }
+        }
+      }
+
+      /* Push DOM transforms */
+      for (i = 0; i < phyNodes.length; i++) { applyTransform(phyNodes[i]); }
+
+      phyRaf = requestAnimationFrame(loop);
+    }
+
+    phyRaf = requestAnimationFrame(loop);
+  }
+
+  function applyTransform(n) {
+    /* Node top-left corner = centre − radius */
+    var tx = (n.x - NODE_R).toFixed(1);
+    var ty = (n.y - NODE_R).toFixed(1);
+    n.el.style.transform = 'translate(' + tx + 'px,' + ty + 'px)';
+  }
+
+  /* ---- Create DOM node ------------------------------------ */
+  function spawnNode(canvas, person) {
     var pTag  = positionTagFor(person.role);
+    var rTags = person.tags || [];
 
     var node = document.createElement('div');
     node.className = 'p-node';
-    node.style.left = xPct.toFixed(2) + '%';
-    node.style.top  = yPct.toFixed(2) + '%';
-
+    node.style.width  = nodeSize + 'px';
+    node.style.height = nodeSize + 'px';
     node.dataset.researchTags = rTags.join('||');
     node.dataset.positionTag  = pTag || '';
 
@@ -130,7 +340,9 @@
     }
 
     var wrap = document.createElement('div');
-    wrap.className = 'p-node__img-wrap';
+    wrap.className  = 'p-node__img-wrap';
+    wrap.style.width  = nodeSize + 'px';
+    wrap.style.height = nodeSize + 'px';
 
     var img = document.createElement('img');
     img.className = 'p-node__img';
@@ -140,26 +352,23 @@
     var overlay = document.createElement('div');
     overlay.className = 'p-node__overlay';
 
-    var tipAbove = yPct > 75;
-    var tip = document.createElement('div');
-    tip.className = 'p-node__tooltip' + (tipAbove ? ' p-node__tooltip--above' : '');
-    tip.innerHTML =
-      '<span class="p-node__tooltip-name">' + person.name + '</span>' +
-      '<span class="p-node__tooltip-role">' + person.role + '</span>';
+    /* Permanent name + role label below the circle */
+    var label = document.createElement('div');
+    label.className = 'p-node__label';
+    label.innerHTML =
+      '<span class="p-node__label-name">' + person.name + '</span>' +
+      '<span class="p-node__label-role">' + person.role + '</span>';
 
     wrap.appendChild(img);
     wrap.appendChild(overlay);
     node.appendChild(wrap);
-    node.appendChild(tip);
+    node.appendChild(label);
     canvas.appendChild(node);
 
-    /* Staggered entrance: add .in after a short delay so CSS transition fires */
-    setTimeout((function (n) {
-      return function () { n.classList.add('in'); };
-    }(node)), 100 + index * 80);
+    return { el: node, wrap: wrap, tags: rTags, posTag: pTag };
   }
 
-  /* ---- Tag panel ----------------------------------------- */
+  /* ---- Tag filter panel ----------------------------------- */
   var activeTags = {};
 
   function buildTagPanel() {
@@ -168,8 +377,8 @@
     var clearBtn = document.getElementById('tag-clear');
     if (!posList || !resList) return;
 
-    POSITION_TAGS.forEach(function (tag) { posList.appendChild(makeBtn(tag, 'position')); });
-    RESEARCH_TAGS.forEach(function (tag) { resList.appendChild(makeBtn(tag, 'research')); });
+    POSITION_TAGS.forEach(function (t) { posList.appendChild(makeBtn(t, 'position')); });
+    RESEARCH_TAGS.forEach(function (t) { resList.appendChild(makeBtn(t, 'research')); });
 
     if (clearBtn) {
       clearBtn.addEventListener('click', function () {
@@ -187,13 +396,8 @@
     btn.className = 'tag-btn tag-btn--' + type;
     btn.textContent = tag;
     btn.addEventListener('click', function () {
-      if (activeTags[tag]) {
-        delete activeTags[tag];
-        btn.classList.remove('active');
-      } else {
-        activeTags[tag] = true;
-        btn.classList.add('active');
-      }
+      if (activeTags[tag]) { delete activeTags[tag]; btn.classList.remove('active'); }
+      else                  { activeTags[tag] = true;  btn.classList.add('active');    }
       applyFilter();
       var cb = document.getElementById('tag-clear');
       if (cb) cb.classList.toggle('visible', Object.keys(activeTags).length > 0);
@@ -201,40 +405,118 @@
     return btn;
   }
 
-  /* ---- Filter -------------------------------------------- */
   function applyFilter() {
     var keys  = Object.keys(activeTags);
     var nodes = document.querySelectorAll('.p-node');
     for (var i = 0; i < nodes.length; i++) {
-      var node = nodes[i];
-      if (keys.length === 0) { node.classList.remove('dimmed'); continue; }
+      var node  = nodes[i];
+      if (!keys.length) { node.classList.remove('dimmed'); continue; }
       var rTags = node.dataset.researchTags ? node.dataset.researchTags.split('||') : [];
       var pTag  = node.dataset.positionTag;
       var all   = pTag ? rTags.concat([pTag]) : rTags;
       var match = keys.every(function (k) { return all.indexOf(k) !== -1; });
-      if (match) node.classList.remove('dimmed');
-      else       node.classList.add('dimmed');
+      node.classList.toggle('dimmed', !match);
     }
+  }
+
+  /* ---- Resize handling ------------------------------------ */
+  var resizeTimer;
+  var constellationCanvas;
+  var bgCanvasEl;
+  var memberData;
+
+  function onResize() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(doResize, 280);
+  }
+
+  function doResize() {
+    if (!constellationCanvas || !memberData) return;
+
+    /* Recompute responsive dimensions */
+    nodeSize   = computeNodeSize();
+    NODE_R     = nodeSize / 2;
+    /* +26 px reserves space for the name/role label below each circle */
+    MIN_GAP    = NODE_R * 2 + Math.round(nodeSize * 0.28) + 26;
+    MARGIN     = NODE_R + 20;
+    MARGIN_BOT = NODE_R + 45;
+
+    /* Update all node elements */
+    phyNodes.forEach(function (n) {
+      n.el.style.width  = nodeSize + 'px';
+      n.el.style.height = nodeSize + 'px';
+      n.wrap.style.width  = nodeSize + 'px';
+      n.wrap.style.height = nodeSize + 'px';
+    });
+
+    /* Canvas height */
+    var nav    = document.querySelector('.nav');
+    var intro  = document.querySelector('.team-intro');
+    var navH   = nav   ? nav.offsetHeight   : 64;
+    var introH = intro ? intro.offsetHeight : 0;
+    var canvasH = Math.max(window.innerHeight - navH - introH, 680);
+    constellationCanvas.style.height = canvasH + 'px';
+
+    phyW = constellationCanvas.offsetWidth;
+    phyH = constellationCanvas.offsetHeight;
+
+    /* Resize bg canvas */
+    if (bgCanvasEl) resizeBgCanvas(bgCanvasEl, phyW, phyH);
+
+    /* Recompute targets and update each node's base */
+    var targets = computeTargets(memberData, phyW, phyH);
+    phyNodes.forEach(function (n, idx) {
+      n.baseX = targets[idx].x;
+      n.baseY = targets[idx].y;
+    });
+
+    /* Reheat so nodes glide to new positions */
+    alpha = Math.max(alpha, 0.50);
   }
 
   /* ---- Boot ---------------------------------------------- */
   function init() {
-    var canvas = document.getElementById('constellation');
-    if (!canvas) return;
-    if (typeof people === 'undefined') { console.warn('people data not loaded'); return; }
+    constellationCanvas = document.getElementById('constellation');
+    if (!constellationCanvas || typeof people === 'undefined') return;
 
-    /* Set an explicit pixel height before nodes are placed */
-    var header  = document.querySelector('.team-header');
-    var nav     = document.querySelector('.nav');
-    var navH    = nav    ? nav.offsetHeight    : 64;
-    var headerH = header ? header.offsetHeight : 0;
-    var canvasH = Math.max(window.innerHeight - navH - headerH, 620);
-    canvas.style.height = canvasH + 'px';
+    memberData = people.current;
+
+    /* Initial responsive sizes */
+    nodeSize   = computeNodeSize();
+    NODE_R     = nodeSize / 2;
+    MIN_GAP    = NODE_R * 2 + Math.round(nodeSize * 0.28) + 26;
+    MARGIN     = NODE_R + 20;
+    MARGIN_BOT = NODE_R + 45;
+
+    /* Canvas height */
+    var nav    = document.querySelector('.nav');
+    var intro  = document.querySelector('.team-intro');
+    var navH   = nav   ? nav.offsetHeight   : 64;
+    var introH = intro ? intro.offsetHeight : 0;
+    var canvasH = Math.max(window.innerHeight - navH - introH, 680);
+    constellationCanvas.style.height = canvasH + 'px';
 
     buildTagPanel();
+    window.addEventListener('resize', onResize);
 
-    /* Small delay so the browser has committed the height before we measure */
-    setTimeout(function () { placeNodes(canvas, people.current); }, 50);
+    setTimeout(function () {
+      phyW = constellationCanvas.offsetWidth;
+      phyH = constellationCanvas.offsetHeight;
+
+      bgCanvasEl = document.getElementById('bg-canvas');
+      if (bgCanvasEl) initBgCanvas(bgCanvasEl, phyW, phyH);
+
+      /* Spawn nodes */
+      var nodeObjects = memberData.map(function (person) {
+        return spawnNode(constellationCanvas, person);
+      });
+
+      /* Compute targets */
+      var targets = computeTargets(memberData, phyW, phyH);
+
+      /* Start physics */
+      startPhysics(nodeObjects, targets);
+    }, 60);
   }
 
   if (document.readyState === 'loading') {

@@ -31,31 +31,20 @@
     </div>
   </nav>
 
-  <!-- TEAM HEADER — title + tag filters -------------------- -->
-  <div class="team-header">
-    <h1 class="team-header__title">Meet our Team</h1>
-
+  <!-- TEAM INTRO — title + tag filters --------------------- -->
+  <div class="team-intro">
+    <h1 class="team-intro__title">Meet our Team!</h1>
     <div class="team-filters">
-
-      <div class="team-filters__group">
-        <span class="team-filters__label">Position</span>
-        <div class="team-filters__tags" id="position-tags"></div>
-      </div>
-
-      <div class="team-filters__group">
-        <span class="team-filters__label">Research focus</span>
-        <div class="team-filters__tags" id="research-tags"></div>
-      </div>
-
-      <button class="tag-clear" id="tag-clear" aria-label="Clear all filters">
-        Clear all filters
-      </button>
-
+      <div class="team-filters__group" id="position-tags"></div>
+      <div class="team-filters__group" id="research-tags"></div>
+      <button class="tag-clear" id="tag-clear" aria-label="Clear all filters">Clear all</button>
     </div>
   </div>
 
   <!-- CONSTELLATION CANVAS --------------------------------- -->
-  <div class="constellation-canvas" id="constellation" aria-label="Team constellation"></div>
+  <div class="constellation-canvas" id="constellation" aria-label="Team constellation">
+    <canvas id="bg-canvas"></canvas>
+  </div>
 
   <!-- FOOTER ----------------------------------------------- -->
   <footer class="footer" role="contentinfo">
