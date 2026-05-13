@@ -1,0 +1,926 @@
+const publications = {
+
+  key: [
+    {
+      authors: "Elsey, J.W.B., Van Ast, V.A., & Kindt, M.",
+      year: 2018,
+      title: "Human memory reconsolidation: A guiding framework and critical review of the evidence.",
+      journal: "Psychological Bulletin",
+      volume: "144(8)",
+      pages: "797–848",
+      doi: "https://doi.org/10.1037/bul0000152"
+    },
+    {
+      authors: "Kindt, M., & Soeter, M.",
+      year: 2018,
+      title: "Pharmacologically induced amnesia for learned fear is time and sleep dependent.",
+      journal: "Nature Communications",
+      volume: "9(1)",
+      pages: "1316",
+      doi: "https://doi.org/10.1038/s41467-018-03659-1"
+    },
+    {
+      authors: "Soeter, M., & Kindt, M.",
+      year: 2015,
+      title: "An abrupt transformation of phobic behavior following a post-retrieval amnesic agent.",
+      journal: "Biological Psychiatry",
+      volume: "78",
+      pages: "880–886",
+      doi: "https://doi.org/10.1016/j.biopsych.2015.04.006"
+    },
+    {
+      authors: "Ast, V.A. van, Cornelisse, S., Meeter, M., Joels, M., & Kindt, M.",
+      year: 2013,
+      title: "Time-dependent effects of cortisol on the contextualization of emotional memories.",
+      journal: "Biological Psychiatry",
+      volume: "74",
+      pages: "809–816",
+      doi: "https://doi.org/10.1016/j.biopsych.2013.06.022"
+    },
+    {
+      authors: "Sevenster, D., Beckers, T., & Kindt, M.",
+      year: 2013,
+      title: "Prediction error governs pharmacologically induced amnesia for learned fear.",
+      journal: "Science",
+      volume: "339",
+      pages: "830–833",
+      doi: "https://doi.org/10.1126/science.1231357"
+    },
+    {
+      authors: "Visser, R.M., Scholte, H.S., Beemsterboer, T., & Kindt, M.",
+      year: 2013,
+      title: "Neural pattern similarity predicts long-term fear memory.",
+      journal: "Nature Neuroscience",
+      volume: "16",
+      pages: "388–390",
+      doi: "https://doi.org/10.1038/nn.3345"
+    },
+    {
+      authors: "Kindt, M., Soeter, M., & Vervliet, B.",
+      year: 2009,
+      title: "Beyond extinction: erasing human fear responses and preventing the return of fear.",
+      journal: "Nature Neuroscience",
+      volume: "12",
+      pages: "256–258",
+      doi: "https://doi.org/10.1038/nn.2271"
+    }
+  ],
+
+  other: [
+    // 2023
+    {
+      year: 2023,
+      authors: "Freund, I.M., Peters, J., Kindt, M., & Visser, R.M.",
+      title: "Emotional memory in the lab: Using the Trier Social Stress Test to induce a sensory-rich and personally meaningful episodic experience.",
+      journal: "Psychoneuroendocrinology",
+      volume: "148",
+      pages: "105971"
+    },
+
+    // 2022
+    {
+      year: 2022,
+      authors: "de Vries, O.T., Grasman, R.P.P.P., Kindt, M., & van Ast, V A.",
+      title: "Threat learning impairs subsequent associative inference.",
+      journal: "Scientific Reports",
+      volume: "12",
+      pages: "18878",
+      url: "https://www.nature.com/articles/s41598-022-21471-2"
+    },
+    {
+      year: 2022,
+      authors: "Cox, W.R., Meeter, M., Kindt, M., & van Ast, V.A.",
+      title: "Time-dependent emotional memory transformation: Divergent pathways of item memory and contextual dependency.",
+      journal: "Journal of Experimental Psychology: General"
+    },
+    {
+      year: 2022,
+      authors: "Cox, W.R., Faliagkas, L., Besseling, A., van der Loo, R.J., Spijker, S., Kindt, M., & Rao-Ruiz, P.",
+      title: "Interfering with contextual fear memories by post-reactivation administration of propranolol in mice: a series of null findings.",
+      journal: "Frontiers in Behavioral Neuroscience",
+      volume: "16",
+      pages: "893572"
+    },
+    {
+      year: 2022,
+      authors: "Cox, W.R., Woelk, M., de Vries, O.T., Krypotos, A-M., Kindt, M., Engelhard, I.M., Sevenster, D., & van Ast, V.A.",
+      title: "Context reexposure to bolster contextual dependency of emotional episodic memory.",
+      preprint: true,
+      url: "https://psyarxiv.com/5nzce/"
+    },
+    {
+      year: 2022,
+      authors: "Filmer, A.I., Peters, J., Bridge, L.A., Visser, R.M., & Kindt, M.",
+      title: "Over the Edge: Extending the duration of a reconsolidation intervention for spider fear.",
+      journal: "Translational Psychiatry",
+      volume: "12(1)",
+      pages: "1–10",
+      url: "https://rdcu.be/cQe9v"
+    },
+    {
+      year: 2022,
+      authors: "Freund, I.M., Arntz, A., Visser, R.M., & Kindt, M.",
+      title: "Jumping back onto the giants' shoulders: Why emotional memory should be considered in a network perspective of psychopathology.",
+      journal: "Behaviour Research and Therapy",
+      volume: "156",
+      pages: "104154"
+    },
+    {
+      year: 2022,
+      authors: "Peters, J., Visser, R.M., & Kindt, M.",
+      title: "More than just fear: Development and psychometric evaluation of the Spider Distress Scale to assess spider fear and spider-related disgust.",
+      journal: "Journal of Anxiety Disorders",
+      volume: "90"
+    },
+    {
+      year: 2022,
+      authors: "Reinhold, F.L., Gerlicher, A.M., van Someren, E.J., & Kindt, M.",
+      title: "Do your troubles today seem further away than yesterday? On sleep's role in mitigating the blushing response to a reactivated embarrassing episode.",
+      journal: "Sleep",
+      volume: "45(11)",
+      pages: "zsac220"
+    },
+    {
+      year: 2022,
+      authors: "Stemerding, L.E., Stibbe, D., van Ast, V.A. & Kindt, M.",
+      title: "Demarcating the boundary conditions of memory reconsolidation: An unsuccessful replication.",
+      journal: "Scientific Reports",
+      volume: "12(1)",
+      pages: "1–13",
+      url: "https://www.nature.com/articles/s41598-022-06119-5.pdf"
+    },
+    {
+      year: 2022,
+      authors: "Stemerding, L.E., Gerlicher, A.M., van Ast, V.A. & Kindt, M.",
+      title: "Pupil dilation and skin conductance as measures of prediction error in aversive learning.",
+      journal: "Behaviour Research and Therapy",
+      volume: "157",
+      pages: "104164"
+    },
+    {
+      year: 2022,
+      authors: "de Vries, O., Duken, S.B., Dzinalija, N., Kindt, M., & van Ast, V.A.",
+      title: "Episodic Conditioning: a novel approach to study the intersection of Pavlovian threat conditioning and episodic memory.",
+      preprint: true,
+      url: "https://doi.org/10.31234/osf.io/bc8hu"
+    },
+
+    // 2021
+    {
+      year: 2021,
+      authors: "Cox, W.R., Dobbelaar, S., Meeter, M., Kindt, M., & van Ast, V.A.",
+      title: "Episodic memory enhancement versus impairment is determined by contextual similarity across events.",
+      journal: "Proceedings of the National Academy of Sciences",
+      volume: "118(48)",
+      pages: "e2101509118"
+    },
+    {
+      year: 2021,
+      authors: "Duken, S.B., Keessen, L., Hoijtink, H., Kindt, M., & van Ast, V.A.",
+      title: "Episodic and affective memory distortions in dysphoria: Bayesian testing of diverging theories [Registered Report Stage 1 Protocol]. In-principle accepted by Nature Communications.",
+      url: "https://doi.org/10.17605/OSF.IO/3D9AN"
+    },
+    {
+      year: 2021,
+      authors: "Duken, S.B., Neumayer, F., Kindt, M., Oosterwijk, S., & van Ast, V.A.",
+      title: "Reliving emotional memories: Episodic recollection elicits affective psychophysiological responses.",
+      preprint: true,
+      url: "https://doi.org/10.31234/osf.io/ukt5x"
+    },
+    {
+      year: 2021,
+      authors: "Elsey, J.W.B.",
+      title: "Optogenetic manipulation of maladaptive memory–new challenges or new solutions for personal authenticity?",
+      journal: "AJOB Neuroscience",
+      volume: "12(1)",
+      pages: "27–29"
+    },
+    {
+      year: 2021,
+      authors: "Elsey, J.W.B. & Kindt, M.",
+      title: "Expectations of objective threats and aversive feelings in specific fears.",
+      journal: "Scientific Reports",
+      volume: "11",
+      pages: "20778"
+    },
+
+    // 2020
+    {
+      year: 2020,
+      authors: "Elsey, J.W.B., Bekker, T.A., De Bree, A.M., & Kindt, M.",
+      title: "Encoding or consolidation? The effects of pre- and post-learning propranolol on the impact of an emotional scene.",
+      journal: "Journal of Behavior Therapy and Experimental Psychiatry",
+      volume: "67",
+      pages: "101480"
+    },
+    {
+      year: 2020,
+      authors: "Elsey, J.W.B., Filmer, A.I., Galvin, H.R., Kurath, J.D., Vossoughi, L., Thomander, L.S., Zavodnik, M. & Kindt, M.",
+      title: "Reconsolidation-based treatment for fear of public speaking: a systematic pilot study using propranolol.",
+      journal: "Translational Psychiatry",
+      volume: "10(1)",
+      pages: "1–12"
+    },
+    {
+      year: 2020,
+      authors: "Elsey, J.W.B., Metselaar, V.N., Geiser, E., Knoop, D.F., Gangadien, S.M., Schrijver, N.A., & Kindt, M.",
+      title: "Reality Cheque: Different Methods of Eliciting Fear-Related Beliefs Reveal Multiple Representations of Threat.",
+      preprint: true,
+      url: "https://doi.org/10.31234/osf.io/nhvys"
+    },
+    {
+      year: 2020,
+      authors: "Gazendam, F.J., Krypotos, A.M., Kamphuis, J.H., van der Leij, A.R., Huizenga, H.M., Eigenhuis, A., & Kindt, M.",
+      title: "From adaptive to maladaptive fear: Heterogeneity in threat and safety learning across response systems in a representative sample.",
+      journal: "International Journal of Psychophysiology",
+      volume: "158",
+      pages: "271–287"
+    },
+    {
+      year: 2020,
+      authors: "Visser, R.M.",
+      title: "Why Do Certain Moments Haunt Us? Conceptualizing Intrusive Memories as Conditioned Responses.",
+      journal: "Biological Psychiatry: Cognitive Neuroscience and Neuroimaging",
+      volume: "5(4)",
+      pages: "375–376"
+    },
+
+    // 2019
+    {
+      year: 2019,
+      authors: "Das, R.K., Gale, G., Walsh, K., Hennessy, V.E., Iskandar, G., Mordecai, L.A., Brandner, B., Kindt, M., Curran, H.V., & Kamboj, S.K.",
+      title: "Ketamine can reduce harmful drinking by pharmacologically rewriting drinking memories.",
+      journal: "Nature Communications",
+      volume: "10(1)",
+      pages: "1–10"
+    },
+    {
+      year: 2019,
+      authors: "Kunze, A.E., Arntz, A., & Kindt, M.",
+      title: "Investigating the effects of imagery rescripting on emotional memory: A series of analogue studies.",
+      journal: "Journal of Experimental Psychopathology",
+      volume: "10(2)",
+      pages: "2043808719850733"
+    },
+    {
+      year: 2019,
+      authors: "Kunze, A.E., Lancee, J., Morina, N., Kindt, M., & Arntz, A.",
+      title: "Mediators of change in imagery rescripting and imaginal exposure for nightmares: Evidence from a randomized wait-list controlled trial.",
+      journal: "Behavior Therapy",
+      volume: "50(5)",
+      pages: "978–993"
+    },
+
+    // 2018
+    {
+      year: 2018,
+      authors: "De Haan, M.I.C., Van Well, S., Visser, R.M., Van Wingen, G., Scholte, H.S., & Kindt, M.",
+      title: "The influence of acoustic startle probes on the neural basis of fear memory.",
+      journal: "Scientific Reports",
+      volume: "8",
+      pages: "14552"
+    },
+    {
+      year: 2018,
+      authors: "Elsey, J.W.B., Van Ast, V.A., & Kindt, M.",
+      title: "Human memory reconsolidation: A guiding framework and critical review of the evidence.",
+      journal: "Psychological Bulletin"
+    },
+    {
+      year: 2018,
+      authors: "Kindt, M., & Soeter, M.",
+      title: "Pharmacologically induced amnesia for learned fear is time and sleep dependent.",
+      journal: "Nature Communications",
+      volume: "9(1)",
+      pages: "1316"
+    },
+    {
+      year: 2018,
+      authors: "Elsey, J.W.B., & Kindt, M.",
+      title: "Can criminals use propranolol to erase crime-related memories? A response to McGorrery (2017).",
+      journal: "Alternative Law Journal",
+      volume: "43(2)",
+      pages: "136–138"
+    },
+    {
+      year: 2018,
+      authors: "Faliagkas, L., Rao-Ruiz, P., & Kindt, M.",
+      title: "Emotional memory expression is misleading: delineating transitions between memory processes.",
+      journal: "Current Opinion in Behavioral Sciences",
+      volume: "19",
+      pages: "116–112"
+    },
+    {
+      year: 2018,
+      authors: "Kindt, M.",
+      title: "The surprising subtleties of changing fear memory: a challenge for translational science.",
+      journal: "Philosophical Transactions of the Royal Society B",
+      volume: "373(1742)",
+      pages: "20170033"
+    },
+
+    // 2017
+    {
+      year: 2017,
+      authors: "Arnaudova, I., Krypotos, A.M., Effting, M., Kindt, M., & Beckers, T.",
+      title: "Manipulating affective state influences conditioned appetitive responses.",
+      journal: "Cognition and Emotion",
+      pages: "1–20"
+    },
+    {
+      year: 2017,
+      authors: "Arnaudova, I., Krypotos, A.M., Effting, M., Kindt, M., & Beckers, T.",
+      title: "Fearing shades of grey: individual differences in fear responding towards generalisation stimuli.",
+      journal: "Cognition and Emotion",
+      volume: "31(6)",
+      pages: "1181–1196"
+    },
+    {
+      year: 2017,
+      authors: "Arnaudova, I., Fanselow, M., Kindt, M., & Beckers, T.",
+      title: "Pathways towards the proliferation of avoidance in anxiety and their implications for treatment.",
+      journal: "Behaviour Research and Therapy",
+      volume: "96",
+      pages: "3–13"
+    },
+    {
+      year: 2017,
+      authors: "Arnaudova, I., Krypotos, A.M., Effting, M., Kindt, M., & Beckers, T.",
+      title: "Moving threat: Attention and distance change interact in threat responding.",
+      journal: "Emotion",
+      volume: "17",
+      pages: "251–258"
+    },
+    {
+      year: 2017,
+      authors: "Beckers, T., & Kindt, M.",
+      title: "Memory reconsolidation interference as an emerging treatment for emotional disorders: strengths, limitations, challenges and opportunities.",
+      journal: "Annual Review of Clinical Psychology",
+      volume: "13",
+      pages: "99–121"
+    },
+    {
+      year: 2017,
+      authors: "Elsey, J.W.B. & Kindt, M.",
+      title: "Tackling maladaptive memories through reconsolidation: From neural to clinical science.",
+      journal: "Neurobiology of Learning & Memory",
+      volume: "142",
+      pages: "108–117"
+    },
+    {
+      year: 2017,
+      authors: "Elsey, J.W.B., & Kindt, M.",
+      title: "Breaking boundaries: Optimizing reconsolidation-based interventions for strong and old memories.",
+      journal: "Learning & Memory",
+      volume: "24",
+      pages: "472–479"
+    },
+    {
+      year: 2017,
+      authors: "Golkar, A., Tjaden, C., & Kindt, M.",
+      title: "Vicarious extinction learning during reconsolidation neutralizes fear memory.",
+      journal: "Behaviour Research and Therapy",
+      volume: "92",
+      pages: "87–93"
+    },
+    {
+      year: 2017,
+      authors: "Kunze, A.E., Arntz, A., Morina, N., Kindt, M., & Lancee, J.",
+      title: "Efficacy of Imagery Rescripting and Imaginal Exposure for Nightmares: A randomized wait-list controlled trial.",
+      journal: "Behaviour Research and Therapy",
+      volume: "97",
+      pages: "14–25"
+    },
+    {
+      year: 2017,
+      authors: "Schroyens, N., Beckers, T., & Kindt, M.",
+      title: "In search for boundary condition of reconsolidation: A failure of fear memory interference.",
+      journal: "Frontiers in Behavioral Neuroscience",
+      doi: "https://doi.org/10.3389/fnbeh.2017.00065"
+    },
+    {
+      year: 2017,
+      authors: "Sevenster, D., Haesen, K., Vervliet, B., Kindt, M., & D'Hooge, R.",
+      title: "Prevention and treatment strategies for contextual overgeneralization.",
+      journal: "Scientific Reports",
+      volume: "7(1)",
+      pages: "16967"
+    },
+
+    // 2016
+    {
+      year: 2016,
+      authors: "Arnaudova, I., Krypotos, A.M., Kindt, M., & Beckers, T.",
+      title: "Fearing shades of grey: individual differences in fear responding towards generalisation stimuli.",
+      journal: "Cognition & Emotion",
+      pages: "1–16"
+    },
+    {
+      year: 2016,
+      authors: "Elsey, J.W.B., & Kindt, M.",
+      title: "Manipulating human memory through reconsolidation: Ethical implications of a new therapeutic approach.",
+      journal: "American Journal of Bioethics – Neuroscience",
+      volume: "7(4)",
+      pages: "225–236"
+    },
+    {
+      year: 2016,
+      authors: "Kindt, M., & van Emmerik, A.",
+      title: "New avenues for treating emotional memory disorders: towards a reconsolidation intervention for posttraumatic stress disorder.",
+      journal: "Therapeutic Advances in Psychopharmacology",
+      volume: "6",
+      pages: "283–295"
+    },
+    {
+      year: 2016,
+      authors: "Kunze, A.E., Lancee, J., Morina, N., Kindt, M., & Arntz, A.",
+      title: "Efficacy and mechanisms of imagery rescripting and imaginal exposure for nightmares: study protocol for a randomized controlled trial.",
+      journal: "Trials",
+      volume: "17",
+      pages: "469"
+    },
+    {
+      year: 2016,
+      authors: "Visser, R.M., de Haan, M.I., Beemsterboer, T., Haver, P., Kindt, M., & Scholte, H.S.",
+      title: "Quantifying learning-dependent changes in the brain: Single trial multivoxel pattern analysis requires slow event related fMRI.",
+      journal: "Psychophysiology",
+      volume: "53",
+      pages: "1117–1127"
+    },
+    {
+      year: 2016,
+      authors: "Visser, R.M., Haver, P., Zwitser, R.J., Scholte, H.S., & Kindt, M.",
+      title: "First steps in using multi-voxel pattern analysis to disentangle neural processes underlying generalization of spider fear.",
+      journal: "Frontiers in Human Neuroscience",
+      volume: "10",
+      pages: "222"
+    },
+
+    // 2015
+    {
+      year: 2015,
+      authors: "Gazendam, F.J., Kamphuis, J.H., Eigenhuis, A., Huizenga, H.M.H., Soeter, M., Bos, M.G.N., Sevenster, D., & Kindt, M.",
+      title: "Personality predicts individual variation in fear learning: A multilevel growth modeling approach.",
+      journal: "Clinical Psychological Science",
+      pages: "1–14"
+    },
+    {
+      year: 2015,
+      authors: "Krypotos, A.-M., Arnaudova, I., Effting, M., Kindt, M., & Beckers, T.",
+      title: "Effects of approach-avoidance training on the extinction and return of fear responses.",
+      journal: "PloS One",
+      volume: "10",
+      pages: "e0131581"
+    },
+    {
+      year: 2015,
+      authors: "Krypotos, A.-M., Beckers, T., Kindt, M., & Wagenmakers, E.J.",
+      title: "A bayesian hierarchical diffusion model decomposition of performance in approach-avoidance tasks.",
+      journal: "Cognition & Emotion",
+      volume: "29",
+      pages: "1424–1444"
+    },
+    {
+      year: 2015,
+      authors: "Krypotos, A.-M., Effting, M., Kindt, M., & Beckers, T.",
+      title: "Avoidance learning: A review of theoretical models and recent developments.",
+      journal: "Frontiers in Behavioural Neuroscience",
+      doi: "https://doi.org/10.3389/fnbeh.2015.00189"
+    },
+    {
+      year: 2015,
+      authors: "Kunze, A., Arntz, A., & Kindt, M.",
+      title: "Fear conditioning with film clips: A complex associative learning paradigm.",
+      journal: "Journal of Behavior Therapy and Experimental Psychiatry",
+      volume: "47",
+      pages: "42–50"
+    },
+    {
+      year: 2015,
+      authors: "Raabe, S., Ehring, T., Marquenie, L., Olff, M. & Kindt, M.",
+      title: "Imagery rescripting as a stand-alone treatment for posttraumatic stress disorder related to childhood abuse.",
+      journal: "Journal of Behavior Therapy and Experimental Psychiatry",
+      volume: "48",
+      pages: "170–176"
+    },
+    {
+      year: 2015,
+      authors: "Sevenster, D., Hamm, A., Beckers, T., & Kindt, M.",
+      title: "Heart rate pattern and resting heart rate variability mediate individual differences in contextual anxiety and conditioned responses.",
+      journal: "International Journal of Psychophysiology"
+    },
+    {
+      year: 2015,
+      authors: "Soeter, M., & Kindt, M.",
+      title: "An abrupt transformation of phobic behavior following a post-retrieval amnesic agent.",
+      journal: "Biological Psychiatry",
+      volume: "78",
+      pages: "880–886"
+    },
+    {
+      year: 2015,
+      authors: "Soeter, M., & Kindt, M.",
+      title: "Retrieval cues that trigger reconsolidation of associative fear memory are not necessarily an exact replica of the original learning experience.",
+      journal: "Frontiers in Behavioural Neuroscience",
+      doi: "https://doi.org/10.3389/fnbeh.2015.00122"
+    },
+    {
+      year: 2015,
+      authors: "Visser, R.M., Kunze, A.E., Westhoff, B., Scholte, H.S., & Kindt, M.",
+      title: "Representational similarity analysis offers a preview of the noradrenergic modulation of long-term fear memory at the time of encoding.",
+      journal: "Psychoneuroendocrinology",
+      volume: "55",
+      pages: "8–20"
+    },
+
+    // 2014
+    {
+      year: 2014,
+      authors: "Ast, V.A. van, Cornelisse, S., Meeter, M., & Kindt, M.",
+      title: "Cortisol mediates the effects of stress on the contextual dependency of memories.",
+      journal: "Psychoneuroendocrinology",
+      volume: "41",
+      pages: "97–110"
+    },
+    {
+      year: 2014,
+      authors: "Bos, M.G.N., Schuijer, J., Lodestijn, F., Beckers, T. & Kindt, M.",
+      title: "Stress enhances reconsolidation of declarative memory.",
+      journal: "Psychoneuroendocrinology",
+      volume: "46",
+      pages: "102–113"
+    },
+    {
+      year: 2014,
+      authors: "Bos, M.G.N., Jacobs van Goethem, T., Beckers, T. & Kindt, M.",
+      title: "Cortisol response mediates the effect of post-reactivation stress exposure on contextualization of emotional memories.",
+      journal: "Psychoneuroendocrinology",
+      volume: "50",
+      pages: "72–84"
+    },
+    {
+      year: 2014,
+      authors: "Bos, M.G.N., Beckers, T. & Kindt, M.",
+      title: "Noradrenergic blockade of memory reconsolidation: A failure to reduce conditioned fear responding.",
+      journal: "Frontiers in Behavioural Neuroscience",
+      volume: "8",
+      pages: "412"
+    },
+    {
+      year: 2014,
+      authors: "Cornelisse, S., Ast, V.A. van, Joels, M., & Kindt, M.",
+      title: "Delayed effects of cortisol enhance fear memory of trace conditioning.",
+      journal: "Psychoneuroendocrinology",
+      volume: "40",
+      pages: "257–268"
+    },
+    {
+      year: 2014,
+      authors: "Kindt, M., & Soeter, M.",
+      title: "Fear inhibition in high trait anxiety.",
+      journal: "PLoS ONE",
+      volume: "9(1)",
+      pages: "e86462"
+    },
+    {
+      year: 2014,
+      authors: "Kindt, M., Soeter, M. & Sevenster, D.",
+      title: "Disrupting reconsolidation of fear memory in humans by a noradrenergic β-blocker.",
+      journal: "Journal of Visualized Experiments",
+      volume: "94",
+      pages: "e52151",
+      doi: "https://doi.org/10.3791/52151"
+    },
+    {
+      year: 2014,
+      authors: "Kindt, M.",
+      title: "A behavioural neuroscience perspective on the aetiology and treatment of anxiety disorders.",
+      journal: "Behaviour Research and Therapy",
+      volume: "62",
+      pages: "24–36"
+    },
+    {
+      year: 2014,
+      authors: "Krypotos, A.-M., Effting, M., Arnaudova, I., Kindt, M., & Beckers, T.",
+      title: "Avoided by association: Acquisition, extinction, and renewal of avoidance tendencies toward conditioned fear stimuli.",
+      journal: "Clinical Psychological Science",
+      volume: "2",
+      pages: "336–343"
+    },
+    {
+      year: 2014,
+      authors: "Salemink, E., Kindt, M., Rienties, H., & Hout, M. van den",
+      title: "Internet-based cognitive bias modification of interpretations in patients with anxiety disorders: A randomised controlled trial.",
+      journal: "Journal of Behavior Therapy and Experimental Psychiatry",
+      volume: "45",
+      pages: "186–195"
+    },
+    {
+      year: 2014,
+      authors: "Sevenster, D., Beckers, T. & Kindt, M.",
+      title: "Fear conditioning of SCR but not the startle reflex requires conscious discrimination of threat and safety.",
+      journal: "Frontiers in Behavioral Neuroscience",
+      volume: "8",
+      pages: "article 32"
+    },
+    {
+      year: 2014,
+      authors: "Sevenster, D., Beckers, T., & Kindt, M.",
+      title: "Prediction error demarcates the transition from retrieval, to reconsolidation, to new learning.",
+      journal: "Learning and Memory",
+      volume: "21",
+      pages: "580–584"
+    },
+
+    // 2013
+    {
+      year: 2013,
+      authors: "Arnaudova, I., Krypotos, A.-M., Effting, M., Boddez, Y., Kindt, M., & Beckers, T.",
+      title: "Individual differences in discriminatory fear learning under conditions of ambiguity: A vulnerability factor for anxiety disorders?",
+      journal: "Frontiers in Psychology",
+      volume: "4",
+      pages: "article 298"
+    },
+    {
+      year: 2013,
+      authors: "Ast, V.A. van, Cornelisse, S., Meeter, M., Joels, M., & Kindt, M.",
+      title: "Time-dependent effects of cortisol on the contextualization of emotional memories.",
+      journal: "Biological Psychiatry",
+      volume: "74",
+      pages: "809–816"
+    },
+    {
+      year: 2013,
+      authors: "Beckers, T., Krypotos, A.-M., Boddez, Y., Effting, M., & Kindt, M.",
+      title: "What's wrong with fear conditioning?",
+      journal: "Biological Psychology",
+      volume: "92",
+      pages: "90–96"
+    },
+    {
+      year: 2013,
+      authors: "Bos, M.G.N., Jentgens, P., Beckers, T. & Kindt, M.",
+      title: "Psychophysiological response patterns to affective film stimuli.",
+      journal: "PLoS ONE",
+      volume: "8",
+      pages: "e62661"
+    },
+    {
+      year: 2013,
+      authors: "Effting, M., Vervliet, B., Beckers, T., & Kindt, M.",
+      title: "Cued reacquisition trials during extinction weaken contextual renewal in human predictive learning.",
+      journal: "Learning and Motivation",
+      volume: "44",
+      pages: "184–195"
+    },
+    {
+      year: 2013,
+      authors: "Gazendam, F.J., Kamphuis, J.H., & Kindt, M.",
+      title: "Deficient safety learning characterizes high trait anxious individuals.",
+      journal: "Biological Psychology",
+      volume: "92",
+      pages: "342–352"
+    },
+    {
+      year: 2013,
+      authors: "Kindt, M., & Soeter, M.",
+      title: "Reconsolidation in a human fear conditioning study: a test of extinction as updating mechanism.",
+      journal: "Biological Psychology",
+      volume: "92(1)",
+      pages: "43–50"
+    },
+    {
+      year: 2013,
+      authors: "Sevenster, D., Beckers, T., & Kindt, M.",
+      title: "Prediction error governs pharmacologically induced amnesia for learned fear.",
+      journal: "Science",
+      volume: "339",
+      pages: "830–833"
+    },
+    {
+      year: 2013,
+      authors: "Soeter, M., & Kindt, M.",
+      title: "High trait anxiety: a challenge for disrupting fear memory reconsolidation.",
+      journal: "PLoS ONE",
+      volume: "8",
+      pages: "e75239"
+    },
+    {
+      year: 2013,
+      authors: "Visser, R.M., Scholte, H.S., Beemsterboer, T., & Kindt, M.",
+      title: "Neural pattern similarity predicts long-term fear memory.",
+      journal: "Nature Neuroscience",
+      volume: "16",
+      pages: "388–390"
+    },
+
+    // 2012
+    {
+      year: 2012,
+      authors: "Ast, V.A. van, Vervliet, B., & Kindt, M.",
+      title: "Contextual control over expression of fear is affected by cortisol.",
+      journal: "Frontiers in Behavioral Neuroscience",
+      volume: "6",
+      pages: "article 67"
+    },
+    {
+      year: 2012,
+      authors: "Bos, M.G.N., Beckers, T., & Kindt, M.",
+      title: "The effects of noradrenergic blockade on extinction in humans.",
+      journal: "Biological Psychology",
+      volume: "89",
+      pages: "598–605"
+    },
+    {
+      year: 2012,
+      authors: "Gazendam, F.J., & Kindt, M.",
+      title: "Worrying affects associative fear learning: A startle fear conditioning study.",
+      journal: "PLoS ONE",
+      volume: "7",
+      pages: "e34882"
+    },
+    {
+      year: 2012,
+      authors: "Sevenster, D., Beckers, T., & Kindt, M.",
+      title: "Retrieval per se is not sufficient to trigger reconsolidation of human fear memory.",
+      journal: "Neurobiology of Learning and Memory",
+      volume: "97",
+      pages: "338–345"
+    },
+    {
+      year: 2012,
+      authors: "Sevenster, D., Beckers, T., & Kindt, M.",
+      title: "Instructed extinction differentially affects the emotional and cognitive expression of associative fear memory.",
+      journal: "Psychophysiology",
+      volume: "49",
+      pages: "1426–1435"
+    },
+    {
+      year: 2012,
+      authors: "Soeter, M., & Kindt, M.",
+      title: "Stimulation of the noradrenergic system during memory formation impairs extinction learning but not the disruption of reconsolidation.",
+      journal: "Neuropsychopharmacology",
+      volume: "37",
+      pages: "1204–1215"
+    },
+    {
+      year: 2012,
+      authors: "Soeter, M., & Kindt, M.",
+      title: "Erasing fear for an imagined threat event.",
+      journal: "Psychoneuroendocrinology",
+      volume: "37",
+      pages: "1769–1779"
+    },
+    {
+      year: 2012,
+      authors: "Well, S. van, Visser, R.M., Scholte, H.S., & Kindt, M.",
+      title: "Neural substrates of individual differences in human fear learning: evidence from concurrent fMRI, fear-potentiated startle, and US-expectancy data.",
+      journal: "Cognitive, Affective and Behavioural Neuroscience",
+      volume: "12",
+      pages: "499–512"
+    },
+
+    // 2011
+    {
+      year: 2011,
+      authors: "Krugers, H.J., Zhou, M., Joels, M., & Kindt, M.",
+      title: "Regulation in excitatory synapses and fearful memories by stress hormones.",
+      journal: "Frontiers in Behavioral Neuroscience",
+      volume: "5",
+      pages: "article 62"
+    },
+    {
+      year: 2011,
+      authors: "Krypotos, A.-M., Jahfari, S., Ast, V. van, Kindt, M., & Forstmann, B.U.",
+      title: "Individual differences in heart rate variability predict the degree of slowing during response inhibition and initiation in the presence of emotional stimuli.",
+      journal: "Frontiers in Psychology",
+      volume: "2",
+      pages: "article 278"
+    },
+    {
+      year: 2011,
+      authors: "Soeter, M., & Kindt, M.",
+      title: "Disrupting reconsolidation: Pharmacological and behavioral manipulations.",
+      journal: "Learning and Memory",
+      volume: "18",
+      pages: "357–366"
+    },
+    {
+      year: 2011,
+      authors: "Soeter, M., & Kindt, M.",
+      title: "Noradrenergic enhancement of associative fear memory in humans.",
+      journal: "Neurobiology of Learning and Memory",
+      volume: "96",
+      pages: "263–271"
+    },
+    {
+      year: 2011,
+      authors: "Visser, R.M., Scholte, H.S., & Kindt, M.",
+      title: "Associative learning increases trial-by-trial similarity of BOLD-MRI patterns.",
+      journal: "The Journal of Neuroscience",
+      volume: "31",
+      pages: "12021–12028"
+    },
+    {
+      year: 2011,
+      authors: "Zhou, M., Kindt, M., Joels, M., & Krugers, H.J.",
+      title: "Blocking mineralocorticoid receptors prior to retrieval reduces contextual fear memory in mice.",
+      journal: "PloS ONE",
+      volume: "6",
+      pages: "e26220"
+    },
+
+    // 2010
+    {
+      year: 2010,
+      authors: "Effting, M., Vervliet, B., & Kindt, M.",
+      title: "Retrospective revaluation effects following serial compound training and target extinction.",
+      journal: "Learning and Motivation",
+      volume: "41",
+      pages: "67–83"
+    },
+    {
+      year: 2010,
+      authors: "Salemink, E., Hout, M., van den, & Kindt, M.",
+      title: "Generalisation of modified interpretive bias across tasks and domains.",
+      journal: "Cognition and Emotion",
+      volume: "24",
+      pages: "453–464"
+    },
+    {
+      year: 2010,
+      authors: "Salemink, E., Hout, M., van den, & Kindt, M.",
+      title: "How does cognitive bias modification affect anxiety? Mediation analyses and experimental data.",
+      journal: "Behavioural and Cognitive Psychotherapy",
+      volume: "38",
+      pages: "59–66"
+    },
+    {
+      year: 2010,
+      authors: "Soeter, M., & Kindt, M.",
+      title: "Dissociating response systems: Erasing fear from memory.",
+      journal: "Neurobiology of Learning and Memory",
+      volume: "94",
+      pages: "30–41"
+    },
+    {
+      year: 2010,
+      authors: "Stegeren, A.H. van, Roozendaal, B., Kindt, M., Wolf, O.T., & Joels, M.",
+      title: "Interacting noradrenergic and corticosteroid systems shift human brain activation patterns during encoding.",
+      journal: "Neurobiology of Learning and Memory",
+      volume: "93",
+      pages: "56–65"
+    },
+    {
+      year: 2010,
+      authors: "Vervliet, B., Kindt, M., Vansteenwegen, D., & Hermans, D.",
+      title: "Fear generalization in humans: Impact of verbal instructions.",
+      journal: "Behaviour Research and Therapy",
+      volume: "48",
+      pages: "38–43"
+    },
+    {
+      year: 2010,
+      authors: "Vervliet, B., Kindt, M., Vansteenwegen, D., & Hermans, D.",
+      title: "Fear generalization in humans: Impact of prior non-fearful experiences.",
+      journal: "Behaviour Research and Therapy",
+      volume: "48",
+      pages: "1078–1084"
+    },
+
+    // 2009
+    {
+      year: 2009,
+      authors: "Buck, N., Kindt, M. & Hout, M., van den",
+      title: "The effects of conceptual processing versus suppression on analogue PTSD symptoms after a distressing film.",
+      journal: "Behavioural and Cognitive Psychotherapy",
+      volume: "37",
+      pages: "195–206"
+    },
+    {
+      year: 2009,
+      authors: "Karsdorp, P.A., Kindt, M., Rietveld, S., Everaerd, W., & Mulder, B.J.M.",
+      title: "False heart rate feedback and the perception of heart symptoms in patients with congenital heart disease and anxiety.",
+      journal: "International Journal of Behavioral Medicine",
+      volume: "16",
+      pages: "81–88"
+    },
+    {
+      year: 2009,
+      authors: "Kindt, M., Soeter, M., & Vervliet, B.",
+      title: "Beyond extinction: erasing human fear responses and preventing the return of fear.",
+      journal: "Nature Neuroscience",
+      volume: "12",
+      pages: "256–258"
+    },
+    {
+      year: 2009,
+      authors: "Salemink, E., Hout, M. van den, & Kindt, M.",
+      title: "Effects of positive interpretive bias modification in highly anxious individuals.",
+      journal: "Journal of Anxiety Disorders",
+      volume: "23",
+      pages: "676–683"
+    }
+  ]
+
+};
