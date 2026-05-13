@@ -1,175 +1,90 @@
-<!DOCTYPE HTML>
-<!--
-	Horizons by TEMPLATED
-	templated.co @templatedco
-	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
--->
-<html>
-	<head>
-		<style>html{visibility: hidden;opacity:0;}</style>
-		<title>Amsterdam Emotional Memory Lab</title>
-		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-		<meta name="description" content="" />
-		<meta name="keywords" content="" />
-		<!--[if lte IE 8]><script src="css/ie/html5shiv.js"></script><![endif]-->
-		<script src="js/jquery.min.js"></script>
-		<script src="js/jquery.dropotron.min.js"></script>
-		<script src="js/skel.min.js"></script>
-		<script src="js/skel-layers.min.js"></script>
-		<script src="js/init.js"></script>
-		<noscript>
-			<link rel="stylesheet" href="css/skel.css" />
-			<link rel="stylesheet" href="css/style.css" />
-		</noscript>
-		<!--[if lte IE 8]><link rel="stylesheet" href="css/ie/v8.css" /><![endif]-->
-	</head>
-	<body class="homepage">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Team — Amsterdam Emotional Memory Lab</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/people.css" />
+</head>
+<body class="page-people">
 
-		<!-- Header -->
-		<div id="header">
-			<div class="container">
-				<!-- Logo -->
-				<h2><a href="#" id="logo">Amsterdam Emotional Memory Lab</a></h2>
+  <!-- NAV -------------------------------------------------- -->
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav__inner">
+      <a href="index.html" class="nav__brand">Amsterdam Emotional Memory Lab</a>
+      <ul class="nav__links" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="people.html">Team</a></li>
+        <li><a href="publications.html">Publications</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-nav">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="nav__dropdown" id="mobile-nav" role="menu">
+      <a href="index.html" role="menuitem">Home</a>
+      <a href="people.html" role="menuitem">Team</a>
+      <a href="publications.html" role="menuitem">Publications</a>
+      <a href="contact.html" role="menuitem">Contact</a>
+    </div>
+  </nav>
 
-				<!-- Nav -->
-				<nav id="nav">
-					<ul>
-						<li><a href="index.html">About</a></li>
-						<li><a href="people.html">People</a></li>
-						<li><a href="publications.html">Publications</a></li>
-						<li><a href="photos.html">Photos</a></li>
-						<li><a href="contact.html">Contact</a></li>
-					</ul>
-				</nav>
-			</div>
-		</div>
+  <!-- TEAM HEADER — title + tag filters -------------------- -->
+  <div class="team-header">
+    <h1 class="team-header__title">Meet our Team</h1>
 
-<!-- Main -->
-			<div id="main" class="wrapper style1">
-				<div class="container">
-					<section>
-						<header class="major">
-							<h2>Current Members</h2>
-						</header>
-					<div class="row no-collapse-1">
-						<section class="4u">
-							<a href="pages/Merel.html" class="image feature"><img src="images/people/Merel.jpg" alt=""></a>
-							<h4><a href="pages/Merel.html">Merel Kindt, PhD</a></h4>
-							Full Professor
-						</section>
-		
-						<section class="4u">
-							<a href="pages/Vanessa.html" class="image feature"><img src="images/people/Vanessa.jpg" alt=""></a>
-							<h4><a href="pages/Vanessa.html">Vanessa A. van Ast, PhD</a></h4>
-							Associate Professor
-						</section>
+    <div class="team-filters">
 
-						<section class="4u">
-							<a href="pages/Renee.html" class="image feature"><img src="images/people/Renee3.jpg" alt=""></a>
-							<h4><a href="pages/Renee.html">Renée M. Visser, PhD</a></h4>
-							Associate Professor
-						</section>
-					</div>
-					
+      <div class="team-filters__group">
+        <span class="team-filters__label">Position</span>
+        <div class="team-filters__tags" id="position-tags"></div>
+      </div>
 
-					<div class="row no-collapse-1">
-		
-						<section class="4u">
-							<a href="pages/Lotte.html" class="image feature"><img src="images/people/Lotte2.jpg" alt=""></a>
-							<h4><a href="pages/Lotte.html">Lotte Stemerding</a></h4>
-							Postdoc
-						</section>
+      <div class="team-filters__group">
+        <span class="team-filters__label">Research focus</span>
+        <div class="team-filters__tags" id="research-tags"></div>
+      </div>
 
-						<section class="4u">
-							<a href="pages/IngaMarie.html" class="image feature"><img src="images/people/IngaMarie2.jpg" alt=""></a>
-							<h4><a href="pages/IngaMarie.html">Inga Marie Freund</a></h4>
-							Ph.D. Candidate
-						</section>	
+      <button class="tag-clear" id="tag-clear" aria-label="Clear all filters">
+        Clear all filters
+      </button>
 
-						<section class="4u">
-							<a href="pages/Gulde.html" class="image feature"><img src="images/people/Gulde.png" alt=""></a>
-							<h4><a href="pages/Gulde.html">Güldehan Durman</a></h4>
-							Ph.D. Candidate
-						</section>
-			
-					</div>
+    </div>
+  </div>
 
-					<div class="row no-collapse-1">
+  <!-- CONSTELLATION CANVAS --------------------------------- -->
+  <div class="constellation-canvas" id="constellation" aria-label="Team constellation"></div>
 
+  <!-- FOOTER ----------------------------------------------- -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer__inner">
+        <div class="footer__left">
+          <p>&copy; <span id="year"></span> Amsterdam Emotional Memory Lab</p>
+          <p>Department of Clinical Psychology &mdash; University of Amsterdam</p>
+          <p>Nieuwe Achtergracht 129-B, 1018 WS Amsterdam, The Netherlands</p>
+        </div>
+        <div class="footer__right">
+          <div class="footer__social">
+            <a href="https://www.linkedin.com/company/amsterdam-emotional-memory-lab/" target="_blank" rel="noopener" aria-label="LinkedIn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect width="24" height="24" rx="3" fill="currentColor"/>
+                <rect x="3" y="8" width="4" height="13" fill="var(--navy)"/>
+                <circle cx="5" cy="5" r="2" fill="var(--navy)"/>
+                <path d="M10 8h4v2s1-2 4-2c3 0 4 2 4 5v8h-4v-7c0-1-.5-2-2-2s-2 1-2 2v7h-4V8z" fill="var(--navy)"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
 
-
-						<section class="4u">
-							<a href="pages/Donna.html" class="image feature"><img src="images/people/Donna.png" alt=""></a>
-							<h4><a href="pages/Donna.html">Donna Meyer</a></h4>
-							Ph.D. Candidate
-						</section>
-
-						<section class="4u">
-							<a href="pages/Linos.html" class="image feature"><img src="images/people/Linos.jpg" alt=""></a>
-							<h4><a href="pages/Linos.html">Linos Vossoughi</a></h4>
-							Ph.D. Candidate
-						</section>	
-
-						<section class="4u">
-							<a href="pages/Ralph.html" class="image feature"><img src="images/people/Ralph.jpg" alt=""></a>
-							<h4><a href="pages/Ralph.html">Ralph Wientjens</a></h4>
-							Ph.D. Candidate
-						</section>								
-											
-					</div>
-
-					<div class="row no-collapse-1">
-
-
-
-					<div class="row no-collapse-1">
-
-
-
-						<section class="4u">
-							<a href="pages/Eline.html" class="image feature"><img src="images/people/Eline.jpg" alt=""></a>
-							<h4><a href="pages/Eline.html">Eline de Vries</a></h4>
-							Ph.D. Candidate
-						</section>
-
-						<section class="4u">
-							<a href="pages/Floris.html" class="image feature"><img src="images/people/Floris.jpg" alt=""></a>
-							<h4><a href="pages/Floris.html">Floris Tijhuis</a></h4>
-							Ph.D. Candidate
-						</section>	
-
-							
-											
-					</div>
-
-					<div class="row no-collapse-1">
-
-					<br>
-					<br>
-					<section class="container">
-					<h6>Alumni</h6>
-					<br>
-					<b>Faya Reinhold</b>, former PhD candidate<br>
-					<b>Jack Peters</b>, former PhD candidate, currently working as a postdoc at Rijksuniversiteit Groningen<br>
-					<b>Olivier de Vries</b>, former PhD candidate<br>
-					<b>Sascha Duken</b>, former PhD candidate<br>
-					<b>Wouter Cox</b>, former PhD candidate<br>
-					<b>Anna Filmer</b>, former PhD candidate<br>
-					<b>Vivian Metselaar</b>, former lab manager<br>
-					<b>Anna Gerlicher</b>, former postdoc, currently assistant professor at Utrecht University<br>
-					<b>Jamie Elsey</b>, former PhD candidate and postdoc, currently working at Rethink Priorities<br>
-					<b>Lara Bridge</b>, former lab manager, currently master student at University of Amsterdam<br>
-					<b>Junjiao Li</b>, visiting PhD candidate, South China Normal University<br>
-					<b>Femke Gazendam</b>, former PhD candidate, currently GZ-certified therapist at PEP psychologen<br>
-					<b>Anna Kunze</b>, former PhD candidate, currently assistant professor at Ludwig-Maximilians-Universität München<br>
-					<b>Marieke Bos</b>, former PhD candidate, currently assistant professor at Leiden University<br>
-					<b>Dieuwke Sevenster</b>, former PhD candidate and postdoc, currently assistant professor at Utrecht University<br>
-					<b>Marieke Soeter</b>, former PhD candidate and postdoc, currently researcher at Netherlands Organisation for Applied Scientific Research [TNO]<br>
-					<b>Marieke Effting</b>, former PhD candidate, currently lecturer at University of Amsterdam<br>
-				
-					</section>
-					</div>
-				</section>
-			</div>
-	</body>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  <script src="data/people.js?v=2"></script>
+  <script src="js/main.js"></script>
+  <script src="js/people.js"></script>
+</body>
 </html>
