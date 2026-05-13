@@ -130,7 +130,7 @@
       + '<div class="pub-item__body">'
       + '<p class="pub-item__title">' + pub.title + featuredBadge + '</p>'
       + '<p class="pub-item__authors">' + authorsHtml + '</p>'
-      + '<p class="pub-item__meta">' + metaParts.join('<span style="margin:0 1px">,</span> ') + (preprintBadge ? ' ' + preprintBadge : '') + '</p>'
+      + '<p class="pub-item__meta">' + metaParts.join(', ') + (preprintBadge ? ' ' + preprintBadge : '') + '</p>'
       + tagsHtml
       + '</div>'
       + doiHtml
@@ -143,7 +143,6 @@
       + '<button class="year-header" aria-expanded="true" type="button">'
       + '<span class="year-header__year">' + year + '</span>'
       + '<span class="year-header__bar" aria-hidden="true"></span>'
-      + '<span class="year-header__count">' + count + ' paper' + (count !== 1 ? 's' : '') + '</span>'
       + ICON_CHEVRON
       + '</button>'
       + '<div class="year-body"><div class="year-body__inner">'

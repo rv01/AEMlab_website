@@ -47,8 +47,8 @@
 .pub-filter-hint {
   display: block;
   font-size: var(--fs-sm);
-  color: rgba(7,22,44,0.42);
-  font-style: italic;
+  color: rgba(7,22,44,0.62);
+  font-style: normal;
 }
 
 /* ---- Content area ---------------------------------------- */
@@ -104,16 +104,6 @@
   flex: 1;
   height: 1px;
   background: rgba(247,232,228,0.15);
-}
-
-.year-header__count {
-  font-size: var(--fs-xs);
-  font-weight: 700;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  color: rgba(247,232,228,0.42);
-  white-space: nowrap;
-  flex-shrink: 0;
 }
 
 .year-header__chevron {
