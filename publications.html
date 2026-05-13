@@ -32,11 +32,25 @@
     </div>
   </nav>
 
-  <!-- PAGE INTRO ------------------------------------------- -->
-  <div class="pub-intro">
-    <div class="pub-intro__inner">
-      <h1 class="pub-intro__title">Publications</h1>
-      <p class="pub-intro__sub">Research from the Amsterdam Emotional Memory Lab</p>
+  <!-- BANNER ----------------------------------------------- -->
+  <header class="banner pub-banner" role="banner">
+    <div class="banner__bg" aria-hidden="true"></div>
+    <div class="banner__overlay pub-banner__overlay" aria-hidden="true"></div>
+    <div class="banner__content">
+      <h1 class="banner__title">Publications</h1>
+      <p class="banner__sub">Amsterdam Emotional Memory Lab</p>
+    </div>
+  </header>
+
+  <!-- FILTER BAR ------------------------------------------- -->
+  <div class="pub-filter-bar">
+    <div class="pub-filter-bar__inner">
+      <div class="pub-filter-heading">
+        <span class="pub-filter-label">
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true" style="display:inline-block;vertical-align:middle;margin-right:5px;margin-top:-2px"><path d="M1 2h10M3 6h6M5 10h2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>Research topics
+        </span>
+        <span class="pub-filter-hint">Click a topic to filter</span>
+      </div>
       <div class="pub-filters">
         <div id="pub-tags" class="team-filters__group"></div>
         <button class="tag-clear" id="pub-tag-clear" aria-label="Clear all filters">Clear all</button>

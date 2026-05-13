@@ -108,6 +108,10 @@
       ? '<div class="pub-item__link-col"><a href="' + link + '" target="_blank" rel="noopener" class="pub-doi" title="Open article">' + ICON_LINK + '</a></div>'
       : '<div class="pub-item__link-col"></div>';
 
+    var featuredBadge = pub.featured
+      ? '<span class="pub-item__featured-badge">Key publication</span>'
+      : '';
+
     var metaParts = [];
     if (pub.journal) metaParts.push('<span class="pub-item__journal">' + pub.journal + '</span>');
     var vp = [pub.volume, pub.pages].filter(Boolean).join(', ');
@@ -124,7 +128,7 @@
 
     return '<div class="pub-item' + (pub.featured ? ' featured' : '') + '">'
       + '<div class="pub-item__body">'
-      + '<p class="pub-item__title">' + pub.title + '</p>'
+      + '<p class="pub-item__title">' + pub.title + featuredBadge + '</p>'
       + '<p class="pub-item__authors">' + authorsHtml + '</p>'
       + '<p class="pub-item__meta">' + metaParts.join('<span style="margin:0 1px">,</span> ') + (preprintBadge ? ' ' + preprintBadge : '') + '</p>'
       + tagsHtml
