@@ -106,10 +106,15 @@
   position: absolute;
   left: 0;
   top: 0;
-  cursor: pointer;
+  cursor: grab;
+  touch-action: none;  /* lets pointer events fire on touch without scroll conflict */
   z-index: 2;
   transition: opacity 350ms ease;
   will-change: transform;
+}
+
+.p-node.dragging {
+  cursor: grabbing;
 }
 
 .p-node.dimmed {
