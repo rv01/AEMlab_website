@@ -11,18 +11,6 @@
   background: rgba(7, 22, 44, 0.58);
 }
 
-/* ---- Scroll reveal --------------------------------------- */
-.reveal {
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.75s ease, transform 0.75s ease;
-}
-
-.reveal.revealed {
-  opacity: 1;
-  transform: none;
-}
-
 /* ---- Panel sections (01 & 02) --------------------------- */
 .contact-panel {
   padding: 6rem 0;

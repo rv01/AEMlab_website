@@ -69,6 +69,12 @@
   border-radius: 6px;
   overflow: hidden;
   box-shadow: 0 2px 12px rgba(7,22,44,0.10), 0 0 0 1px rgba(7,22,44,0.06);
+  animation: yearSettle 0.45s ease both;
+}
+
+@keyframes yearSettle {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
 }
 
 /* ---- Year header — dark navy strip ----------------------- */

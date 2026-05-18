@@ -161,6 +161,10 @@
     }
     var grouped = groupByYear(filtered);
     list.innerHTML = grouped.map(function (g) { return renderYearSection(g.year, g.pubs); }).join('');
+    /* stagger: each year section settles in 80 ms after the previous */
+    list.querySelectorAll('.year-section').forEach(function (el, i) {
+      el.style.animationDelay = (i * 0.08) + 's';
+    });
     initCollapse();
   }
 
