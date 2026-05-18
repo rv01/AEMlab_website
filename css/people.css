@@ -10,7 +10,7 @@
 
 /* ---- Team intro ------------------------------------------ */
 .team-intro {
-  background: var(--blush);
+  background: var(--white);
   padding: 1.75rem 2rem 1.5rem;
   text-align: center;
   border-bottom: 1px solid rgba(7,22,44,0.07);
