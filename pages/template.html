@@ -83,20 +83,24 @@
 
   <!-- BODY — add/remove sections as needed ----------------- -->
   <main class="profile-body">
-    <div class="profile-body__inner">
 
-      <section class="profile-section">
+    <section class="profile-section" data-num="01">
+      <div class="profile-section__inner">
         <h2>Research Interests</h2>
         <p>{{RESEARCH_INTERESTS}}</p>
-      </section>
+      </div>
+    </section>
 
-      <!-- Remove this section if background text is not available -->
-      <section class="profile-section">
+    <!-- Remove this section if background text is not available -->
+    <section class="profile-section" data-num="02">
+      <div class="profile-section__inner">
         <h2>Background</h2>
         <p>{{BACKGROUND}}</p>
-      </section>
+      </div>
+    </section>
 
-    </div>
+    <!-- Additional sections: copy block above, increment data-num -->
+
   </main>
 
   <!-- FOOTER ----------------------------------------------- -->
