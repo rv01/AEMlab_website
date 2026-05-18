@@ -138,10 +138,11 @@
   }
 
   function renderYearSection(year, pubs) {
-    var count = pubs.length;
     return '<section class="year-section" data-year="' + year + '">'
       + '<button class="year-header" aria-expanded="true" type="button">'
+      + '<div class="year-header__year-wrap">'
       + '<span class="year-header__year">' + year + '</span>'
+      + '</div>'
       + '<span class="year-header__bar" aria-hidden="true"></span>'
       + ICON_CHEVRON
       + '</button>'
@@ -151,30 +152,77 @@
       + '</section>';
   }
 
+  function staggerEnter(inner) {
+    var items = inner.querySelectorAll('.pub-item');
+    items.forEach(function (item) {
+      item.classList.remove('pub-enter');
+      item.style.removeProperty('--pub-delay');
+    });
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        items.forEach(function (item, i) {
+          item.style.setProperty('--pub-delay', (i * 0.04) + 's');
+          item.classList.add('pub-enter');
+        });
+      });
+    });
+  }
+
   function render() {
     var list = document.getElementById('pub-list');
     if (!list) return;
-    var filtered = getFiltered();
-    if (!filtered.length) {
-      list.innerHTML = '<p class="no-results">No publications match the selected filters.</p>';
-      return;
+
+    function doRender() {
+      var filtered = getFiltered();
+      if (!filtered.length) {
+        list.innerHTML = '<p class="no-results">No publications match the selected filters.</p>';
+      } else {
+        var grouped = groupByYear(filtered);
+        list.innerHTML = grouped.map(function (g) { return renderYearSection(g.year, g.pubs); }).join('');
+        list.querySelectorAll('.year-section').forEach(function (el, i) {
+          el.style.animationDelay = (i * 0.08) + 's';
+        });
+        initCollapse();
+      }
+      list.style.opacity = '';
+      list.style.transition = '';
     }
-    var grouped = groupByYear(filtered);
-    list.innerHTML = grouped.map(function (g) { return renderYearSection(g.year, g.pubs); }).join('');
-    /* stagger: each year section settles in 80 ms after the previous */
-    list.querySelectorAll('.year-section').forEach(function (el, i) {
-      el.style.animationDelay = (i * 0.08) + 's';
-    });
-    initCollapse();
+
+    if (list.children.length) {
+      list.style.transition = 'opacity 180ms ease';
+      list.style.opacity = '0';
+      setTimeout(doRender, 190);
+    } else {
+      doRender();
+    }
   }
 
   function initCollapse() {
     document.querySelectorAll('.year-header').forEach(function (btn) {
       btn.addEventListener('click', function () {
-        var body = btn.nextElementSibling;
-        var expanded = btn.getAttribute('aria-expanded') === 'true';
-        btn.setAttribute('aria-expanded', String(!expanded));
-        body.classList.toggle('collapsed', expanded);
+        var section = btn.closest('.year-section');
+        var yearWrap = btn.querySelector('.year-header__year-wrap');
+        var body = section.querySelector('.year-body');
+        var inner = section.querySelector('.year-body__inner');
+        var collapsing = btn.getAttribute('aria-expanded') === 'true';
+
+        btn.setAttribute('aria-expanded', String(!collapsing));
+
+        if (collapsing) {
+          /* Measure before any class changes so we get expanded-state geometry */
+          var hRect = btn.getBoundingClientRect();
+          var yRect = yearWrap.getBoundingClientRect();
+          var delta = (hRect.width - yRect.width) / 2 - (yRect.left - hRect.left);
+          /* GPU-accelerated transform — no layout recalc per frame */
+          yearWrap.style.transform = 'translateX(' + delta + 'px) scale(0.9)';
+          body.classList.add('collapsed');
+          section.classList.add('is-collapsed');
+        } else {
+          yearWrap.style.transform = '';
+          body.classList.remove('collapsed');
+          section.classList.remove('is-collapsed');
+          staggerEnter(inner);
+        }
       });
     });
   }

@@ -8,7 +8,7 @@
   backdrop-filter: blur(10px);
 }
 
-/* ---- Banner (shorter than landing page) ------------------ */
+/* ---- Banner ---------------------------------------------- */
 .pub-banner {
   height: clamp(180px, 22vw, 280px);
 }
@@ -21,12 +21,12 @@
   background: rgba(7, 22, 44, 0.65);
 }
 
-/* ---- Filter bar ------------------------------------------ */
+/* ---- Filter bar — blush, red label decoration ------------ */
 .pub-filter-bar {
-  background: var(--white);
+  background: var(--blush);
   padding: 1.75rem 2rem 2rem;
   text-align: center;
-  border-bottom: 1px solid rgba(7,22,44,0.08);
+  border-bottom: 1px solid rgba(7,22,44,0.10);
 }
 
 .pub-filter-bar__inner {
@@ -39,7 +39,9 @@
 }
 
 .pub-filter-label {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
   font-size: var(--fs-xs);
   font-weight: 700;
   letter-spacing: 0.13em;
@@ -48,11 +50,19 @@
   margin-bottom: 0.3rem;
 }
 
+.pub-filter-label::before {
+  content: '';
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--red);
+  flex-shrink: 0;
+}
+
 .pub-filter-hint {
   display: block;
   font-size: var(--fs-sm);
-  color: rgba(7,22,44,0.62);
-  font-style: normal;
+  color: rgba(7,22,44,0.55);
 }
 
 /* ---- Content area ---------------------------------------- */
@@ -73,19 +83,24 @@
   border-radius: 6px;
   overflow: hidden;
   box-shadow: 0 2px 12px rgba(7,22,44,0.10), 0 0 0 1px rgba(7,22,44,0.06);
-  animation: yearSettle 0.45s ease both;
+  animation: yearSettle 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+  transition: box-shadow 280ms ease;
+}
+
+.year-section.is-collapsed {
+  box-shadow: 0 1px 6px rgba(7,22,44,0.12), 0 0 0 1px rgba(7,22,44,0.08);
 }
 
 @keyframes yearSettle {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(14px); }
   to   { opacity: 1; transform: none; }
 }
 
-/* ---- Year header — dark navy strip ----------------------- */
+/* ---- Year header — dark navy with red left accent --------- */
 .year-header {
   display: flex;
   align-items: center;
-  gap: 1.1rem;
+  gap: 1rem;
   width: 100%;
   padding: 1rem 1.75rem;
   background: var(--navy);
@@ -93,11 +108,30 @@
   cursor: pointer;
   text-align: left;
   font-family: var(--font-base);
-  transition: background var(--transition);
+  position: relative;
+  transition: background 280ms ease;
 }
 
-.year-header:hover {
+/* 4px red left accent stripe — matches contact page */
+.year-header::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--red);
+}
+
+.year-header:hover,
+.year-section.is-collapsed .year-header {
   background: var(--blue-dark);
+}
+
+/* Year number wrapper — translateX centering animated via JS */
+.year-header__year-wrap {
+  flex-shrink: 0;
+  transition: transform 420ms cubic-bezier(0.34, 1.26, 0.64, 1);
 }
 
 .year-header__year {
@@ -106,23 +140,33 @@
   color: var(--blush);
   letter-spacing: -0.03em;
   line-height: 1;
-  min-width: 4.5rem;
-  flex-shrink: 0;
 }
 
+/* Dividing bar — fades out when collapsed, keeps layout space */
 .year-header__bar {
-  flex: 1;
+  flex: 1 0 0;
   height: 1px;
   background: rgba(247,232,228,0.15);
+  transition: opacity 260ms ease;
 }
 
+.year-section.is-collapsed .year-header__bar {
+  opacity: 0;
+}
+
+/* Chevron — spring rotation */
 .year-header__chevron {
   width: 18px;
   height: 18px;
   flex-shrink: 0;
   color: rgba(247,232,228,0.40);
-  transition: transform 260ms ease;
+  transition: transform 360ms cubic-bezier(0.34, 1.26, 0.64, 1),
+              color 200ms ease;
   display: block;
+}
+
+.year-header:hover .year-header__chevron {
+  color: rgba(247,232,228,0.70);
 }
 
 .year-header[aria-expanded="false"] .year-header__chevron {
@@ -133,7 +177,7 @@
 .year-body {
   display: grid;
   grid-template-rows: 1fr;
-  transition: grid-template-rows 280ms ease;
+  transition: grid-template-rows 380ms cubic-bezier(0.4, 0, 0.2, 1);
   background: var(--white);
 }
 
@@ -143,6 +187,22 @@
 
 .year-body__inner {
   overflow: hidden;
+  transition: opacity 300ms ease;
+}
+
+.year-body.collapsed .year-body__inner {
+  opacity: 0;
+}
+
+/* ---- Stagger-in animation on section expand -------------- */
+@keyframes pubEnter {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.pub-item.pub-enter {
+  animation: pubEnter 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--pub-delay, 0s);
 }
 
 /* ---- Publication entry ----------------------------------- */
@@ -166,7 +226,6 @@
   border-left-color: rgba(176,42,60,0.30);
 }
 
-/* Featured / key publication */
 .pub-item.featured {
   border-left-color: var(--red);
   background: rgba(176,42,60,0.030);
@@ -190,7 +249,6 @@
   margin-bottom: 0.25rem;
 }
 
-/* Key publication badge inside title row */
 .pub-item__featured-badge {
   display: inline-block;
   font-size: 0.62rem;
@@ -315,9 +373,7 @@
   .pub-content .container { padding: 0 0.75rem; }
   .pub-content { padding: 1.5rem 0 4rem; }
 
-  .year-header {
-    padding: 0.85rem 1.1rem;
-  }
+  .year-header { padding: 0.85rem 1.1rem; }
   .year-header__year { font-size: 1.6rem; }
 
   .pub-item {

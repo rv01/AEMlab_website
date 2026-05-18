@@ -40,32 +40,16 @@
 /* Visual column */
 .contact-panel__visual {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
+  justify-content: center;
   text-align: center;
   position: relative;
 }
 
-.contact-panel__num {
-  display: block;
-  font-size: clamp(6rem, 14vw, 11rem);
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: -0.06em;
-  color: var(--navy);
-  opacity: 0.055;
-  user-select: none;
-}
-
-.contact-panel--blush .contact-panel__num {
-  opacity: 0.075;
-}
 
 .contact-panel__icon {
   color: var(--blue-mid);
   opacity: 0.68;
-  margin-top: -1.25rem;
 }
 
 /* Content column */
@@ -154,20 +138,6 @@
   background: var(--red);
 }
 
-/* Large watermark number */
-.contact-address__watermark {
-  position: absolute;
-  right: -1.5rem;
-  bottom: -2rem;
-  font-size: clamp(10rem, 20vw, 16rem);
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: -0.06em;
-  color: var(--white);
-  opacity: 0.045;
-  user-select: none;
-  pointer-events: none;
-}
 
 .contact-address__content {
   position: relative;
@@ -271,8 +241,7 @@
     align-items: center;
   }
 
-  .contact-panel__num { font-size: clamp(5rem, 16vw, 8rem); }
-  .contact-panel__icon { margin-top: 0; }
+
 }
 
 @media (max-width: 767px) {
