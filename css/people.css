@@ -3,17 +3,38 @@
    ============================================================ */
 
 .page-people .nav {
-  background: rgba(7, 22, 44, 0.62);
+  background: rgba(7, 22, 44, 0.88);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 }
 
 /* ---- Team intro ------------------------------------------ */
 .team-intro {
-  background: var(--white);
-  padding: 1.75rem 2rem 1.5rem;
+  background: var(--blush);
+  padding: 2rem 2rem 2rem;
   text-align: center;
-  border-bottom: 1px solid rgba(7,22,44,0.07);
+}
+
+.team-intro__label {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 0.65rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+}
+.team-intro__label::before,
+.team-intro__label::after {
+  content: '';
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--red);
+  flex-shrink: 0;
 }
 
 .team-intro__title {
@@ -33,26 +54,6 @@
   gap: 0.5rem;
 }
 
-.team-filters__heading {
-  margin-bottom: 0.25rem;
-}
-
-.team-filters__label {
-  display: inline-block;
-  font-size: var(--fs-xs);
-  font-weight: 700;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-  color: var(--red);
-  margin-bottom: 0.2rem;
-}
-
-.team-filters__hint {
-  display: block;
-  font-size: var(--fs-sm);
-  color: rgba(7,22,44,0.55);
-}
-
 .team-filters__groups {
   display: flex;
   flex-direction: column;
@@ -67,12 +68,33 @@
   gap: 0.35rem;
 }
 
+/* Base section label — used on publications page (light bg) */
 .team-filters__section-label {
   font-size: var(--fs-xs);
   font-weight: 700;
   letter-spacing: 0.10em;
   text-transform: uppercase;
   color: rgba(7,22,44,0.38);
+}
+
+/* Team page: muted dark on blush — same as base, no override needed */
+
+/* Research topics mobile toggle button */
+.research-toggle {
+  font-family: var(--font-base);
+  background: none;
+  border: none;
+  cursor: default;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.research-toggle__chevron {
+  display: none;
+  transition: transform 220ms ease;
+  color: rgba(7,22,44,0.45);
 }
 
 .team-filters__group {
@@ -82,6 +104,7 @@
   gap: 0.45rem;
 }
 
+/* ---- Tag buttons ------------------------------------------ */
 .tag-btn {
   font-family: var(--font-base);
   font-size: 0.875rem;
@@ -95,6 +118,7 @@
 .tag-btn:hover  { transform: translateY(-1px); }
 .tag-btn:active { transform: translateY(0); }
 
+/* Default styles — publications page (light background) */
 .tag-btn--position {
   border: 2px solid rgba(176,42,60,0.35);
   background: rgba(176,42,60,0.05);
@@ -111,6 +135,10 @@
 .tag-btn--research:hover  { border-color: var(--blue-dark); background: rgba(28,52,91,0.10); }
 .tag-btn--research.active { background: var(--blue-dark); border-color: var(--blue-dark); color: var(--white); }
 
+/* Team page uses same tag pill styles as publications — blush bg suits both */
+
+/* ---- Clear button ----------------------------------------- */
+/* Default — publications page (light background) */
 .tag-clear {
   font-family: var(--font-base);
   font-size: var(--fs-sm);
@@ -125,6 +153,8 @@
 .tag-clear.visible { display: inline; }
 .tag-clear:hover   { color: var(--navy); text-decoration: underline; }
 
+/* Team page clear button uses base style — no dark override needed */
+
 /* ---- Constellation canvas --------------------------------- */
 .constellation-canvas {
   width: 100%;
@@ -132,6 +162,7 @@
   position: relative;
   overflow: hidden;
   background: #06121F;
+  box-shadow: inset 0 14px 36px rgba(6,18,31,0.65);
 }
 
 #bg-canvas {
@@ -243,6 +274,8 @@
 .profile-hero {
   position: relative;
   overflow: hidden;
+  margin-top: calc(-1 * var(--nav-h));
+  padding-top: var(--nav-h);
 }
 
 .profile-hero__bg {
@@ -250,7 +283,7 @@
   inset: 0;
   background-image: url('../images/amsterdam2.jpg');
   background-size: cover;
-  background-position: center 60%;
+  background-position: center 40%;
 }
 
 .profile-hero__overlay {
@@ -486,7 +519,10 @@
 }
 
 @media (max-width: 767px) {
-  .team-intro  { padding: 1.25rem 1.25rem 1rem; }
+  .team-intro  { padding: 1.5rem 1.25rem 1.5rem; }
+  .research-toggle { cursor: pointer; }
+  .research-toggle__chevron { display: block; }
+  #research-tags.collapsed { display: none; }
   .profile-section { padding: 2rem 0; }
   .profile-section__inner { padding: 0 1.25rem; }
   .profile-section:nth-child(odd) .profile-section__inner,

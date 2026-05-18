@@ -512,6 +512,28 @@
     }
   }
 
+  /* ---- Mobile research filter collapse -------------------- */
+  function initMobileFilters() {
+    var toggle = document.getElementById('research-toggle');
+    var tags   = document.getElementById('research-tags');
+    if (!toggle || !tags) return;
+
+    function isMobile() { return window.innerWidth <= 767; }
+
+    if (isMobile()) {
+      tags.classList.add('collapsed');
+      toggle.setAttribute('aria-expanded', 'false');
+    }
+
+    toggle.addEventListener('click', function () {
+      if (!isMobile()) return;
+      var isCollapsed = tags.classList.toggle('collapsed');
+      toggle.setAttribute('aria-expanded', String(!isCollapsed));
+      var chevron = toggle.querySelector('.research-toggle__chevron');
+      if (chevron) chevron.style.transform = isCollapsed ? '' : 'rotate(180deg)';
+    });
+  }
+
   /* ---- Resize handling ------------------------------------ */
   var resizeTimer;
   var constellationCanvas;
@@ -581,6 +603,7 @@
     constellationCanvas.style.height = canvasH + 'px';
 
     buildTagPanel();
+    initMobileFilters();
     window.addEventListener('resize', onResize);
 
     setTimeout(function () {

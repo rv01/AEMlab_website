@@ -162,7 +162,7 @@ p  { font-size: var(--fs-md); }
   position: relative;
   width: 100%;
   /* taller to compensate for pulling up behind the nav */
-  height: clamp(220px, 28vw, 360px);
+  height: clamp(280px, 36vw, 440px);
   /* slide up behind the transparent nav */
   margin-top: calc(-1 * var(--nav-h));
   /* push content below the nav area so it stays centred in the visible photo strip */
@@ -190,6 +190,7 @@ p  { font-size: var(--fs-md); }
   text-align: center;
   color: var(--white);
   padding: 0 1.5rem;
+  animation: bannerReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) both 0.2s;
 }
 .banner__title {
   font-size: clamp(1.75rem, 4.5vw, 3.25rem);
@@ -210,29 +211,52 @@ p  { font-size: var(--fs-md); }
    HERO (mission)
    ============================================================ */
 .hero {
-  background: var(--white);
-  padding: 5rem 0 4.5rem;
+  background: var(--navy);
+  padding: 3.5rem 0 3.5rem;
 }
 .hero__inner {
   width: 100%;
-  max-width: var(--max-w);
+  max-width: 920px;
   margin: 0 auto;
   padding: 0 2.5rem;
-  text-align: center;
+  text-align: left;
+}
+.hero__label {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+.hero__label::before {
+  content: '';
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--red);
+  flex-shrink: 0;
 }
 .hero__heading {
   font-size: var(--fs-2xl);
-  color: var(--navy);
+  color: var(--blush);
   margin-bottom: 1.5rem;
 }
 .hero__text {
   font-size: clamp(1.2rem, 1.6vw, 1.5rem);
-  color: var(--blue-dark);
+  color: rgba(247, 232, 228, 0.82);
   line-height: 1.85;
 }
 
 @keyframes fadeUp {
   to { opacity: 1; transform: translateY(0); }
+}
+@keyframes bannerReveal {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 /* ---- Scroll reveal --------------------------------------- */
 .reveal {
@@ -443,10 +467,10 @@ p  { font-size: var(--fs-md); }
   .nav__inner  { padding: 0 1.25rem; }
   .footer .container { padding: 0 1.25rem; }
   .footer__inner { flex-direction: column; align-items: flex-start; gap: 1rem; }
-  .hero { padding: 2.5rem 0 2rem; }
+  .hero { padding: 2rem 0 1.75rem; }
   .hero__inner { padding: 0 1.25rem; }
   .research { padding: 3rem 0; }
   .linkedin { padding: 3rem 0; }
   .research .container, .linkedin .container { padding: 0 1.25rem; }
-  .banner { height: clamp(180px, 45vw, 260px); }
+  .banner { height: clamp(200px, 46vw, 280px); }
 }

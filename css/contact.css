@@ -7,8 +7,12 @@
   height: clamp(180px, 22vw, 280px);
 }
 
+.contact-banner .banner__bg {
+  background-position: center 40%;
+}
+
 .contact-banner__overlay {
-  background: rgba(7, 22, 44, 0.58);
+  background: rgba(7, 22, 44, 0.65);
 }
 
 /* ---- Panel sections (01 & 02) --------------------------- */
