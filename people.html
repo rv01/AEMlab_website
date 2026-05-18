@@ -35,9 +35,23 @@
   <div class="team-intro">
     <h1 class="team-intro__title">Meet our Team!</h1>
     <div class="team-filters">
-      <div class="team-filters__group" id="position-tags"></div>
-      <div class="team-filters__group" id="research-tags"></div>
-      <button class="tag-clear" id="tag-clear" aria-label="Clear all filters">Clear all</button>
+      <div class="team-filters__heading">
+        <span class="team-filters__label">
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true" style="display:inline-block;vertical-align:middle;margin-right:5px;margin-top:-2px"><path d="M1 2h10M3 6h6M5 10h2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>Filters
+        </span>
+        <span class="team-filters__hint">Click to filter</span>
+      </div>
+      <div class="team-filters__groups">
+        <div class="team-filters__section">
+          <span class="team-filters__section-label">Role</span>
+          <div class="team-filters__group" id="position-tags"></div>
+        </div>
+        <div class="team-filters__section">
+          <span class="team-filters__section-label">Research Topics</span>
+          <div class="team-filters__group" id="research-tags"></div>
+        </div>
+        <button class="tag-clear" id="tag-clear" aria-label="Clear all filters">Clear all</button>
+      </div>
     </div>
   </div>
 
