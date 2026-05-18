@@ -3,13 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{{FULL_NAME}} — Amsterdam Emotional Memory Lab</title>
+  <title>Amsterdam Emotional Memory Lab</title>
   <link rel="stylesheet" href="../css/style.css" />
   <link rel="stylesheet" href="../css/people.css" />
 </head>
 <body>
 
-  <!-- NAV -------------------------------------------------- -->
   <nav class="nav" role="navigation" aria-label="Main navigation">
     <div class="nav__inner">
       <a href="../index.html" class="nav__brand">Amsterdam Emotional Memory Lab</a>
@@ -31,17 +30,13 @@
     </div>
   </nav>
 
-  <!-- HERO — replace all {{PLACEHOLDER}} values ------------ -->
   <header class="profile-hero">
     <div class="profile-hero__bg"></div>
     <div class="profile-hero__overlay"></div>
     <div class="profile-hero__inner">
-
       <div class="profile-hero__photo-col">
-        <!-- Path is relative to pages/: ../images/people/Name.jpg -->
-        <img class="profile-photo" src="{{PHOTO_SRC}}" alt="{{FULL_NAME}}" />
+        <img class="profile-photo" src="" alt="" />
       </div>
-
       <div class="profile-hero__info">
         <a href="../people.html" class="profile-back">
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -49,61 +44,16 @@
           </svg>
           Back to Team
         </a>
-
-        <h1 class="profile-name">{{FULL_NAME}}</h1>
-        <!-- Options: Full Professor | Associate Professor | Assistant Professor | Postdoc | PhD Candidate -->
-        <p class="profile-role">{{ROLE}}</p>
+        <h1 class="profile-name"></h1>
+        <p class="profile-role"></p>
         <p class="profile-affiliation">Department of Clinical Psychology &mdash; University of Amsterdam</p>
-
-        <div class="profile-hero__links">
-          <!-- Remove any <a> block if the link is not available for this person -->
-
-          <!-- LinkedIn -->
-          <a href="{{LINKEDIN_URL}}" target="_blank" rel="noopener" class="profile-link">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <rect width="24" height="24" rx="3" fill="currentColor"/>
-              <rect x="3" y="8" width="4" height="13" fill="var(--navy)"/>
-              <circle cx="5" cy="5" r="2" fill="var(--navy)"/>
-              <path d="M10 8h4v2s1-2 4-2c3 0 4 2 4 5v8h-4v-7c0-1-.5-2-2-2s-2 1-2 2v7h-4V8z" fill="var(--navy)"/>
-            </svg>
-            LinkedIn
-          </a>
-
-          <!-- UvA Profile -->
-          <a href="{{UVA_URL}}" target="_blank" rel="noopener" class="profile-link">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 10v11M16 10v11M12 10v11"/>
-            </svg>
-            UvA Profile
-          </a>
-        </div>
+        <div class="profile-hero__links"></div>
       </div>
     </div>
   </header>
 
-  <!-- BODY — add/remove sections as needed ----------------- -->
-  <main class="profile-body">
+  <main class="profile-body"></main>
 
-    <section class="profile-section" data-num="01">
-      <div class="profile-section__inner">
-        <h2>Research Interests</h2>
-        <p>{{RESEARCH_INTERESTS}}</p>
-      </div>
-    </section>
-
-    <!-- Remove this section if background text is not available -->
-    <section class="profile-section" data-num="02">
-      <div class="profile-section__inner">
-        <h2>Background</h2>
-        <p>{{BACKGROUND}}</p>
-      </div>
-    </section>
-
-    <!-- Additional sections: copy block above, increment data-num -->
-
-  </main>
-
-  <!-- FOOTER ----------------------------------------------- -->
   <footer class="footer" role="contentinfo">
     <div class="container">
       <div class="footer__inner">
@@ -129,6 +79,8 @@
   </footer>
 
   <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  <script src="../data/people.js"></script>
+  <script src="../js/profile.js"></script>
   <script src="../js/main.js"></script>
 </body>
 </html>
