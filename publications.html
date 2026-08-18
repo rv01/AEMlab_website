@@ -16,6 +16,7 @@
       <a href="index.html" class="nav__brand">Amsterdam Emotional Memory Lab</a>
       <ul class="nav__links" role="list">
         <li><a href="index.html">Home</a></li>
+        <li><a href="research.html">Research Questions</a></li>
         <li><a href="people.html">Team</a></li>
         <li><a href="publications.html">Publications</a></li>
         <li><a href="contact.html">Contact</a></li>
@@ -26,6 +27,7 @@
     </div>
     <div class="nav__dropdown" id="mobile-nav" role="menu">
       <a href="index.html" role="menuitem">Home</a>
+      <a href="research.html" role="menuitem">Research Questions</a>
       <a href="people.html" role="menuitem">Team</a>
       <a href="publications.html" role="menuitem">Publications</a>
       <a href="contact.html" role="menuitem">Contact</a>
@@ -45,13 +47,16 @@
   <!-- FILTER BAR ------------------------------------------- -->
   <div class="pub-filter-bar">
     <div class="pub-filter-bar__inner">
-      <div class="pub-filter-heading">
-        <span class="pub-filter-label">Research topics</span>
-        <span class="pub-filter-hint">Click a topic to filter</span>
-      </div>
-      <div class="pub-filters">
-        <div id="pub-tags" class="team-filters__group"></div>
-        <button class="tag-clear" id="pub-tag-clear" aria-label="Clear all filters">Clear all</button>
+      <div class="pub-filter-group">
+        <div class="pub-filter-heading">
+          <span class="pub-filter-label">Research topics</span>
+          <span class="pub-filter-hint">Click a topic to filter</span>
+        </div>
+        <div class="pub-filters">
+          <div id="pub-tags" class="team-filters__group">
+            <button class="tag-btn tag-btn--position" id="pub-key-toggle" type="button" aria-pressed="false">Key publications</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -92,6 +97,7 @@
 
   <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
   <script src="data/people.js?v=2"></script>
+  <script src="data/research-questions.js"></script>
   <script src="data/publications.js"></script>
   <script src="js/main.js"></script>
   <script src="js/publications.js"></script>

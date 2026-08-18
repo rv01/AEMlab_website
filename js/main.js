@@ -36,17 +36,6 @@
     });
   }
 
-  /* ---- Expandable research cards ------------------------- */
-  function initCards() {
-    document.querySelectorAll('.card').forEach(function (card) {
-      card.addEventListener('click', function (e) {
-        if (e.target.closest('.card__link')) return;
-        const open = card.classList.toggle('open');
-        card.setAttribute('aria-expanded', String(open));
-      });
-    });
-  }
-
   /* ---- Smooth scroll for anchor links -------------------- */
   function initSmoothScroll() {
     document.querySelectorAll('a[href^="#"]').forEach(function (a) {
@@ -81,7 +70,6 @@
   document.addEventListener('DOMContentLoaded', function () {
     initNav();
     setActiveNav();
-    initCards();
     initSmoothScroll();
     initReveal();
   });

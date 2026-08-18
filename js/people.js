@@ -290,7 +290,10 @@
 
   function startPhysics(nodeObjects, targets) {
     if (phyRaf) cancelAnimationFrame(phyRaf);
-    alpha = 1.0;
+    /* Gentle boot: full-strength alpha (1.0) is reserved for reheats
+       (resize/drag-release), where a snappy response feels right. On first
+       load a softer alpha keeps the initial settle calm instead of punchy. */
+    alpha = 0.40;
 
     /* Build phyNodes — attach drag listener while we have the phyNode ref */
     phyNodes = nodeObjects.map(function (obj, idx) {
@@ -298,11 +301,11 @@
       var level  = SENIORITY[member.role] || 4;
       var cgK    = SENIORITY_CGK[Math.min(level - 1, 3)];
 
-      /* Start near the target position rather than at a random canvas point.
-         A small scatter (≈40 % of MIN_GAP) means nodes only need to travel
-         ~90 px to reach home — no fast cross-canvas fly-in, no big initial
-         repulsion explosions. */
-      var scatterR = MIN_GAP * 0.40;
+      /* Start very close to the target position — nodes should barely need
+         to travel to reach home. A small scatter (≈15 % of MIN_GAP) keeps
+         neighbouring nodes from starting inside each other's hard-sphere
+         radius, which is what caused the abrupt "expulsion" snap on load. */
+      var scatterR = MIN_GAP * 0.15;
       var sa = Math.random() * Math.PI * 2;
       var tx = targets[idx].x, ty = targets[idx].y;
 
@@ -332,6 +335,13 @@
 
     /* Snap to start positions before first paint */
     phyNodes.forEach(function (n) { applyTransform(n); });
+
+    /* Staggered fade-in — nodes materialize like stars appearing rather
+       than popping in all at once already fully visible. */
+    phyNodes.forEach(function (n) {
+      var delay = 40 + Math.random() * 340;
+      setTimeout(function () { n.el.style.opacity = '1'; }, delay);
+    });
 
     function loop() {
       /* Alpha decay */
@@ -427,6 +437,7 @@
     node.className = 'p-node';
     node.style.width  = nodeSize + 'px';
     node.style.height = nodeSize + 'px';
+    node.style.opacity = '0';   /* faded in, staggered, once physics starts */
     node.dataset.researchTags = rTags.join('||');
     node.dataset.positionTag  = pTag || '';
 

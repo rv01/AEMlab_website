@@ -1,0 +1,326 @@
+/* ============================================================
+   Research Questions page
+   ============================================================ */
+
+/* ---- Banner ------------------------------------------------ */
+.rq-banner {
+  height: clamp(220px, 26vw, 320px);
+}
+.rq-banner .banner__bg {
+  background-position: center 40%;
+}
+.rq-banner__overlay {
+  background: rgba(7, 22, 44, 0.65);
+}
+
+/* ---- Intro — navy band, white text (mirrors the homepage
+   mission/.hero section) ---------------------------------- */
+.rq-intro {
+  background: var(--navy);
+  padding: 2.75rem 2.5rem;
+}
+.rq-intro__inner {
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: center;
+}
+.rq-intro__inner p {
+  font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+  color: rgba(247, 232, 228, 0.85);
+  line-height: 1.8;
+}
+
+/* ---- Switcher section — light pink, matches the homepage
+   research-cards section ----------------------------------- */
+.rq-section {
+  background: var(--blush);
+  padding: 3.5rem 0 5rem;
+}
+.rq-section .container {
+  padding: 0 2.5rem;
+}
+
+.rq-switcher {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+.rq-switcher.has-active .rq-card:not(.active) {
+  opacity: 0.72;
+}
+
+/* ---- Card ----------------------------------------------------
+   Stacked vertically, staggered left/right/left. Collapsed cards
+   sit at ~64% width; the active one grows to fill the row while
+   its panel opens underneath.
+------------------------------------------------------------- */
+.rq-card {
+  position: relative;
+  width: 72%;
+  min-width: 0;
+  background: var(--blue-dark);
+  border-left: 3px solid var(--red);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 4px 18px rgba(7, 22, 44, 0.12);
+  will-change: width;
+  transition: width 650ms cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 400ms ease,
+              box-shadow 300ms ease,
+              transform 300ms ease;
+}
+.rq-card:nth-child(odd)  { align-self: flex-start; }
+.rq-card:nth-child(even) { align-self: flex-end; }
+
+.rq-card.active {
+  width: 100%;
+  box-shadow: 0 14px 40px rgba(7, 22, 44, 0.24);
+}
+.rq-card:not(.active):hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 26px rgba(7, 22, 44, 0.20);
+}
+
+/* Faint watermark numeral — echoes the profile-page motif */
+.rq-card__num {
+  position: absolute;
+  top: 0.5rem;
+  right: 1rem;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--blush);
+  opacity: 0.06;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+  transition: opacity 400ms ease;
+}
+.rq-card.active .rq-card__num {
+  opacity: 0.09;
+}
+
+/* ---- Header / toggle button — horizontal bar -------------- */
+.rq-card__header {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 1.65rem 2rem;
+  font-family: var(--font-base);
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+  scroll-margin-top: calc(var(--nav-h) + 1.5rem);
+}
+.rq-card__header:focus-visible {
+  outline: 2px solid var(--blush);
+  outline-offset: -4px;
+  border-radius: var(--radius);
+}
+.rq-card__icon {
+  display: flex;
+  flex-shrink: 0;
+  color: var(--blush);
+  opacity: 0.65;
+  transition: opacity 300ms ease;
+}
+.rq-card.active .rq-card__icon {
+  opacity: 0.95;
+}
+.rq-card__title {
+  flex: 1;
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--white);
+}
+.rq-card__chevron {
+  flex-shrink: 0;
+  color: rgba(247, 232, 228, 0.45);
+  transition: transform 450ms cubic-bezier(0.34, 1.56, 0.64, 1), color 200ms ease;
+}
+.rq-card__header:hover .rq-card__chevron {
+  color: rgba(247, 232, 228, 0.75);
+}
+.rq-card.active .rq-card__chevron {
+  transform: rotate(180deg);
+  color: rgba(247, 232, 228, 0.75);
+}
+
+/* ---- Panel — collapse/expand via grid-template-rows,
+   the same pattern used for publication year sections. Delayed to
+   start after the width transition is underway, rather than at the
+   exact same instant, so the two layout-affecting animations don't
+   both hit their heaviest reflow moment on the same frames. -------- */
+.rq-card__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 500ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.rq-card.active .rq-card__panel {
+  grid-template-rows: 1fr;
+  transition-delay: 280ms;
+}
+.rq-card__panel-inner {
+  overflow: hidden;
+  min-width: 0;
+  padding: 0.25rem 2rem 2.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+.rq-card.active .rq-card__panel-inner {
+  opacity: 1;
+  transition: opacity 400ms ease 420ms;
+}
+
+.rq-card__text p {
+  font-size: var(--fs-md);
+  color: rgba(247, 232, 228, 0.85);
+  line-height: 1.8;
+  margin-bottom: 1.2rem;
+}
+.rq-card__text p:last-child {
+  margin-bottom: 0;
+}
+
+/* ---- Key papers — a boxed panel below the text so it reads as a
+   distinct reference block instead of a continuation of the copy. --- */
+.rq-card__papers {
+  background: rgba(247, 232, 228, 0.05);
+  border: 1px solid rgba(247, 232, 228, 0.12);
+  border-radius: var(--radius);
+  padding: 1.5rem 1.75rem 1.75rem;
+}
+.rq-card__papers-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 1rem;
+}
+.rq-card__papers-heading::before {
+  content: '';
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--red);
+  flex-shrink: 0;
+}
+
+.rq-paper {
+  padding: 0.85rem 0;
+  border-bottom: 1px solid rgba(247, 232, 228, 0.10);
+}
+.rq-paper:last-child {
+  border-bottom: none;
+}
+.rq-paper__title {
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.45;
+  margin-bottom: 0.2rem;
+}
+.rq-paper__title-link {
+  color: inherit;
+  transition: color 200ms ease;
+}
+.rq-paper__title-link:hover {
+  color: var(--blush);
+}
+.rq-paper__title-link svg {
+  width: 10px;
+  height: 10px;
+  margin-left: 0.35em;
+  vertical-align: 1px;
+  opacity: 0.45;
+  transition: opacity 200ms ease;
+}
+.rq-paper__title-link:hover svg {
+  opacity: 0.9;
+}
+.rq-paper__meta {
+  font-size: 0.78rem;
+  color: rgba(247, 232, 228, 0.55);
+  line-height: 1.5;
+}
+.rq-paper__empty {
+  font-size: var(--fs-sm);
+  color: rgba(247, 232, 228, 0.5);
+  font-style: italic;
+}
+
+.rq-card__papers-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 1.25rem;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--blush);
+  border-bottom: 1px solid rgba(247, 232, 228, 0.35);
+  padding-bottom: 2px;
+  transition: border-color 200ms ease, gap 200ms ease;
+}
+.rq-card__papers-cta:hover {
+  border-color: var(--blush);
+  gap: 0.6rem;
+}
+.rq-card__papers-cta svg {
+  flex-shrink: 0;
+}
+
+/* ---- Responsive --------------------------------------------- */
+@media (max-width: 900px) {
+  .rq-card {
+    width: 100%;
+  }
+  .rq-card:nth-child(odd),
+  .rq-card:nth-child(even) {
+    align-self: stretch;
+  }
+  .rq-card__header {
+    padding: 1.25rem 1.25rem;
+    gap: 1rem;
+  }
+  .rq-card__icon svg {
+    width: 36px;
+    height: 36px;
+  }
+  .rq-card__title {
+    font-size: var(--fs-md);
+  }
+  .rq-card__panel-inner {
+    padding: 0 1.25rem 1.75rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .rq-intro {
+    padding: 2rem 1.5rem;
+  }
+  .rq-section .container {
+    padding: 0 1.25rem;
+  }
+  .rq-section {
+    padding: 2.5rem 0 3.5rem;
+  }
+  .rq-card__num {
+    display: none;
+  }
+}

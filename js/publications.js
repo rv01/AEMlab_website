@@ -9,7 +9,9 @@
   var labMembers = [];
 
   function buildLookup() {
-    var all = (people.current || []).concat(people.alumni || []).filter(function (p) {
+    // Only current lab members get linked — alumni pages are not part of
+    // this flow, so a name shouldn't point somewhere that isn't a live profile.
+    var all = (people.current || []).filter(function (p) {
       return p.page;
     });
 
@@ -67,6 +69,7 @@
 
   /* ---- Tag filtering ----------------------------------- */
   var activeTags = [];
+  var keyOnly = false;   // "Key publications" toggle — restrict to papers with an rq
 
   function getAllTags() {
     var seen = {};
@@ -80,11 +83,21 @@
   }
 
   function getFiltered() {
-    if (!activeTags.length) return publications;
     return publications.filter(function (p) {
       var tags = p.tags || [];
-      return activeTags.every(function (t) { return tags.indexOf(t) !== -1; });
+      var hasRQ = Array.isArray(p.rq) && p.rq.length > 0;
+      var tagsMatch = activeTags.every(function (t) { return tags.indexOf(t) !== -1; });
+      var keyMatch = !keyOnly || hasRQ;
+      return tagsMatch && keyMatch;
     });
+  }
+
+  /* ---- Research-question short-label lookup, used to label a
+     key publication's tag pill (e.g. "Change") ------------------ */
+  function rqShort(slug) {
+    if (typeof researchQuestions === 'undefined') return slug;
+    var rq = researchQuestions.filter(function (r) { return r.slug === slug; })[0];
+    return rq ? rq.short : slug;
   }
 
   /* ---- Rendering --------------------------------------- */
@@ -104,36 +117,40 @@
     var authorsHtml = linkAuthors(pub.authors || '');
     var link = pub.doi || pub.url;
 
-    var doiHtml = link
-      ? '<div class="pub-item__link-col"><a href="' + link + '" target="_blank" rel="noopener" class="pub-doi" title="Open article">' + ICON_LINK + '</a></div>'
-      : '<div class="pub-item__link-col"></div>';
+    var titleHtml = link
+      ? '<a href="' + link + '" target="_blank" rel="noopener" class="pub-item__title-link">'
+        + pub.title + ICON_LINK + '</a>'
+      : pub.title;
 
-    var featuredBadge = pub.featured
-      ? '<span class="pub-item__featured-badge">Key publication</span>'
-      : '';
-
-    var metaParts = [];
-    if (pub.journal) metaParts.push('<span class="pub-item__journal">' + pub.journal + '</span>');
+    var metaBits = [];
+    if (pub.journal) metaBits.push(pub.journal);
     var vp = [pub.volume, pub.pages].filter(Boolean).join(', ');
-    if (vp) metaParts.push('<span>' + vp + '</span>');
+    if (vp) metaBits.push(vp);
+    var metaText = metaBits.join(', ');
 
     var preprintBadge = pub.preprint ? '<span class="pub-item__preprint">Preprint</span>' : '';
 
-    var tagsHtml = '';
-    if (pub.tags && pub.tags.length) {
-      tagsHtml = '<div class="pub-item__tags">'
-        + pub.tags.map(function (t) { return '<span class="pub-tag">' + t + '</span>'; }).join('')
-        + '</div>';
+    var keyTagsHtml = '';
+    if (Array.isArray(pub.rq) && pub.rq.length) {
+      keyTagsHtml = '<span class="pub-tag pub-tag--key">Key publication</span>'
+        + pub.rq.map(function (slug) { return '<span class="pub-tag pub-tag--rq">' + rqShort(slug) + '</span>'; }).join('');
     }
+    var contentTagsHtml = (pub.tags && pub.tags.length)
+      ? pub.tags.map(function (t) { return '<span class="pub-tag">' + t + '</span>'; }).join('')
+      : '';
 
-    return '<div class="pub-item' + (pub.featured ? ' featured' : '') + '">'
-      + '<div class="pub-item__body">'
-      + '<p class="pub-item__title">' + pub.title + featuredBadge + '</p>'
+    var tagsHtml = (keyTagsHtml || contentTagsHtml)
+      ? '<div class="pub-item__tags">' + keyTagsHtml + contentTagsHtml + '</div>'
+      : '';
+
+    return '<div class="pub-item">'
+      + '<p class="pub-item__title">' + titleHtml + '</p>'
       + '<p class="pub-item__authors">' + authorsHtml + '</p>'
-      + '<p class="pub-item__meta">' + metaParts.join(', ') + (preprintBadge ? ' ' + preprintBadge : '') + '</p>'
+      + '<p class="pub-item__meta">'
+      + (metaText ? '<span class="pub-item__meta-text">' + metaText + '</span>' : '')
+      + preprintBadge
+      + '</p>'
       + tagsHtml
-      + '</div>'
-      + doiHtml
       + '</div>';
   }
 
@@ -231,46 +248,70 @@
   function initFilters() {
     var allTags = getAllTags();
     var container = document.getElementById('pub-tags');
-    var clearBtn  = document.getElementById('pub-tag-clear');
-    if (!container || !clearBtn) return;
+    if (!container) return;
 
     if (!allTags.length) {
-      var filtersEl = document.querySelector('.pub-filters');
-      if (filtersEl) filtersEl.style.display = 'none';
-      return;
-    }
-
-    allTags.forEach(function (tag) {
-      var btn = document.createElement('button');
-      btn.className = 'tag-btn tag-btn--research';
-      btn.textContent = tag;
-      btn.addEventListener('click', function () {
-        var idx = activeTags.indexOf(tag);
-        if (idx !== -1) {
-          activeTags.splice(idx, 1);
-          btn.classList.remove('active');
-        } else {
-          activeTags.push(tag);
-          btn.classList.add('active');
-        }
-        clearBtn.classList.toggle('visible', activeTags.length > 0);
-        render();
+      var groupEl = container.closest('.pub-filter-group');
+      if (groupEl) groupEl.style.display = 'none';
+    } else {
+      allTags.forEach(function (tag) {
+        var btn = document.createElement('button');
+        btn.className = 'tag-btn tag-btn--research';
+        btn.textContent = tag;
+        btn.addEventListener('click', function () {
+          var idx = activeTags.indexOf(tag);
+          if (idx !== -1) {
+            activeTags.splice(idx, 1);
+            btn.classList.remove('active');
+          } else {
+            activeTags.push(tag);
+            btn.classList.add('active');
+          }
+          render();
+        });
+        container.appendChild(btn);
       });
-      container.appendChild(btn);
-    });
+    }
+  }
 
-    clearBtn.addEventListener('click', function () {
-      activeTags = [];
-      container.querySelectorAll('.tag-btn').forEach(function (b) { b.classList.remove('active'); });
-      clearBtn.classList.remove('visible');
+  /* ---- "Key publications" filter — a single toggle pill that
+     restricts the list to papers with an rq (see rqShort() above
+     for how each key paper's research question is labelled) ---- */
+  function setKeyOnly(value) {
+    keyOnly = value;
+    var toggle = document.getElementById('pub-key-toggle');
+    if (toggle) {
+      toggle.classList.toggle('active', keyOnly);
+      toggle.setAttribute('aria-pressed', String(keyOnly));
+    }
+  }
+
+  function initKeyFilter() {
+    var toggle = document.getElementById('pub-key-toggle');
+    if (!toggle) return;
+    toggle.addEventListener('click', function () {
+      setKeyOnly(!keyOnly);
       render();
     });
+  }
+
+  /* ---- Arriving from research.html's "Explore more papers" link
+     (publications.html?key=1) — pre-activates the Key publications
+     filter, without narrowing to a single research question. ---- */
+  function initKeyFromUrl() {
+    var params = new URLSearchParams(window.location.search);
+    if (params.get('key')) {
+      setKeyOnly(true);
+      history.replaceState(null, '', location.pathname);
+    }
   }
 
   /* ---- Boot -------------------------------------------- */
   document.addEventListener('DOMContentLoaded', function () {
     buildLookup();
     initFilters();
+    initKeyFilter();
+    initKeyFromUrl();
     render();
   });
 })();
