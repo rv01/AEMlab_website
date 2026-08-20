@@ -189,7 +189,9 @@ p  { font-size: var(--fs-md); }
 .pub-item__title-link:active,
 .pub-author-link:active,
 .media-entry__title-link:active,
-.media-person-link:active {
+.media-person-link:active,
+.profile-person-link:active,
+.profile-paper__meta a:active {
   opacity: 0.62;
   transition-duration: var(--dur-fast);
 }

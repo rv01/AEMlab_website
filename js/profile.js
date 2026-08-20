@@ -3,6 +3,9 @@
   var person = people.current.find(function (p) { return p.id === id; });
   if (!person) return;
 
+  var namePatterns = [];
+  var citationMembers = [];
+
   document.title = person.name + ' — Amsterdam Emotional Memory Lab';
 
   var photo = document.querySelector('.profile-photo');
@@ -22,6 +25,8 @@
     a.innerHTML = linkIcon(link.label) + link.label;
     linksEl.appendChild(a);
   });
+
+  buildMemberLinks();
 
   var body = document.querySelector('.profile-body');
   if (person.researchInterests) body.appendChild(makeSection('Research Interests', person.researchInterests));
@@ -56,9 +61,95 @@
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;');
-    return escaped.replace(/\[([^\]]+)\]\(([^)]+)\)/g, function (match, label, url) {
+    var linked = escaped.replace(/\[([^\]]+)\]\(([^)]+)\)/g, function (match, label, url) {
       return '<a href="' + url + '" target="_blank" rel="noopener">' + label + '</a>';
     });
+    return linkPeopleInHtml(linked);
+  }
+
+  /* ---- Linking lab members wherever they're named ------------
+     Two matchers, mirroring the two other pages that already do this:
+     prose gets the full "First Last" treatment from js/media.js, and the
+     citation line under each paper gets the "Last, F." treatment from
+     js/publications.js (first initial added only when someone else on the
+     roster shares that surname). Both are restricted to current members
+     with a live profile page — alumni pages don't exist as a working
+     destination — and both skip this page's own subject: a name shouldn't
+     link back to the page it's already sitting on. */
+  function buildMemberLinks() {
+    var linkable = (people.current || []).filter(function (p) {
+      return p.page && p !== person;
+    });
+
+    var everyone = (people.current || []).concat(people.alumni || []);
+    var lastNameCount = {};
+    everyone.forEach(function (p) {
+      var ln = p.name.trim().split(/\s+/).pop();
+      lastNameCount[ln] = (lastNameCount[ln] || 0) + 1;
+    });
+
+    linkable.forEach(function (p) {
+      var parts = p.name.trim().split(/\s+/);
+      var lastName = parts[parts.length - 1];
+      citationMembers.push({
+        lastName:     lastName,
+        firstInitial: parts[0][0],
+        useInitial:   lastNameCount[lastName] > 1,
+        page:         p.page
+      });
+
+      var proseParts = p.name.trim().split(/\s+/);
+      var first = proseParts.shift();
+      var rest  = proseParts.filter(function (t) { return !/^[A-Z]\.$/.test(t); });
+      if (!rest.length) return;
+      namePatterns.push({
+        re: new RegExp(escRe(first) + '(?:\\s+[A-Z]\\.)*\\s+' + rest.map(escRe).join('\\s+'), 'g'),
+        page: p.page
+      });
+    });
+  }
+
+  function linkProseNames(text) {
+    namePatterns.forEach(function (m) {
+      text = text.replace(m.re, '<a href="../' + m.page + '" class="profile-person-link">$&</a>');
+    });
+    return text;
+  }
+
+  /* Only matches outside existing tags, so a name inside a markdown link
+     built by richText() above never gets a nested anchor. */
+  function linkPeopleInHtml(html) {
+    var anchorDepth = 0;
+    return String(html || '').split(/(<[^>]*>)/).map(function (chunk, i) {
+      if (i % 2 === 1) {
+        if (/^<a\b/i.test(chunk)) anchorDepth++;
+        else if (/^<\/a\s*>/i.test(chunk)) anchorDepth = Math.max(0, anchorDepth - 1);
+        return chunk;
+      }
+      return anchorDepth ? chunk : linkProseNames(chunk);
+    }).join('');
+  }
+
+  function linkAuthors(str) {
+    if (!str) return '';
+    var result = str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+
+    citationMembers.forEach(function (m) {
+      var re;
+      if (m.useInitial) {
+        re = new RegExp('\\b' + escRe(m.lastName) + ',\\s*' + escRe(m.firstInitial) + '\\.', 'g');
+        result = result.replace(re, function (match) {
+          return match.replace(m.lastName, '<a href="../' + m.page + '">' + m.lastName + '</a>');
+        });
+      } else {
+        re = new RegExp('\\b' + escRe(m.lastName) + '\\b', 'g');
+        result = result.replace(re, '<a href="../' + m.page + '">$&</a>');
+      }
+    });
+    return result;
   }
 
   /* ---- Publications within the lab --------------------------
@@ -118,7 +209,7 @@
     var div = document.createElement('div');
     div.className = 'profile-paper';
     div.innerHTML = '<div class="profile-paper__title">' + titleHtml + '</div>'
-      + '<div class="profile-paper__meta">' + pub.authors + ' &middot; ' + metaParts.join(', ') + '</div>';
+      + '<div class="profile-paper__meta">' + linkAuthors(pub.authors) + ' &middot; ' + metaParts.join(', ') + '</div>';
     return div;
   }
 

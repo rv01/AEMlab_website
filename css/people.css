@@ -490,6 +490,18 @@
   border-color: rgba(7,22,44,0.45);
 }
 
+/* A lab member's name mentioned in the prose — quieter than the red
+   funding/paper links above, matching the treatment media.css and
+   publications.css give the same kind of mention elsewhere on the site. */
+.profile-section p a.profile-person-link {
+  color: var(--blue-mid);
+  border-color: rgba(70,114,162,0.28);
+}
+.profile-section p a.profile-person-link:hover {
+  color: var(--red);
+  border-color: rgba(176,42,60,0.45);
+}
+
 /* ---- Publications within the lab ---------------------------
    The section heading (h2, red rule) matches every other section on this
    page. What sits under it is deliberately NOT another one of those framed
@@ -544,6 +556,15 @@
   font-size: 0.78rem;
   color: rgba(7,22,44,0.55);
   line-height: 1.5;
+}
+.profile-paper__meta a {
+  color: var(--blue-mid);
+  border-bottom: 1px solid rgba(70,114,162,0.28);
+  transition: color var(--transition), border-color var(--transition);
+}
+.profile-paper__meta a:hover {
+  color: var(--red);
+  border-color: rgba(176,42,60,0.45);
 }
 
 .profile-paper__empty {

@@ -94,11 +94,10 @@
 
   var POSITION_TAGS = ['Professor', 'Associate Professor', 'Assistant Professor', 'Postdoc', 'PhD student'];
   var RESEARCH_TAGS = [
-    'Fear memory', 'Memory reconsolidation', 'Autobiographical memory',
-    'Intrusive memory', 'Contextual memory', 'Narrative formation',
-    'Network approach', 'Theory development', 'Psychopathology',
-    'Clinical populations', 'Clinical interventions', 'Conditioning',
-    'fMRI', 'Psychophysiology', 'Computational modeling'
+    'Autobiographical memory', 'Clinical interventions', 'Computational modeling',
+    'Conditioning and Extinction', 'Context modulation', 'Fear memory', 'fMRI',
+    'Intrusive Thoughts and Memories', 'Memory reconsolidation', 'Narrative formation',
+    'Network approach', 'Psychopathology', 'Psychophysiology', 'Theory development'
   ];
 
   function positionTagFor(role) {
@@ -657,15 +656,23 @@
     return { el: node, wrap: wrap, tags: rTags, posTag: pTag };
   }
 
-  /* ---- Tag filter panel ----------------------------------- */
+  /* ---- Tag filter panel -----------------------------------
+     Role is single-select — a person only ever holds one position, so
+     picking a new role button clears whichever one was active, radio-style.
+     Research topics stay multi-select: several can genuinely apply at once. */
   var activeTags = {};
+  var posButtons = [];
 
   function buildTagPanel() {
     var posList  = document.getElementById('position-tags');
     var resList  = document.getElementById('research-tags');
     if (!posList || !resList) return;
 
-    POSITION_TAGS.forEach(function (t) { posList.appendChild(makeBtn(t, 'position')); });
+    POSITION_TAGS.forEach(function (t) {
+      var btn = makeBtn(t, 'position');
+      posButtons.push(btn);
+      posList.appendChild(btn);
+    });
     RESEARCH_TAGS.forEach(function (t) { resList.appendChild(makeBtn(t, 'research')); });
   }
 
@@ -674,8 +681,17 @@
     btn.className = 'tag-btn tag-btn--' + type;
     btn.textContent = tag;
     btn.addEventListener('click', function () {
-      if (activeTags[tag]) { delete activeTags[tag]; btn.classList.remove('active'); }
-      else                  { activeTags[tag] = true;  btn.classList.add('active');    }
+      if (type === 'position') {
+        var wasActive = !!activeTags[tag];
+        posButtons.forEach(function (b) {
+          delete activeTags[b.textContent];
+          b.classList.remove('active');
+        });
+        if (!wasActive) { activeTags[tag] = true; btn.classList.add('active'); }
+      } else {
+        if (activeTags[tag]) { delete activeTags[tag]; btn.classList.remove('active'); }
+        else                  { activeTags[tag] = true;  btn.classList.add('active');    }
+      }
       applyFilter();
     });
     return btn;
