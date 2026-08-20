@@ -46,7 +46,7 @@ const mediaItems = [
     title: "Merel Kindt on fear research and its clinical use",
     description: "Merel Kindt was a guest on the NRC podcast <em>Het Uur</em>, talking through her research on fear and her clinical work on treating fear memories. The conversation also turns to a broader question: are we living in more frightening times, or have we become less resilient? Listen to the episode <a href=\"https://www.nrc.nl/nieuws/2026/06/12/merel-kindt-leven-we-in-engere-tijden-of-zijn-we-minder-veerkrachtig-angstpsycholoog-a4929972\" target=\"_blank\" rel=\"noopener\">here</a>.",
     url: "https://www.nrc.nl/nieuws/2026/06/12/merel-kindt-leven-we-in-engere-tijden-of-zijn-we-minder-veerkrachtig-angstpsycholoog-a4929972",
-    image: "images/media/het_uur.png",
+    image: "images/media/het_uur.jpg",
     imageAlt: "Cover art for the NRC podcast Het Uur."
   },
   {
@@ -66,7 +66,7 @@ const mediaItems = [
     title: "Faya Reinhold on sleep and emotional memory",
     description: "Het Parool interviewed Faya Reinhold about the results of her dissertation on sleep and emotional memory. She explains what sleep contributes to the way emotional experiences are stored, and what the consequences are when good sleep is missing for a long stretch of time. Read the interview <a href=\"https://www.parool.nl/nederland/wat-zijn-de-gevolgen-als-je-lange-tijd-slecht-slaapt~b7e5265d/\" target=\"_blank\" rel=\"noopener\">here</a>.",
     url: "https://www.parool.nl/nederland/wat-zijn-de-gevolgen-als-je-lange-tijd-slecht-slaapt~b7e5265d/",
-    image: "images/media/parool_faya.png",
+    image: "images/media/parool_faya.jpg",
     imageAlt: "Illustration of a woman asleep in bed while shadowy figures loom around her."
   }
 ];
