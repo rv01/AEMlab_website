@@ -2,7 +2,10 @@
    AEM Lab — Shared Stylesheet
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&display=swap');
+/* Both faces are loaded with <link rel="preconnect"> + <link rel="stylesheet">
+   in each page's <head>, not with @import — an @import cannot start until this
+   file has downloaded and parsed, which left the webfont a round trip behind
+   and made the flash of fallback text worse than it needed to be. */
 
 /* --- Variables -------------------------------------------- */
 :root {
@@ -13,7 +16,23 @@
   --blush:      #F7E8E4;
   --white:      #FFFFFF;
 
-  --font-base:  'DM Sans', system-ui, sans-serif;
+  /* Two faces, two jobs. The display face states things — page and section
+     headings, the three research questions, media headlines. The body face
+     runs everything else: navigation, labels, metadata, dense lists, copy.
+
+     The pairing is grotesque against geometric, not serif against sans. DM
+     Sans is round, open and geometric; Archivo is a grotesque with flatter
+     terminals, squarer bowls and tighter apertures, so at heading sizes the
+     two read as clearly different voices while still belonging to the same
+     century. Archivo also carries a width axis, which is what gives the
+     headings their slight expansion below — a display move a single-width
+     face cannot make.
+
+     Both are variable fonts covering 400-700, so every weight in that range
+     is a real drawn weight rather than one the browser rounds off or fakes. */
+  --font-base:    'DM Sans', system-ui, sans-serif;
+  --font-display: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+
   --fs-xs:      0.75rem;
   --fs-sm:      0.875rem;
   --fs-base:    1rem;
@@ -24,9 +43,34 @@
   --fs-3xl:     3rem;
 
   --radius:     4px;
-  --transition: 200ms ease;
-  --max-w:      1300px;
+  --max-w:      1400px;
   --nav-h:      64px;
+
+  /* --- Motion ------------------------------------------------
+     Three durations and three curves, used site-wide. Before this the site
+     carried 17 hand-written durations and 4 curves — including two chevron
+     springs that differed only in overshoot — so nothing read as belonging to
+     the same object. Pick by what is moving, not by feel:
+       fast  — press, hover, colour: feedback that must not lag the pointer
+       base  — a thing changing state
+       slow  — a thing changing size or position in the layout
+     out    — something arriving or settling (decelerates into place)
+     inout  — something resizing, where both ends need to be gentle
+     spring — a small element with a little overshoot (chevrons, toggles) */
+  --dur-fast:    140ms;
+  --dur-base:    260ms;
+  --dur-slow:    520ms;
+  --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-inout:  cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+
+  /* Kept as the shorthand the rest of the site already uses for hover-weight
+     transitions: `transition: color var(--transition)`. */
+  --transition: var(--dur-fast) var(--ease-out);
+
+  /* Red reads well on the light sections; dark surfaces re-point this at blush
+     further down, and it inherits to everything inside them. */
+  --focus-ring: var(--red);
 }
 
 /* --- Reset ------------------------------------------------- */
@@ -44,13 +88,164 @@ img { display: block; max-width: 100%; }
 a { color: inherit; text-decoration: none; }
 ul, ol { list-style: none; }
 
-/* --- Typography ------------------------------------------- */
-h1, h2, h3, h4 { line-height: 1.2; font-weight: 700; }
-h1 { font-size: var(--fs-3xl); }
-h2 { font-size: var(--fs-2xl); }
-h3 { font-size: var(--fs-xl); }
-h4 { font-size: var(--fs-lg); }
+/* --- Typography -------------------------------------------
+   Leading tracks size inversely: tight on large text, looser as it gets
+   smaller. These used to share one `line-height: 1.2` across a 2.2x size
+   range, which is loose at the top of the scale and tight at the bottom. */
+h1, h2, h3, h4 { font-weight: 700; }
+h1 { font-size: var(--fs-3xl); line-height: 1.08; }
+h2 { font-size: var(--fs-2xl); line-height: 1.16; }
+h3 { font-size: var(--fs-xl);  line-height: 1.25; }
+h4 { font-size: var(--fs-lg);  line-height: 1.32; }
 p  { font-size: var(--fs-md); }
+
+/* Headings that carry the display face. Listed one by one rather than as a
+   blanket `h1, h2` because several headings on this site are deliberately
+   *not* statements — `.profile-section h2` and `.rq-card__papers-heading` are
+   small labels and stay on the body face with the rest of the UI text. */
+.banner__title,
+.hero__heading,
+.research__title,
+.linkedin__title,
+.contact-panel__heading,
+.contact-address__heading,
+.profile-name,
+.card__title,
+.rq-card__title,
+.media-entry__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  /* Just past normal width. Archivo's width axis runs 62-125%; a few points
+     of expansion gives headings presence without tipping into a display
+     caricature, and it is the clearest signal that this is a different face
+     from the body text rather than DM Sans in bold. */
+  font-stretch: 106%;
+  letter-spacing: -0.018em;
+}
+
+/* Tracking is size-specific — one value across the scale is wrong somewhere.
+   Letters read further apart as they grow, so the largest text needs pulling
+   in hardest; the smallest display sizes sit near neutral. */
+.banner__title { letter-spacing: -0.028em; }
+.profile-name  { letter-spacing: -0.024em; }
+.card__title,
+.rq-card__title { letter-spacing: -0.008em; }
+
+/* --- Interaction states -----------------------------------
+   Two things the site had almost none of: a visible keyboard focus ring
+   (there was exactly one `:focus-visible` rule, on the research accordion)
+   and any response to being pressed (exactly one `:active` rule, on the tag
+   pills). Both are defined once here and inherited everywhere.
+
+   Press feedback is deliberately not one blanket rule. Scaling a full-width
+   bar looks cheap, and moving an inline text link is worse, so the three
+   kinds of control each get the response that suits their size:
+     small controls  — dip in scale
+     large surfaces  — shift background / shadow, barely move
+     inline links    — colour only, never move
+   ---------------------------------------------------------- */
+:where(a, button, [tabindex]):focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Dark sections re-point the ring; custom properties inherit, so every control
+   inside these picks up the blush ring without naming itself. */
+.nav,
+.footer,
+.hero,
+.card,
+.rq-card,
+.profile-hero,
+.constellation-canvas,
+.contact-address__info,
+.year-header,
+.rq-intro { --focus-ring: var(--blush); }
+
+/* Small controls — the dip is what makes a click feel committed. */
+.nav__toggle:active,
+.tag-btn:active,
+.profile-link:active,
+.footer__social a:active {
+  transform: scale(0.94);
+  transition-duration: var(--dur-fast);
+}
+
+/* Large bars — they darken rather than move. Scaling something full-width
+   looks cheap, and these two are the site's primary controls. */
+.year-header:active,
+.rq-card__header:active {
+  background: #05101F;
+  transition-duration: var(--dur-fast);
+}
+
+/* Inline and underlined links — colour shift only, no movement. */
+.nav__links a:active,
+.nav__dropdown a:active,
+.profile-back:active,
+.contact-cta:active,
+.rq-card__papers-cta:active,
+.pub-item__title-link:active,
+.pub-author-link:active,
+.media-entry__title-link:active,
+.media-person-link:active {
+  opacity: 0.62;
+  transition-duration: var(--dur-fast);
+}
+
+/* --- Reduced motion ---------------------------------------
+   Reduced motion does not mean no feedback — it means the gentler,
+   non-vestibular version. Everything that *travels* becomes a cross-fade in
+   place; everything that only changes colour, opacity or background is left
+   alone, because those aid comprehension and cause no vestibular trouble.
+
+   Kept deliberately: hover/press colour changes, the accordion open/close
+   (it is a size change the reader asked for, and hiding it outright would
+   make the control feel broken), and the constellation's settled layout —
+   js/people.js freezes its physics loop under the same query rather than
+   leaving portraits drifting.
+   ---------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  /* Anything mid-entrance simply starts in its final position. */
+  .reveal,
+  .media-entry__inner,
+  .banner__content,
+  .profile-hero__photo-col,
+  .profile-hero__info,
+  .profile-section,
+  .year-section,
+  .pub-item.pub-enter {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* Press feedback stops moving; the colour half of it still fires. */
+  .nav__toggle:active,
+  .tag-btn:active,
+  .profile-link:active,
+  .footer__social a:active,
+  .card:active,
+  .card:hover,
+  .tag-btn:hover:not(:active),
+  .rq-card:not(.active):hover,
+  .linkedin-feed__link:hover svg,
+  .contact-cta:hover svg,
+  .rq-card__papers-cta:hover svg,
+  .card:hover .card__arrow {
+    transform: none !important;
+  }
+
+  /* Spring overshoot has no place here; chevrons still turn, just plainly. */
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-timing-function: linear !important;
+  }
+}
 
 /* --- Layout Utilities ------------------------------------- */
 .container {
@@ -76,7 +271,24 @@ p  { font-size: var(--fs-md); }
   display: flex;
   align-items: center;
 }
+/* Blush panel behind just the icon — flush with the nav's own top/bottom
+   edges, its right end rounded into a full semicircle so it reads as an
+   arch transitioning into the navy bar. The wordmark sits outside it, back
+   on the navy background. */
+.nav::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: var(--nav-brand-panel-w, 66px);
+  background: var(--blush);
+  border-radius: 0 999px 999px 0;
+  box-shadow: 10px 0 26px -6px rgba(6,18,31,0.35);
+}
 .nav__inner {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -84,11 +296,30 @@ p  { font-size: var(--fs-md); }
   padding: 0 2.5rem;
 }
 .nav__brand {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+  margin-left: -20px;
+  /* Lets the wordmark truncate instead of running into the hamburger on
+     very narrow phones. */
+  min-width: 0;
+}
+.nav__brand-badge { display: contents; }
+.nav__brand-icon {
+  height: 36px;
+  width: auto;
+  display: block;
+  flex-shrink: 0;
+}
+.nav__brand-text {
   font-size: var(--fs-base);
   font-weight: 700;
   letter-spacing: 0.01em;
   color: var(--blush);
   white-space: nowrap;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .nav__links {
   display: flex;
@@ -101,6 +332,8 @@ p  { font-size: var(--fs-md); }
   color: rgba(247,232,228,0.80);
   text-transform: uppercase;
   letter-spacing: 0.06em;
+  /* A squeezed link must never break "Research Questions" onto two lines */
+  white-space: nowrap;
   padding-bottom: 3px;
   border-bottom: 2px solid transparent;
   transition: border-color var(--transition), color var(--transition);
@@ -161,8 +394,7 @@ p  { font-size: var(--fs-md); }
 .banner {
   position: relative;
   width: 100%;
-  /* taller to compensate for pulling up behind the nav */
-  height: clamp(280px, 36vw, 440px);
+  height: clamp(180px, 22vw, 280px);
   /* slide up behind the transparent nav */
   margin-top: calc(-1 * var(--nav-h));
   /* push content below the nav area so it stays centred in the visible photo strip */
@@ -177,12 +409,12 @@ p  { font-size: var(--fs-md); }
   inset: 0;
   background-image: url('../images/amsterdam2.jpg');
   background-size: cover;
-  background-position: center 60%;
+  background-position: center 40%;
 }
 .banner__overlay {
   position: absolute;
   inset: 0;
-  background: rgba(28, 52, 91, 0.45);
+  background: rgba(7, 22, 44, 0.65);
 }
 .banner__content {
   position: relative;
@@ -190,20 +422,25 @@ p  { font-size: var(--fs-md); }
   text-align: center;
   color: var(--white);
   padding: 0 1.5rem;
-  animation: bannerReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) both 0.2s;
+  animation: bannerReveal 0.9s var(--ease-out) both 0.2s;
 }
+/* Face, weight, width and tracking come from the display-heading block in the
+   typography section above — this only sets what is specific to the banner. */
 .banner__title {
   font-size: clamp(1.75rem, 4.5vw, 3.25rem);
-  font-weight: 700;
-  letter-spacing: 0.02em;
+  line-height: 1.06;
   text-shadow: 0 2px 16px rgba(0,0,0,0.35);
 }
+/* Only index.html still carries a subtitle, naming the institution under the
+   lab's own name. The interior pages used to repeat "Amsterdam Emotional
+   Memory Lab" here — directly under the nav wordmark that already says it, and
+   above a footer that says it again — so that line is gone from all of them.
+   Sentence case: this is a line of text, not a UI label. */
 .banner__sub {
-  margin-top: 0.6rem;
+  margin-top: 0.7rem;
   font-size: var(--fs-md);
-  opacity: 0.80;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  opacity: 0.82;
+  letter-spacing: 0.01em;
   font-weight: 500;
 }
 
@@ -211,34 +448,28 @@ p  { font-size: var(--fs-md); }
    HERO (mission)
    ============================================================ */
 .hero {
+  /* The pill is a fixed height, so its end caps are always exact semicircles of
+     radius --hero-arch-h / 2 — everything else here is derived from this value. */
+  --hero-arch-h: clamp(260px, 26vw, 400px);
+  position: relative;
   background: var(--navy);
-  padding: 3.5rem 0 3.5rem;
 }
 .hero__inner {
   width: 100%;
-  max-width: 920px;
+  max-width: var(--max-w);
   margin: 0 auto;
   padding: 0 2.5rem;
   text-align: left;
-}
-.hero__label {
-  font-size: var(--fs-xs);
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--red);
-  margin-bottom: 0.85rem;
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  gap: 0.65rem;
+  gap: 2.5rem;
+  /* Leaves navy above and below the arch rather than letting it run edge to edge. */
+  min-height: calc(var(--hero-arch-h) + 6rem);
 }
-.hero__label::before {
-  content: '';
-  display: block;
-  width: 22px;
-  height: 2px;
-  background: var(--red);
-  flex-shrink: 0;
+.hero__copy {
+  max-width: 46rem;
+  padding: 3.5rem 0;
 }
 .hero__heading {
   font-size: var(--fs-2xl);
@@ -251,6 +482,39 @@ p  { font-size: var(--fs-md); }
   line-height: 1.85;
 }
 
+/* ---- Animated lab logo ----------------------------------- */
+/* Blush pill — a semicircular cap at each end joined by a straight middle,
+   contained in the band so the navy simply grows around it as the page widens.
+   The logo is nearly square, so a pill sized snugly around it comes out looking
+   like an oval; the 0.42 side padding is what stretches it to ~1.8:1 and leaves
+   a straight midsection about as long as the two caps together. Clearance-wise
+   only 0.2 is needed — with the logo at 0.8 of the pill height and vertically
+   centred, that is exactly how far each curve reaches in at the logo's top and
+   bottom corners (3-4-5 triangle) — so the rest is deliberate air. Equal on both
+   sides, so the logo sits centred between the two caps. */
+.hero__mark {
+  position: relative;
+  align-self: center;
+  height: var(--hero-arch-h);
+  width: max-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-inline: calc(var(--hero-arch-h) * 0.42);
+  background: var(--blush);
+  border-radius: 999px;
+  box-shadow: 0 22px 50px -22px rgba(0, 0, 0, 0.55);
+}
+/* The logo canvas (500.03 x 410.34) is filled edge to edge with showName:true,
+   so centring the stage centres the artwork. */
+.hero__mark-stage {
+  position: relative;
+  height: calc(var(--hero-arch-h) * 0.8);
+  aspect-ratio: 500.03 / 410.34;
+  width: auto;
+  flex-shrink: 0;
+}
+
 @keyframes fadeUp {
   to { opacity: 1; transform: translateY(0); }
 }
@@ -259,14 +523,55 @@ p  { font-size: var(--fs-md); }
   to   { opacity: 1; transform: translateY(0); }
 }
 /* ---- Scroll reveal --------------------------------------- */
-.reveal {
+/* Travel is 10px, not 24px. A whole section sliding a quarter of an inch up
+   the page is the stock "AOS" reveal; at 10px the content settles rather than
+   arrives, which is what you want when the same effect fires on every section
+   of every page.
+
+   Everything here hangs off `html.js`, which the inline gate in each page's
+   <head> sets and removes again if main.js never arms the observer. Content
+   is only ever hidden while something is actually running that will show it:
+   no JavaScript, a blocked or broken main.js, and the page is just visible.
+   The default state of a paragraph is "readable" — the animation is the
+   exception, and it has to prove it can finish before it may hide anything. */
+.js .reveal {
   opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
+  transform: translateY(10px);
+  transition: opacity var(--dur-slow) var(--ease-out),
+              transform var(--dur-slow) var(--ease-out);
 }
-.reveal.revealed {
+.js .reveal.revealed {
   opacity: 1;
   transform: none;
+}
+
+/* Print and static capture never scroll, so an IntersectionObserver never
+   fires for anything below the fold. Both want the whole page. */
+@media print {
+  .js .reveal,
+  .js .media-entry__inner {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* The three research cards arrive one after another instead of the grid
+   fading in as a single block — the eye is led across them in reading order,
+   and it is the one place on the homepage where a stagger buys anything.
+   `--i` is set per card in the markup. */
+/* `backwards`, not `both`: `both` would keep the keyframes' final
+   `transform: none` applied at animation priority forever, which outranks the
+   cascade and would silently kill the hover lift and the press dip. With
+   `backwards` the card holds the `from` state through its delay and then
+   hands control back to normal styles. */
+.research.revealed .card {
+  animation: cardEnter var(--dur-slow) var(--ease-out) backwards;
+  animation-delay: calc(var(--i, 0) * 90ms);
+}
+@keyframes cardEnter {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
 }
 
 /* ============================================================
@@ -294,6 +599,11 @@ p  { font-size: var(--fs-md); }
   grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
 }
+/* The red left stripe stays here: three cards, one per research question, and
+   the same stripe marks the same three questions on research.html. It was
+   removed from the *repeating* content units — media entries, profile sections,
+   publication rows — where it fired dozens of times a page and stopped
+   carrying meaning. */
 .card {
   background: var(--blue-dark);
   color: var(--white);
@@ -303,11 +613,18 @@ p  { font-size: var(--fs-md); }
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  transition: transform var(--transition), box-shadow var(--transition);
+  transition: transform var(--dur-base) var(--ease-out),
+              box-shadow var(--dur-base) var(--ease-out);
 }
 .card:hover {
   transform: translateY(-3px);
   box-shadow: 0 8px 28px rgba(7,22,44,0.20);
+}
+/* A large surface: it settles back toward the page rather than shrinking. */
+.card:active {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 12px rgba(7,22,44,0.18);
+  transition-duration: var(--dur-fast);
 }
 .card__icon {
   display: flex;
@@ -323,29 +640,22 @@ p  { font-size: var(--fs-md); }
   text-align: center;
 }
 .card__body {
-  font-size: var(--fs-sm);
+  font-size: var(--fs-md);
   color: rgba(247,232,228,0.82);
-  line-height: 1.75;
+  line-height: 1.7;
   margin-top: 1rem;
 }
+/* The arrow alone, where "Explore this question" used to sit beside it. The
+   whole card is a link, so the label was a second call to action for the same
+   click — and the identical wording on all three said nothing about where any
+   one of them went. The row itself stays: `margin-top: auto` is what keeps the
+   three cards' arrows on one line whatever the copy lengths are. */
 .card__footer {
   margin-top: auto;
   padding-top: 1.75rem;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
+  justify-content: flex-end;
 }
-.card__link {
-  font-size: var(--fs-xs);
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--blush);
-  border-bottom: 1px solid rgba(247,232,228,0.38);
-  transition: border-color var(--transition);
-}
-.card:hover .card__link { border-color: var(--blush); }
 .card__arrow {
   color: var(--blush);
   opacity: 0.75;
@@ -358,40 +668,90 @@ p  { font-size: var(--fs-md); }
 }
 
 /* ============================================================
-   LINKEDIN FEED PLACEHOLDER
+   LINKEDIN FEED
+   ------------------------------------------------------------
+   The container is a fixed-height frame whether it holds the real embed or
+   the empty state, so switching the feed on never shifts the page — the same
+   trick data/media.js uses for its placeholder tiles.
+
+   The empty state is a genuine state, not the dashed "paste embed code here"
+   placeholder that used to live here: it addresses the visitor rather than
+   the site's author, and it stays correct until there is something to show.
    ============================================================ */
 .linkedin {
   background: var(--white);
-  padding: 5rem 0;
+  padding: 4rem 0;
 }
 .linkedin__header {
   text-align: center;
-  margin-bottom: 2.5rem;
+  margin-bottom: 2rem;
 }
 .linkedin__title {
   font-size: var(--fs-2xl);
   color: var(--navy);
 }
-.linkedin__feed {
-  max-width: 680px;
+
+/* The two states size themselves rather than sharing one reserved height:
+   they are never on screen together, so there is no layout shift to guard
+   against, and forcing the empty state to the embed's height just leaves a
+   cavernous box with one line in it. */
+.linkedin-feed {
+  max-width: 560px;
   margin: 0 auto;
-  border: 2px dashed rgba(70,114,162,0.32);
+  border: 1px solid rgba(7,22,44,0.14);
   border-radius: var(--radius);
+  overflow: hidden;
+  display: flex;
+}
+
+.linkedin-feed__frame {
+  width: 100%;
+  height: 520px;   /* LinkedIn's page plugin renders around this tall */
+  border: none;
+  display: block;
+}
+
+/* ---- Empty state ---- */
+.linkedin-feed__empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
   padding: 3rem 2rem;
   text-align: center;
+}
+.linkedin-feed__mark {
+  display: flex;
   color: var(--blue-mid);
+  opacity: 0.5;
 }
-.linkedin__icon {
-  margin: 0 auto 1.25rem;
-  opacity: 0.35;
+.linkedin-feed__msg {
+  font-size: var(--fs-md);
+  color: rgba(7,22,44,0.55);
+  line-height: 1.6;
 }
-.linkedin__feed p {
-  font-size: var(--fs-base);
-  line-height: 1.7;
-}
-.linkedin__feed a {
+.linkedin-feed__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: var(--fs-sm);
+  font-weight: 600;
   color: var(--red);
-  border-bottom: 1px solid currentColor;
+  border-bottom: 1px solid rgba(176,42,60,0.35);
+  padding-bottom: 2px;
+  transition: border-color var(--dur-base) var(--ease-out);
+}
+.linkedin-feed__link:hover { border-color: var(--red); }
+.linkedin-feed__link svg {
+  flex-shrink: 0;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+.linkedin-feed__link:hover svg { transform: translateX(3px); }
+.linkedin-feed__link:active {
+  opacity: 0.62;
+  transition-duration: var(--dur-fast);
 }
 
 /* ============================================================
@@ -412,6 +772,19 @@ p  { font-size: var(--fs-md); }
   justify-content: space-between;
   gap: 2rem;
   flex-wrap: wrap;
+}
+.footer__left {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  margin-left: -20px;
+}
+.footer__brand-card { display: contents; }
+.footer__brand-logo {
+  flex-shrink: 0;
+  height: 48px;
+  width: auto;
+  display: block;
 }
 .footer__left p {
   font-size: var(--fs-sm);
@@ -439,6 +812,46 @@ p  { font-size: var(--fs-md); }
 /* ============================================================
    RESPONSIVE
    ============================================================ */
+/* Stacked below 1100 rather than at the cards' 999px: side by side, the pill
+   leaves the copy under ~420px here, which is too narrow to read well. */
+@media (max-width: 1099px) {
+  /* Once the pill drops below the copy the two stop being a left-hand column
+     and a right-hand object and become one stack, so the stack centres on the
+     page — copy and pill on the same axis. Left-aligning them here left the
+     pill's centre nowhere near anything, since it is a fixed-width object in a
+     full-width row. */
+  .hero { --hero-arch-h: clamp(180px, 40vw, 300px); }
+  .hero__inner {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 0;
+    min-height: 0;
+    padding-bottom: 3.5rem;
+    text-align: center;
+  }
+  .hero__copy {
+    justify-self: center;
+    padding-bottom: 2.5rem;
+  }
+}
+
+/* Six links plus the full wordmark stop fitting a long way above the phone
+   breakpoint, so the link row tightens first and then hands over to the
+   hamburger while there is still room to spare.
+   .nav__inner's padding is deliberately NOT reduced here: it is what sets
+   the icon's distance from the viewport edge, and the blush arch behind it
+   is a fixed width — shrinking the padding slides the icon off-centre in
+   the arch and pulls the wordmark on top of its right-hand curve. */
+@media (max-width: 1300px) {
+  .nav__links { gap: 1.5rem; }
+  .nav__links a { letter-spacing: 0.04em; }
+}
+
+@media (max-width: 1150px) {
+  .nav__links  { display: none; }
+  .nav__toggle { display: flex; }
+}
+
 @media (max-width: 999px) {
   .cards-grid {
     grid-template-columns: 1fr;
@@ -448,15 +861,20 @@ p  { font-size: var(--fs-md); }
 }
 
 @media (max-width: 767px) {
-  .nav__links  { display: none; }
-  .nav__toggle { display: flex; }
   .nav__inner  { padding: 0 1.25rem; }
+  .nav { --nav-brand-panel-w: 38px; }
+  .nav__brand { gap: 1rem; margin-left: -10px; }
+  .nav__brand-icon  { height: 26px; }
+  .nav__brand-text  { font-size: var(--fs-sm); }
   .footer .container { padding: 0 1.25rem; }
   .footer__inner { flex-direction: column; align-items: flex-start; gap: 1rem; }
-  .hero { padding: 2rem 0 1.75rem; }
-  .hero__inner { padding: 0 1.25rem; }
+  .footer__left { align-items: flex-start; margin-left: -10px; }
+  .footer__brand-logo { height: 34px; }
+  .hero { --hero-arch-h: clamp(150px, 40vw, 250px); }
+  .hero__inner { padding: 0 1.25rem 2.5rem; }
+  .hero__copy { padding: 2.5rem 0 2rem; }
   .research { padding: 3rem 0; }
   .linkedin { padding: 3rem 0; }
   .research .container, .linkedin .container { padding: 0 1.25rem; }
-  .banner { height: clamp(200px, 46vw, 280px); }
+  .banner { height: clamp(150px, 38vw, 200px); }
 }

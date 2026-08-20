@@ -2,22 +2,9 @@
    Contact page
    ============================================================ */
 
-/* ---- Banner ---------------------------------------------- */
-.contact-banner {
-  height: clamp(180px, 22vw, 280px);
-}
-
-.contact-banner .banner__bg {
-  background-position: center 40%;
-}
-
-.contact-banner__overlay {
-  background: rgba(7, 22, 44, 0.65);
-}
-
 /* ---- Panel sections (01 & 02) --------------------------- */
 .contact-panel {
-  padding: 6rem 0;
+  padding: 3.75rem 0;
   position: relative;
   overflow: hidden;
 }
@@ -25,17 +12,27 @@
 .contact-panel--light { background: var(--white); }
 .contact-panel--blush { background: var(--blush); }
 
+/* 1040px, the same measure `.media-entry__inner` uses, rather than the full
+   1400px shell. The copy is capped at 520px, so across the full width the
+   icon and the text ended up at opposite ends of the viewport with a void
+   between them — a gap that only looked deliberate while the icon was big
+   enough to fill its half. */
 .contact-panel__inner {
-  max-width: var(--max-w);
+  max-width: 1040px;
   margin: 0 auto;
   padding: 0 2.5rem;
   display: grid;
   align-items: center;
-  gap: 4rem 5rem;
+  gap: 4rem 3.5rem;
 }
 
-.contact-panel__inner--ltr { grid-template-columns: 1fr 2fr; }
-.contact-panel__inner--rtl { grid-template-columns: 2fr 1fr; }
+/* The visual column was a full `1fr` of a 1400px grid — roughly 450px of
+   white around a 140px line icon, which made a stock flask and a stock
+   document the biggest things on the page. The column is now sized to the
+   icon rather than the icon floating in the column, and the copy gets the
+   space back. */
+.contact-panel__inner--ltr { grid-template-columns: 200px minmax(0, 1fr); }
+.contact-panel__inner--rtl { grid-template-columns: minmax(0, 1fr) 200px; }
 
 /* Visual column */
 .contact-panel__visual {
@@ -49,31 +46,16 @@
 
 .contact-panel__icon {
   color: var(--blue-mid);
-  opacity: 0.68;
+  opacity: 0.55;
+}
+/* Drawn at 140 in the markup; shown at 92 so it reads as a quiet marker
+   beside the text rather than as the subject of the panel. */
+.contact-panel__icon svg {
+  width: 92px;
+  height: 92px;
 }
 
 /* Content column */
-.contact-panel__label {
-  font-size: var(--fs-xs);
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--red);
-  margin-bottom: 0.85rem;
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-}
-
-.contact-panel__label::before {
-  content: '';
-  display: block;
-  width: 22px;
-  height: 2px;
-  background: var(--red);
-  flex-shrink: 0;
-}
-
 .contact-panel__heading {
   font-size: var(--fs-2xl);
   color: var(--navy);
@@ -94,20 +76,26 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: var(--fs-sm);
-  font-weight: 700;
-  letter-spacing: 0.10em;
-  text-transform: uppercase;
+  font-size: var(--fs-md);
+  font-weight: 600;
+  letter-spacing: 0.005em;
   color: var(--red);
   border-bottom: 2px solid rgba(176,42,60,0.30);
   padding-bottom: 3px;
-  transition: gap 200ms ease, border-color 200ms ease;
+  transition: border-color var(--dur-base) var(--ease-out);
 }
 
 .contact-cta:hover {
-  gap: 0.90rem;
   border-color: var(--red);
 }
+
+/* The arrow moves, not the gap — animating `gap` runs layout on every frame,
+   and .card__arrow already solved this with a composited transform. */
+.contact-cta svg {
+  flex-shrink: 0;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+.contact-cta:hover svg { transform: translateX(4px); }
 
 /* ---- Address section (03) -------------------------------- */
 .contact-address {
@@ -145,27 +133,6 @@
   width: 100%;
 }
 
-.contact-address__label {
-  font-size: var(--fs-xs);
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--red);
-  margin-bottom: 0.85rem;
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-}
-
-.contact-address__label::before {
-  content: '';
-  display: block;
-  width: 22px;
-  height: 2px;
-  background: var(--red);
-  flex-shrink: 0;
-}
-
 .contact-address__heading {
   font-size: var(--fs-2xl);
   color: var(--blush);
@@ -199,11 +166,10 @@
 }
 
 .contact-address__sublabel {
-  font-size: var(--fs-xs) !important;
+  font-size: var(--fs-sm) !important;
   font-weight: 700 !important;
-  letter-spacing: 0.10em;
-  text-transform: uppercase;
-  color: rgba(247,232,228,0.48) !important;
+  letter-spacing: 0.005em;
+  color: rgba(247,232,228,0.58) !important;
   margin-bottom: 0.1rem;
 }
 
@@ -229,25 +195,27 @@
   .contact-panel__inner--ltr,
   .contact-panel__inner--rtl {
     grid-template-columns: 1fr;
+    justify-items: start;
   }
 
   /* On mobile, body always comes first for RTL panels */
   .contact-panel__inner--rtl .contact-panel__body { order: 1; }
   .contact-panel__inner--rtl .contact-panel__visual { order: 2; }
 
+  /* Stacked, the icon sits with the copy rather than centred over it. */
   .contact-panel__visual {
     flex-direction: row;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
   }
+  .contact-panel__icon svg { width: 72px; height: 72px; }
 
 
 }
 
 @media (max-width: 767px) {
-  .contact-panel { padding: 3.5rem 0; }
+  .contact-panel { padding: 2.75rem 0; }
   .contact-panel__inner { padding: 0 1.25rem; gap: 2rem; }
-  .contact-banner { height: clamp(150px, 38vw, 200px); }
 
   .contact-address { flex-direction: column; }
   .contact-address__info {

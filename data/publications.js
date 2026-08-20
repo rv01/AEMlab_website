@@ -1,7 +1,7 @@
 const publications = [
 
   // 2026
-  { year: 2026, authors: "Stemerding, L.E., Gerlicher, A.M.V., Reinhold, F.L., & Kindt, M.", title: "Model-free and model-based learning in human fear conditioning.", journal: "Psychophysiology", volume: "63(7)", pages: "e70349", doi: "https://doi.org/10.1111/psyp.70349", tags: ["Conditioning and Extinction", "Computational modeling"], rq: ["measure"] },
+  { year: 2026, authors: "Stemerding, L.E., Gerlicher, A.M.V., Reinhold, F.L., & Kindt, M.", title: "Model-free and model-based learning in human fear conditioning.", journal: "Psychophysiology", volume: "63(7)", pages: "e70349", doi: "https://doi.org/10.1111/psyp.70349", tags: ["Conditioning and Extinction", "Fear memory"], rq: ["measure"] },
 
   // 2025
   { year: 2025, authors: "Freund, I.M., Peters, J., van Emmerik, A.A., Kindt, M., & Visser, R.M.", title: "Expanding the toolset of experimental psychopathology: The Trier Social Stress Test induces a personally relevant emotional memory.", journal: "Behaviour Research and Therapy", volume: "191", pages: "104783", doi: "https://doi.org/10.1016/j.brat.2025.104783", tags: ["Autobiographical memory", "Psychophysiology"], rq: ["measure"] },

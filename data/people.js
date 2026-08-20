@@ -9,10 +9,11 @@ var people = {
       photo: "images/people/Merel.jpg",
       photoBio: "images/people/Merel.png",
       page: "pages/Merel.html",
-      tags: ["Fear memory", "Memory reconsolidation", "Conditioning", "Clinical populations", "Psychophysiology"],
+      tags: ["Autobiographical memory", "Fear memory", "Memory reconsolidation", "Conditioning and Extinction", "Clinical interventions", "Psychophysiology", "Psychopathology", "Theory development", "fMRI", "Network Approach", "Narrative formation"],
       researchInterests: "My research is concerned with the understanding of neurobiological and psychological processes of fear and anxiety with the main focus on the mechanisms of change in the treatment of anxiety and related disorders. Although cognitive behavioural therapy (CBT) is effective in reducing fear for most anxiety disorders, a high percentage of patients experience a relapse even after apparently successful treatment. The prevailing view on the return of fear is that CBT can eliminate all fearful responding, but does not erase the original fear memory. Partial or full reappearance of fear may be explained by intact fear memories that resurface. Once a fear memory has been established, it is held to be forever. Insights from neuroscience suggest that it is unnecessarily defeatist to regard fear memory as irreversible. Fear conditioning research in animals and humans shows that reactivation of a consolidated fear memory can turn it to a labile, sensitive state in which the memory trace can be changed. Disruption of fear memory reconsolidation may prevent the return of fear and is thereby a promising therapeutic strategy for patients with anxiety and related disorders. We utilise the fear-conditioning paradigm to achieve a better understanding of the optimal and boundary conditions of changing fear memory. I believe that basic research is required for a step-change improvement of treatment for psychiatric disorders.",
       background: "",
       links: [
+        { label: "LinkedIn", url: "https://www.linkedin.com/in/merel-kindt-2aa567b4/" },
         { label: "UvA Profile", url: "http://www.uva.nl/profiel/k/i/m.kindt/m.kindt.html" }
       ]
     },
@@ -28,6 +29,7 @@ var people = {
       researchInterests: "Our emotional memories seem indelible, and therefore a reliable record of our experiences. But nothing is further from the truth: over time both the content and emotional intensity of memories are subject to change. My research is driven by my fascination for the neuroendocrinological, physiological, and psycho-emotional mechanisms of memory formation and change, and how these explain clinically relevant phenomena like overgeneralized fearful memories or intrusive memories. To pursue questions in this realm, I am using a wide range of methods and techniques, such as behavioural experimentation (e.g., episodic memory assessment, fear-conditioning), psychophysiological assessments (e.g., functional magnetic resonance imaging, heart rate, fear-potentiated startle) and statistical techniques (e.g., mediation analysis).",
       background: "After completion of the Research Master Psychology Amsterdam (cum laude), I received an NWO-funded Toptalent grant (\"Effects of stress on associative memory\") that enabled me to pursue my PhD under the supervision of prof. dr. Merel Kindt. Then, as a post-doc in the group of prof. dr. Karin roelofs at the Donders institute, I helped to design and set up a large prospective study (still ongoing) investigating the neurobiology of human defensive reactions, and their role in the development of post-traumatic stress, in police recruits. Currently I am working as associate professor in the Amsterdam Emotional Memory Lab, at the Clinical Psychology department. My ongoing research is gratefully supported by an NWO-veni grant, \"The fate of emotional episodic memories\".",
       links: [
+        { label: "LinkedIn", url: "https://www.linkedin.com/in/vanessa-van-ast-7163b915/" },
         { label: "UvA Profile", url: "http://www.uva.nl/profiel/a/s/v.a.vanast/v.a.vanast.html" }
       ]
     },
@@ -36,13 +38,14 @@ var people = {
       name: "Renée M. Visser",
       title: "PhD",
       role: "Associate Professor",
-      photo: "images/people/Renee3.jpg",
-      photoBio: "images/people/Renee3.jpg",
+      photo: "images/people/Renee.jpg",
+      photoBio: "images/people/Renee.jpg",
       page: "pages/Renee.html",
-      tags: ["Autobiographical memory", "fMRI", "Clinical populations", "Memory reconsolidation"],
-      researchInterests: "The last two decades of neuroscientific research have produced many new insights on the representation and dynamic nature of memory. This has generated a new and promising hypothesis on the malleability of emotional memories. Yet, most of this research has been restricted to simple associative fears in non-human animals; much less is known about how complex autobiographical memories (i.e., what we remember from our own lives) may change. As a cognitive neuroscientist with a background in clinical psychology I investigate brain mechanisms underlying the plasticity of emotional memory. Specifically, by combining behavioural experimentation with functional Magnetic Resonance Imaging (fMRI) I seek to gain fundamental insights into the evolution of autobiographical memory over time, as well as into procedures that target maladaptive processes underlying traumatic memories. In general, I am interested in how cognitive neuroscience can improve mental health care, by informing psychological treatment development and by increasing awareness of the neural processes involved in affective disorders.",
-      background: "After completing a clinical master (2009, cum laude), and a research master (2010, cum laude), I did my PhD (2016, cum laude) with Prof Merel Kindt and Dr H. Steven Scholte at the University of Amsterdam. For my post-doctoral training (November 2015–August 2018) I worked with Prof Emily Holmes and Prof Rik Henson at the MRC Cognition and Brain Sciences Unit, University of Cambridge, United Kingdom. During this time I was gratefully supported by a Marie Skłodowska-Curie Individual Fellowship from the European Union. In September 2018 I started working as an assistant professor in the Amsterdam Emotional Memory Lab, at the Clinical Psychology department, University of Amsterdam. My research is supported by a NWO Veni grant, \"In search of the affective engram of autobiographical memory\".",
+      tags: ["Autobiographical memory", "Intrusive memory", "Clinical interventions", "Narrative formation", "Theory development", "Psychopathology", "fMRI", "Computational modeling"],
+      researchInterests: "I am a cognitive neuroscientist working in clinical psychology. My team studies the dynamics of emotional memory: How do memories change, spontaneously and through intervention? How do emotions arise from, and shape, our processing of continuous experience? Why do some memories become intrusive, and how does that affect our mental health? What aspects of emotional memory should therapy target and how? We address these questions using a range of methods, including behavioural experimentation, computational modeling, functional Magnetic Resonance Imaging (fMRI), ecological momentary assessment (EMA), and qualitative approaches.",
+      background: "After a clinical and a research master's in psychology, I completed my doctoral training at the University of Amsterdam investigating the neural dynamics of fear memory. From 2015-2018, I worked as an Investigator Scientist, and later as a Marie Skłodowska-Curie Fellow, at the MRC Cognition and Brain Sciences Unit, University of Cambridge. There, I expanded my knowledge of simple fears to more complex emotional memories including intrusive memories of trauma. While my core focus remained the basic neurocognitive mechanisms behind these memories, working within an interdisciplinary team of cognitive psychologists, psychotherapists, and psychiatrists gave me deeper insight into psychopathological mechanisms, and into what keeps science and clinical practice apart.\n\nI returned to Amsterdam in 2018 to establish a research program on the neurocognitive mechanisms underlying memory transformation, developing novel experimental approaches to model emotional experiences with high personal relevance. This work now spans two main lines. The first combines lab experiments, neuroimaging, and computational modelling to unravel how narratives and emotion interact (with Floris Tijhuis, MSc, MA, and Dora Gözükara, PhD). The second uses experiments and single-case experimental designs in clinical and non-clinical populations to probe the mechanisms behind intrusive memories and their impact on mental health (with Linos Vossoughi, MSc, Eline de Vries, MSc, Faya Reinhold, PhD). As co-promotor, I also contribute to projects investigating spider fear (Jack Peters, PhD), memory and sleep (Faya Reinhold, PhD; Mona Klau, MSc), and symptom networks in psychopathology (Inga Marie Freund, almost PhD). Alongside this empirical work, I continue to think through the conceptual questions linking adverse experience to persistent mental health problems.\n\nMy research is supported by personal grants ([NWO Veni](https://www.nwo.nl/en/projects/016veni195246), [NWO Vidi](https://www.nwo.nl/en/researchprogrammes/nwo-talent-programme/projects-vidi/vidi-2023), NWO XS, [L'Oréal-UNESCO For Women in Science Fellowship 2023](https://www.unesco.nl/nl/artikel/women-in-science-ceremonie-eert-vrouwelijke-wetenschappers-met-beurzen-en-prijzen)) and an NWO consortium grant ([NSMD](https://nsmd.eu/)).",
       links: [
+        { label: "LinkedIn", url: "https://nl.linkedin.com/in/reneemvisser" },
         { label: "UvA Profile", url: "http://www.uva.nl/profiel/v/i/r.m.visser/r.m.visser.html" }
       ]
     },
@@ -50,14 +53,15 @@ var people = {
       id: "Lotte",
       name: "Lotte Stemerding",
       title: "PhD",
-      role: "Postdoc",
-      photo: "images/people/Lotte2.jpg",
-      photoBio: "images/people/Lotte2.jpg",
+      role: "Assistant Professor",
+      photo: "images/people/Lotte.jpg",
+      photoBio: "images/people/Lotte.jpg",
       page: "pages/Lotte.html",
-      tags: ["Fear memory", "Memory reconsolidation", "Conditioning", "Clinical populations"],
-      researchInterests: "In a broad sense, I am interested in how our memories shape and affect our behaviour, decisions, and mental health. I am currently investigating the effect of prediction errors on changes in fear behaviour. In addition, I work on identifying other predictors of the long-term effects of clinical interventions, both in conditioning experiments and clinical interventions.",
-      background: "I completed a bachelor degree in liberal arts and sciences at the Amsterdam University College (2015, cum laude), where I majored in human biology, but also took various courses in different disciplines. After, I moved to London to start an MSc programme in Cognitive Neuroscience at University College London, which I completed in 2017. During my PhD (also in the Emotional Memory Lab), I investigated the role of prediction errors in memory reconsolidation and extinction learning with the use of fear-conditioning experiments.",
+      tags: ["Autobiographical memory", "Clinical interventions", "Fear memory", "Memory reconsolidation", "Conditioning", "Psychophysiology", "Computational modeling"],
+      researchInterests: "Memories shape how we feel, think, and act. In some cases, this results in dysfunctional behaviors or feelings that characterize mental disorders. An effective way to weaken the impact that negative memories have on our mental health is through corrective experiences. For example, in exposure therapy patients are repeatedly exposed to the feared object or situation in a safe environment. Or in Imagery Rescripting, patients imagine a more positive outcome to a distressing memory. Broadly speaking, my work focuses on identifying the conditions under which humans can best learn from these corrective experiences, and how emotional memories change as a result of them. Ultimately, this will lead to a better understanding of how psychological interventions work and how we can improve treatment outcomes.\n\nIn my work, I use insights from fundamental models of learning and memory to understand why some experiences result in lasting behavioral change, whereas others do not. Much of my PhD work focused on understanding how prediction errors (that is, how surprising the new experience is) affect [fear memory updating](https://www.nature.com/articles/s41598-022-06119-5) and [extinction learning](https://www.sciencedirect.com/science/article/pii/S0005796723000682?via%3Dihub). In addition, I studied whether physiological measurements that are commonly used in experimental settings reflect different aspects of fear learning (see [here](https://onlinelibrary.wiley.com/doi/10.1111/psyp.70349) and [here](https://www.sciencedirect.com/science/article/pii/S0005796722001358)). More recently, I have also been working with complex autobiographical memories from participants' personal lives, to find out how and under what conditions an intervention like Imagery Rescripting changes the experience of a memory. In addition, I am interested in how computational modeling of behavioral data can help uncover the learning processes that drive memory change over time.",
+      background: "After completing a master's degree in Cognitive Neuroscience at University College London (2017), I did a PhD in the Amsterdam Emotional Memory lab under supervision of Prof. Merel Kindt and Dr. Vanessa van Ast (2023). During my PhD, I investigated the role of prediction errors in memory reconsolidation and fear extinction. After, I completed a short postdoc with Prof. Arnoud Arntz and Prof. Merel Kindt on autobiographical memories in depression and the effectiveness of Imagery Rescripting to treat these memories. In January 2024 I started as assistant professor at the Clinical Psychology department, funded by the [Dutch Sectorplan Social Sciences and Humanities](https://www.sectorplan-ssh.nl/).",
       links: [
+        { label: "LinkedIn", url: "https://www.linkedin.com/in/lotte-stemerding-554913b5/" },
         { label: "UvA Profile", url: "http://www.uva.nl/profiel/s/t/l.e.stemerding/l.e.stemerding.html" }
       ]
     },
@@ -69,10 +73,11 @@ var people = {
       photo: "images/people/IngaMarie.jpg",
       photoBio: "images/people/IngaMarie.jpg",
       page: "pages/IngaMarie.html",
-      tags: ["Network approach", "Clinical populations", "Autobiographical memory", "Theory development"],
+      tags: ["Network approach", "Clinical interventions", "Autobiographical memory", "Theory development", "Psychopathology"],
       researchInterests: "I am interested in the role of emotional memory in affective disorders, such as post-traumatic stress disorder, depression, and anxiety disorders. In the realm of my PhD project, I wish to delve into what exactly we mean by 'emotional memory'. Upon defining this construct, I aim to investigate whether emotional memory is a latent construct or a partial common cause of mental conditions with the use of network modeling.",
       background: "I obtained my BSc in psychology at the University of Glasgow (2017, First Class Honours). During this degree, I studied abroad at the University of California, Berkeley for one academic year (2015–2016, GPA = 4.0). Following my BSc, I completed my research MSc in clinical and health psychology at Leiden University (2020, Cum Laude). Since September 2020, I am combining my curiosity about research and clinical psychology as a PhD student in the Department of Clinical Psychology at the UvA, under supervision of Prof. Dr. Merel Kindt, Prof. Dr. Arnoud Arntz, and Dr. Renée Visser.",
       links: [
+        { label: "LinkedIn", url: "https://www.linkedin.com/in/imfreund/" },
         { label: "UvA Profile", url: "https://www.uva.nl/en/profile/f/r/i.m.freund/i.m.freund.html" }
       ]
     },
@@ -88,6 +93,7 @@ var people = {
       researchInterests: "Many psychological interventions target emotional memory as an underlying factor to promote symptom relief in patients. However, instead of being the mechanism of action, emotional memory is perhaps only a theoretical construct that provides a strong rationale for clinical scientist and practitioners. Such a view would align with the network model of psychopathology, where mental disorders are conceptualised as dynamic networks of interacting symptoms without an underlying latent entity. In my PhD project, I investigate the function of emotional memory from the latent-factor and network theory approaches. My project is a part of the New Science of Mental Disorders (NSMD) consortium and is supervised by Prof. Dr. Merel Kindt, Prof. Dr. Arnoud Arntz and Dr. Tessa Blanken.",
       background: "I completed my bachelor's degree in Philosophy and Psychology at Emory University (GA) in 2019. I worked as a research specialist in the Dilks Lab, where I collaborated on behavioral and imaging studies on visual and social perception. To gain more clinical focus, I pursued a Research Master's degree in Clinical and Developmental Psychopathology at Vrije Universiteit Amsterdam (2022, cum laude). I joined the Amsterdam Emotional Memory Lab in November 2022.",
       links: [
+        { label: "LinkedIn", url: "https://nl.linkedin.com/in/guldehan-durman-650216188" },
         { label: "UvA Profile", url: "https://www.uva.nl/profiel/d/u/g.durman/g.durman.html" }
       ]
     },
@@ -103,7 +109,8 @@ var people = {
       researchInterests: "I am particularly interested in the conditions under which emotional episodic memories change over time, and how these conditions can be optimized in order to improve psychological treatments for emotional memory disorders. In my PhD project, I aim to investigate how contextual (dis)similarity between past aversive events and novel therapeutic experiences can modulate (mal)adaptive emotional responses through memory (dis)integration, under the supervision of Dr. Vanessa van Ast and Prof. Dr. Merel Kindt.",
       background: "After obtaining my Bachelor's degree in Psychology at the University of Amsterdam (UvA) with a specialization in Clinical Psychology (2020, cum laude), I completed the Research Master's in Psychology at the UvA, with a major in Clinical Psychology and a minor in Psychological Methods (2022, cum laude).",
       links: [
-        { label: "LinkedIn", url: "https://www.linkedin.com/in/donna-meyer-1bb77b128/" }
+        { label: "LinkedIn", url: "https://www.linkedin.com/in/donna-meyer-1bb77b128/" },
+        { label: "UvA Profile", url: "https://www.uva.nl/en/profile/m/e/d.j.meyer/d.j.meyer.html" }
       ]
     },
     {
@@ -118,6 +125,7 @@ var people = {
       researchInterests: "I will investigate intrusive images and thoughts with the goal of developing a deeper understanding of how intrusions about the past are related to intrusions about the future. In addition, I hope to help elucidate the processes by which different types of intrusions (e.g., past- vs future-oriented) relate to maladaptive behaviours and psychopathology. Finally, I will assess the utility and feasibility of tracking intrusion related information with clinical routine outcome monitoring, for therapists to make data-informed treatment decisions.",
       background: "I received my Bachelor's degree in Psychology from the American College of Greece in 2016 and my Research Master's in Clinical Psychology and Brain and Cognition from the University of Amsterdam in 2018. After a few years teaching at the University of Rotterdam and working in the corporate world I found my way back into research in clinical psychology.",
       links: [
+        { label: "LinkedIn", url: "https://www.linkedin.com/in/linos-vossoughi-91675b244/"},
         { label: "UvA Profile", url: "https://www.uva.nl/profiel/v/o/l.vossoughi/l.vossoughi.html" }
       ]
     },
@@ -129,10 +137,11 @@ var people = {
       photo: "images/people/Ralph.jpg",
       photoBio: "images/people/Ralph.jpg",
       page: "pages/Ralph.html",
-      tags: ["Fear memory", "fMRI", "Memory reconsolidation", "Conditioning"],
+      tags: ["Context modulation", "fMRI", "Theory development", "Fear memory", "Conditioning and Extinction", "Psychophysiology"],
       researchInterests: "My research aims to improve treatments for emotional memory disorders by deepening our understanding of their neurophysiological and cognitive mechanisms. In my PhD, I investigate the cognitive and behavioral processes underlying emotional memories, employing advanced neuroimaging techniques to bridge the gap between lab-based interventions and clinical application.",
       background: "I graduated with honors in Medical Natural Sciences (2020) from Vrije Universiteit (VU) and went on to pursue a Research Master in Cognitive Neuropsychology (2023, cum laude) at the VU, where I completed my thesis on How Prediction Errors Shape Neural Dynamics Across the Visual Hierarchy using functional MRI.",
       links: [
+        { label: "LinkedIn", url: "https://www.linkedin.com/in/ralph-wientjens/" },
         { label: "UvA Profile", url: "https://www.uva.nl/en/profile/w/i/r.g.a.m.wientjens/r.g.a.m.wientjens.html" }
       ]
     },
@@ -144,9 +153,9 @@ var people = {
       photo: "images/people/Eline.jpg",
       photoBio: "images/people/Eline.jpg",
       page: "pages/Eline.html",
-      tags: ["Intrusive memory", "Network approach", "Clinical populations", "Theory development"],
-      researchInterests: "I am fascinated by how symptoms and their dynamics are experienced differently across individuals. Intrusive memories are particularly interesting because, though often associated with PTSD, this symptom appears across a variety of disorders and patients. During my PhD project, I hope to explore if, and how, intrusive memories play a (casual) role in driving dysfunctional thoughts, urges and behaviours, and how we can view intrusive memories through a transdiagnostic lens. My project is part of the New Science of Mental Disorders (NSMD) consortium.",
-      background: "I obtained my bachelor's degree (honours & cum laude, 2023) and research master's degree (cum laude, 2025) in psychology at the University of Amsterdam, specialising in clinical psychology and psychological methods. I combined my research master with a 7-month internship at PsyQ Almere as a psychologist-in-training.",
+      tags: ["Intrusive memory", "Clinical interventions", "Theory development", "Psychopathology", "Network approach"],
+      researchInterests: "I am fascinated by how symptoms and their dynamics are experienced differently across individuals. Intrusive memories are particularly interesting because, though often associated with PTSD, this symptom appears across a variety of disorders and patients. Throughout my PhD project I explore if, and how, intrusive memories play a causal role in driving dysfunctional thoughts, urges and behaviours, and how we can view intrusive memories through a transdiagnostic lens. If this is the case, it could mean existing psychological treatments related to memory and imagery could be useful for many more people that currently receive it.\n\nMy project is part of the New Science of Mental Disorders (NSMD) consortium, aligning with my interest in network analysis and complexity science. I am supervised by Dr. Renée Visser, Prof. Merel Kindt, Prof. Anita Jansen, and Dr. Lourens Waldorp.",
+      background: "I obtained my bachelor's degree (honours & cum laude, 2023) and research master's degree (cum laude, 2025) in psychology at the University of Amsterdam, specialising in clinical psychology and psychological methods. I combined my research master with a 7-month internship at PsyQ Almere as a psychologist-in-training, where I worked with a wide range of patients e.g. ADHD, PTSD, depressive-, anxiety-, and personality disorders. After this experience, I have also grown interested in how clinicians think about disorders and how their beliefs influence how they interact with their patients. Consequently, I ran a project where I used Perceived Causal Networks to capture how mental health practitioners conceptualise the causal relationships between symptoms of Major Depressive Disorder.",
       links: [
         { label: "LinkedIn", url: "https://www.linkedin.com/in/elizabeth-de-vries" },
         { label: "UvA Profile", url: "https://www.uva.nl/profiel/v/r/e.f.de-vries/e.f.de-vries.html" }
@@ -160,9 +169,9 @@ var people = {
       photo: "images/people/Floris.jpg",
       photoBio: "images/people/Floris.jpg",
       page: "pages/Floris.html",
-      tags: ["Autobiographical memory", "fMRI", "Narrative formation", "Contextual memory"],
-      researchInterests: "I am a PhD candidate on the Vidi-funded project Memories in Motion, led by Dr. Renée Visser. My research investigates how individual (emotional) events are integrated into autobiographical memory networks and narratives over time. By combining longitudinal fMRI, behavioral paradigms, and experience-sampling methods, I aim to better understand how memory shapes identity and mental health. My academic interests lie at the intersection of neuroscience, psychology, and philosophy.",
-      background: "I hold an MSc in Neurosciences (Clinical and Translational Neuroscience) and an MA in Philosophy of Neuroscience. My scientific background spans computational, clinical, and cognitive neuroscience, with experience in neuroimaging research across healthy participants and various clinical populations.",
+      tags: ["Autobiographical memory", "fMRI", "Narrative formation", "Clinical interventions", "Psychophysiology", "Computational modeling"],
+      researchInterests: "I am a PhD candidate on the Vidi-funded project Memories in Motion, led by Dr. Renée Visser. My research investigates how emotional events are integrated into (autobiographical) memory networks and narratives over time. By combining longitudinal fMRI and behavioral paradigms, I aim to better understand how emotional memory transforms over time, dynamically shaping identity and mental health. My academic interests lie at the intersection of cognitive neuroscience, psychology, and philosophy, focusing on how empirical and conceptual approaches can jointly address questions about memory, self, and emotion. I am particularly fascinated by how frameworks from different disciplines can be integrated to gain a more complete understanding of the human mind. Beyond research, I am committed to open science and public engagement in neuroscience.",
+      background: "I hold an MSc in Neurosciences (Clinical and Translational Neuroscience) and an MA in Philosophy of Neuroscience. My scientific background spans computational, clinical, and cognitive neuroscience, with experience in neuroimaging research across healthy participants and various clinical populations, including individuals with PTSD, MS, and glioma. As a research intern and research assistant, I have worked with large-scale fMRI datasets using advanced analytical and machine learning methods to study cognition, emotion, and brain connectivity. Alongside this empirical work, I have conducted philosophical research on the therapeutic effects of psychedelics, focusing on the experiential dimensions of the psychedelic experience in relation to mental health.",
       links: [
         { label: "LinkedIn", url: "https://www.linkedin.com/in/floris-tijhuis-6101a0189/" },
         { label: "UvA Profile", url: "https://www.uva.nl/profiel/t/i/f.b.tijhuis/f.b.tijhuis.html" }
@@ -182,7 +191,7 @@ var people = {
     {
       id: "Jack",
       name: "Jack Peters",
-      role: "Former PhD Candidate",
+      role: "Former PhD Candidate and Postdoc",
       photo: "images/people/Jack.png",
       page: "pages/alumni/Jack.html",
       currentPosition: "Postdoc at Rijksuniversiteit Groningen"
@@ -190,7 +199,7 @@ var people = {
     {
       id: "Olivier",
       name: "Olivier de Vries",
-      role: "Former PhD Candidate",
+      role: "Former PhD Candidate and Postdoc",
       photo: "images/people/Olivier.png",
       page: "pages/alumni/Olivier.html",
       currentPosition: ""
@@ -206,7 +215,7 @@ var people = {
     {
       id: "Wouter",
       name: "Wouter Cox",
-      role: "Former PhD Candidate",
+      role: "Former PhD Candidate and Postdoc",
       photo: "images/people/Wouter.png",
       page: "pages/alumni/Wouter.html",
       currentPosition: ""

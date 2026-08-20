@@ -18,6 +18,66 @@
   var ALPHA_MIN    = 0.055;   /* floor for perpetual drift */
   var REPULSION_K  = 2.2;     /* repulsion multiplier — softer initial pushes */
 
+  /* ---- Gesture handoff ------------------------------------
+     Velocity here is px per frame, because that is what the integrator uses
+     (`n.x += n.vx` once per rAF). Pointer velocity arrives as px per
+     millisecond, so FRAME_MS is the conversion between the two. */
+  var FRAME_MS   = 1000 / 60;
+  var MAX_FLICK  = 34;    /* px/frame ceiling ≈ 2000 px/s — past this a throw
+                             stops reading as a throw and starts reading as a
+                             glitch. With VEL_DECAY it carries roughly 230px. */
+  var FLICK_WINDOW = 100; /* ms of pointer history the release velocity is
+                             measured over — long enough to be steady, short
+                             enough to still be "the last thing you did" */
+  var FLICK_STALE  = 70;  /* ms. Hold still, then let go, and nothing is
+                             thrown: the gesture ended before the release. */
+
+  /* ---- Soft edges -----------------------------------------
+     The canvas has no walls any more, it has a shore. Both numbers below
+     govern how far past MARGIN a node may go and how hard it is pushed back;
+     OOB_MAX is also the asymptote of the drag-time rubber band, so a dragged
+     node and a thrown one are bounded by the same line and neither can jump
+     on release.
+
+     The 46px budget is set by the canvas, which clips: MARGIN is 100 and a
+     node's radius is 85, so a portrait starts touching the edge only 15px
+     past the margin. At 46 the very hardest throw tucks about a fifth of a
+     circle under the edge for a few frames, which reads as depth. Anything
+     larger reads as a bug. */
+  var OOB_MAX    = 46;    /* px past the margin, hard backstop and rubber-band limit */
+  var RUBBER_C   = 0.85;  /* rubber-band constant — lower resists sooner */
+  var EDGE_K     = 0.45;  /* inward pull per px of overshoot, per frame — tuned
+                             so a throw at MAX_FLICK turns around at ~40px,
+                             inside OOB_MAX, and the hard clamp never fires */
+  var EDGE_DAMP  = 0.86;  /* extra velocity bleed while out of bounds */
+
+  /* Apple's rubber-band curve: the further past the edge you pull, the less
+     the node follows, asymptotically approaching `limit` and never passing it.
+     A hard clamp reads as frozen; this reads as "responsive, but there is
+     nothing more out here". */
+  function rubberband(overshoot, limit) {
+    return (overshoot * limit * RUBBER_C) / (limit + RUBBER_C * Math.abs(overshoot));
+  }
+  function softBound(v, lo, hi) {
+    if (v < lo) return lo - rubberband(lo - v, OOB_MAX);
+    if (v > hi) return hi + rubberband(v - hi, OOB_MAX);
+    return v;
+  }
+
+  /* ---- Reduced motion --------------------------------------
+     The constellation is the one thing on the site that moves forever: eleven
+     portraits orbiting their anchor points plus a drifting particle field
+     behind them, on a permanent rAF loop. That is exactly the kind of
+     continuous ambient motion `prefers-reduced-motion` exists to switch off.
+
+     Switched off does not mean gone. The layout still resolves — the physics
+     runs until the nodes have settled and then parks itself — and dragging
+     still works and still springs back, because that motion is one the reader
+     asked for. What stops is the perpetual idle drift and the animated
+     background field, which are decoration nobody requested. */
+  var REDUCED = window.matchMedia
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   /* ---- Seniority ----------------------------------------- */
   var SENIORITY = {
     'Full Professor':      1,
@@ -32,12 +92,13 @@
      the spring force is too weak to compete with repulsion from PhD nodes. */
   var SENIORITY_CGK = [0.0016, 0.0006, 0.00015, 0];
 
-  var POSITION_TAGS = ['Professor', 'Associate Professor', 'Postdoc', 'PhD student'];
+  var POSITION_TAGS = ['Professor', 'Associate Professor', 'Assistant Professor', 'Postdoc', 'PhD student'];
   var RESEARCH_TAGS = [
     'Fear memory', 'Memory reconsolidation', 'Autobiographical memory',
     'Intrusive memory', 'Contextual memory', 'Narrative formation',
-    'Network approach', 'Theory development', 'Clinical populations',
-    'Conditioning', 'fMRI', 'Psychophysiology'
+    'Network approach', 'Theory development', 'Psychopathology',
+    'Clinical populations', 'Clinical interventions', 'Conditioning',
+    'fMRI', 'Psychophysiology', 'Computational modeling'
   ];
 
   function positionTagFor(role) {
@@ -219,7 +280,9 @@
       bgCtx.fill();
     }
 
-    bgRaf = requestAnimationFrame(drawBg);
+    /* One frame is enough under reduced motion: the field is drawn, the
+       lines are there, nothing drifts. */
+    if (!REDUCED) bgRaf = requestAnimationFrame(drawBg);
   }
 
   /* ---- Drag state ----------------------------------------- */
@@ -236,19 +299,46 @@
     e.preventDefault();
     var pt = getCanvasPos(e);
     drag = {
-      node:   n,
-      offX:   n.x - pt.x,
-      offY:   n.y - pt.y,
-      startX: pt.x,
-      startY: pt.y,
-      moved:  false,
-      page:   person.page || null
+      node:    n,
+      offX:    n.x - pt.x,
+      offY:    n.y - pt.y,
+      startX:  pt.x,
+      startY:  pt.y,
+      moved:   false,
+      page:    person.page || null,
+      /* Recent on-screen positions, for the release velocity. Sampling the
+         node rather than the raw pointer is deliberate: near an edge the two
+         diverge, and what should carry into the throw is the speed the
+         portrait was visibly moving at, not the speed your finger was. */
+      samples: [{ x: n.x, y: n.y, t: evTime(e) }]
     };
     n.el.classList.add('dragging');
     n.el.style.zIndex = '10';
+    /* Wake the loop if it has parked (reduced motion): the dragged node is
+       positioned straight from the pointer, but the *other* nodes only get
+       out of its way while the physics is running. */
+    reheat(alpha);
     document.addEventListener('pointermove',   onPointerMove);
     document.addEventListener('pointerup',     onPointerUp);
-    document.addEventListener('pointercancel', onPointerUp);
+    document.addEventListener('pointercancel', onPointerCancel);
+  }
+
+  function evTime(e) {
+    if (e && typeof e.timeStamp === 'number' && e.timeStamp > 0) return e.timeStamp;
+    return (window.performance && performance.now) ? performance.now() : Date.now();
+  }
+
+  function endDrag() {
+    document.removeEventListener('pointermove',   onPointerMove);
+    document.removeEventListener('pointerup',     onPointerUp);
+    document.removeEventListener('pointercancel', onPointerCancel);
+    var d = drag;
+    drag = null;
+    if (d) {
+      d.node.el.classList.remove('dragging');
+      d.node.el.style.zIndex = '2';
+    }
+    return d;
   }
 
   function onPointerMove(e) {
@@ -257,29 +347,82 @@
     var ddx = pt.x - drag.startX, ddy = pt.y - drag.startY;
     if (!drag.moved && Math.sqrt(ddx * ddx + ddy * ddy) > 6) drag.moved = true;
     var n = drag.node;
-    n.x  = Math.max(MARGIN, Math.min(phyW - MARGIN,     pt.x + drag.offX));
-    n.y  = Math.max(MARGIN, Math.min(phyH - MARGIN_BOT, pt.y + drag.offY));
+    /* Rubber band, not a clamp: drag past the edge and the portrait keeps
+       following, just less and less, up to OOB_MAX. */
+    n.x  = softBound(pt.x + drag.offX, MARGIN, phyW - MARGIN);
+    n.y  = softBound(pt.y + drag.offY, MARGIN, phyH - MARGIN_BOT);
     n.vx = 0; n.vy = 0;
     applyTransform(n);
+
+    drag.samples.push({ x: n.x, y: n.y, t: evTime(e) });
+    if (drag.samples.length > 6) drag.samples.shift();
   }
 
-  function onPointerUp() {
-    document.removeEventListener('pointermove',   onPointerMove);
-    document.removeEventListener('pointerup',     onPointerUp);
-    document.removeEventListener('pointercancel', onPointerUp);
-    if (!drag) return;
-    var d = drag;
-    drag = null;
-    d.node.el.classList.remove('dragging');
-    d.node.el.style.zIndex = '2';
-    d.node.vx = 0; d.node.vy = 0;
+  /* Measured over the last FLICK_WINDOW ms of movement, not the single last
+     frame — one frame is noisy enough that an identical gesture can come out
+     twice as fast or half as fast depending on where the samples landed. */
+  function releaseVelocity(d, upTime) {
+    var s = d.samples;
+    var last = s[s.length - 1];
+    if (!last || upTime - last.t > FLICK_STALE) return null;
+
+    var first = last;
+    for (var i = s.length - 2; i >= 0; i--) {
+      if (last.t - s[i].t > FLICK_WINDOW) break;
+      first = s[i];
+    }
+    var dt = last.t - first.t;
+    if (dt < 8) return null;
+
+    var vx = (last.x - first.x) / dt * FRAME_MS;
+    var vy = (last.y - first.y) / dt * FRAME_MS;
+    var sp = Math.sqrt(vx * vx + vy * vy);
+    if (sp < 0.6) return null;              /* a placement, not a throw */
+    if (sp > MAX_FLICK) { vx *= MAX_FLICK / sp; vy *= MAX_FLICK / sp; }
+    return { vx: vx, vy: vy };
+  }
+
+  function onPointerUp(e) {
+    var d = endDrag();
+    if (!d) return;
+
     /* Short drag = click → navigate */
     if (!d.moved && d.page) {
+      d.node.vx = 0; d.node.vy = 0;
       window.location.href = d.page;
       return;
     }
-    /* Reheat so the node springs back to its home position */
-    alpha = Math.max(alpha, 0.55);
+
+    /* Hand the gesture over to the physics instead of throwing it away.
+       Zeroing here — which is what used to happen — meant a flicked portrait
+       stopped dead at the point you let go and only then got dragged home
+       from a standstill, with a visible seam between your finger and the
+       spring. Seeding the node's velocity from the last few frames of the
+       gesture removes the seam: the throw simply continues, and the spring
+       that was already running catches it.
+
+       Not under reduced motion. A flick there would send a 170px portrait
+       coasting a couple of hundred pixels across the viewport, which is
+       exactly the large-surface travel that setting asks us to drop; the
+       node still follows the finger 1:1 and still springs home. */
+    var v = REDUCED ? null : releaseVelocity(d, evTime(e));
+    d.node.vx = v ? v.vx : 0;
+    d.node.vy = v ? v.vy : 0;
+
+    /* Reheat so the node springs back to its home position. A thrown node
+       gets a gentler spring: at full strength the spring would arrest the
+       throw within a few frames and there would have been no point handing
+       the velocity over at all. */
+    reheat(v ? 0.35 : 0.55);
+  }
+
+  /* A cancelled gesture is not a release — the pointer was taken away rather
+     than let go, so there is no throw to inherit. */
+  function onPointerCancel() {
+    var d = endDrag();
+    if (!d) return;
+    d.node.vx = 0; d.node.vy = 0;
+    reheat(0.55);
   }
 
   /* ---- Physics state -------------------------------------- */
@@ -287,6 +430,15 @@
   var phyW = 0, phyH = 0;
   var alpha = 1.0;
   var phyRaf;
+  var phyLoop = null;   /* set by startPhysics, so reheat() can restart a parked loop */
+
+  /* Raise alpha and make sure the loop is actually running. Under reduced
+     motion the loop parks itself once everything has settled, so bumping
+     alpha alone would do nothing — every reheat has to go through here. */
+  function reheat(to) {
+    alpha = Math.max(alpha, to);
+    if (!phyRaf && phyLoop) phyRaf = requestAnimationFrame(phyLoop);
+  }
 
   function startPhysics(nodeObjects, targets) {
     if (phyRaf) cancelAnimationFrame(phyRaf);
@@ -340,7 +492,7 @@
        than popping in all at once already fully visible. */
     phyNodes.forEach(function (n) {
       var delay = 40 + Math.random() * 340;
-      setTimeout(function () { n.el.style.opacity = '1'; }, delay);
+      setTimeout(function () { n.el.classList.add('is-visible'); }, delay);
     });
 
     function loop() {
@@ -355,7 +507,7 @@
         n = phyNodes[i];
         if (n === dn) continue; /* dragged node is positioned by the pointer */
 
-        n.driftAngle += n.driftSpeed;
+        if (!REDUCED) n.driftAngle += n.driftSpeed;
         var dtx = n.baseX + Math.cos(n.driftAngle) * n.driftR;
         var dty = n.baseY + Math.sin(n.driftAngle) * n.driftR;
         n.vx += (dtx - n.x) * SPRING_K * alpha;
@@ -392,10 +544,25 @@
         if (n === dn) continue;
         n.x += n.vx;
         n.y += n.vy;
-        if (n.x < MARGIN)            { n.x = MARGIN;            n.vx =  Math.abs(n.vx) * 0.35; }
-        if (n.x > phyW - MARGIN)     { n.x = phyW - MARGIN;     n.vx = -Math.abs(n.vx) * 0.35; }
-        if (n.y < MARGIN)            { n.y = MARGIN;            n.vy =  Math.abs(n.vy) * 0.35; }
-        if (n.y > phyH - MARGIN_BOT) { n.y = phyH - MARGIN_BOT; n.vy = -Math.abs(n.vy) * 0.35; }
+        /* Soft shore, matching the drag-time rubber band. A thrown node now
+           arrives at the edge carrying real speed, and stopping it dead on
+           the margin line would put back exactly the wall the handoff was
+           meant to remove. Past the margin it is pulled inward in proportion
+           to how far out it is and bled of speed, so it decelerates into the
+           edge and turns around. The hard clamp survives as a backstop at
+           OOB_MAX, which a flick at MAX_FLICK does not reach (it turns around
+           at about 40px), so in practice nothing ever hits it. */
+        var ox = 0, oy = 0;
+        if (n.x < MARGIN)                 ox = MARGIN - n.x;
+        else if (n.x > phyW - MARGIN)     ox = (phyW - MARGIN) - n.x;
+        if (n.y < MARGIN)                 oy = MARGIN - n.y;
+        else if (n.y > phyH - MARGIN_BOT) oy = (phyH - MARGIN_BOT) - n.y;
+
+        if (ox) { n.vx += ox * EDGE_K; n.vx *= EDGE_DAMP; }
+        if (oy) { n.vy += oy * EDGE_K; n.vy *= EDGE_DAMP; }
+
+        n.x = Math.max(MARGIN - OOB_MAX, Math.min(phyW - MARGIN + OOB_MAX, n.x));
+        n.y = Math.max(MARGIN - OOB_MAX, Math.min(phyH - MARGIN_BOT + OOB_MAX, n.y));
       }
 
       /* Hard-sphere position correction (skip dragged node) */
@@ -416,10 +583,26 @@
       /* Push DOM transforms */
       for (i = 0; i < phyNodes.length; i++) { applyTransform(phyNodes[i]); }
 
+      /* Under reduced motion, stop once everything has come to rest rather
+         than idling at ALPHA_MIN forever. reheat() restarts it whenever
+         something genuinely changes (a drag, a resize, a filter). */
+      if (REDUCED && !drag && isSettled()) { phyRaf = null; return; }
+
       phyRaf = requestAnimationFrame(loop);
     }
 
+    phyLoop = loop;
     phyRaf = requestAnimationFrame(loop);
+  }
+
+  /* Everything at its floor alpha and effectively not moving. */
+  function isSettled() {
+    if (alpha > ALPHA_MIN * 1.02) return false;
+    for (var i = 0; i < phyNodes.length; i++) {
+      if (Math.abs(phyNodes[i].vx) > 0.06) return false;
+      if (Math.abs(phyNodes[i].vy) > 0.06) return false;
+    }
+    return true;
   }
 
   function applyTransform(n) {
@@ -437,7 +620,9 @@
     node.className = 'p-node';
     node.style.width  = nodeSize + 'px';
     node.style.height = nodeSize + 'px';
-    node.style.opacity = '0';   /* faded in, staggered, once physics starts */
+    /* Starts invisible via the base `.p-node` rule; `.is-visible` (added
+       below, staggered) is what fades it in. See the CSS comment on
+       `.is-visible` for why this can't be an inline style. */
     node.dataset.researchTags = rTags.join('||');
     node.dataset.positionTag  = pTag || '';
 
@@ -478,21 +663,10 @@
   function buildTagPanel() {
     var posList  = document.getElementById('position-tags');
     var resList  = document.getElementById('research-tags');
-    var clearBtn = document.getElementById('tag-clear');
     if (!posList || !resList) return;
 
     POSITION_TAGS.forEach(function (t) { posList.appendChild(makeBtn(t, 'position')); });
     RESEARCH_TAGS.forEach(function (t) { resList.appendChild(makeBtn(t, 'research')); });
-
-    if (clearBtn) {
-      clearBtn.addEventListener('click', function () {
-        activeTags = {};
-        var btns = document.querySelectorAll('.tag-btn.active');
-        for (var i = 0; i < btns.length; i++) btns[i].classList.remove('active');
-        applyFilter();
-        clearBtn.classList.remove('visible');
-      });
-    }
   }
 
   function makeBtn(tag, type) {
@@ -503,10 +677,31 @@
       if (activeTags[tag]) { delete activeTags[tag]; btn.classList.remove('active'); }
       else                  { activeTags[tag] = true;  btn.classList.add('active');    }
       applyFilter();
-      var cb = document.getElementById('tag-clear');
-      if (cb) cb.classList.toggle('visible', Object.keys(activeTags).length > 0);
     });
     return btn;
+  }
+
+  /* ---- Alumni directory ------------------------------------ */
+  function renderAlumni() {
+    var grid = document.getElementById('alumni-grid');
+    if (!grid || typeof people === 'undefined' || !people.alumni) return;
+
+    people.alumni.forEach(function (person) {
+      var entry = document.createElement('div');
+      entry.className = 'team-alumni__entry';
+
+      var name = document.createElement('span');
+      name.className = 'team-alumni__name';
+      name.textContent = person.name;
+      entry.appendChild(name);
+
+      var role = document.createElement('span');
+      role.className = 'team-alumni__role';
+      role.textContent = person.role;
+      entry.appendChild(role);
+
+      grid.appendChild(entry);
+    });
   }
 
   function applyFilter() {
@@ -572,11 +767,7 @@
       n.wrap.style.height = nodeSize + 'px';
     });
 
-    var nav    = document.querySelector('.nav');
-    var intro  = document.querySelector('.team-intro');
-    var navH   = nav   ? nav.offsetHeight   : 64;
-    var introH = intro ? intro.offsetHeight : 0;
-    var canvasH = Math.max(window.innerHeight - navH - introH, 680);
+    var canvasH = computeCanvasHeight();
     constellationCanvas.style.height = canvasH + 'px';
 
     phyW = constellationCanvas.offsetWidth;
@@ -590,7 +781,23 @@
       n.baseY = targets[idx].y;
     });
 
-    alpha = Math.max(alpha, 0.50);
+    reheat(0.50);
+  }
+
+  /* Fill whatever is left of the first screen, so banner + constellation +
+     the filter strip underneath it together come to one viewport and the
+     tags are on screen at load without scrolling. The banner is pulled up
+     behind the sticky nav by exactly --nav-h, so only banner.offsetHeight
+     counts against the viewport — don't subtract navH on top of it. The
+     680px floor is unchanged. */
+  function computeCanvasHeight() {
+    var nav    = document.querySelector('.nav');
+    var banner = document.querySelector('.banner');
+    var intro  = document.querySelector('.team-intro');
+    var navH   = nav   ? nav.offsetHeight   : 64;
+    var introH = intro ? intro.offsetHeight : 0;
+    var headerH = banner ? Math.max(banner.offsetHeight, navH) : navH;
+    return Math.max(window.innerHeight - headerH - introH, 680);
   }
 
   /* ---- Boot ---------------------------------------------- */
@@ -606,15 +813,12 @@
     MARGIN     = NODE_R + 20;
     MARGIN_BOT = NODE_R + 45;
 
-    var nav    = document.querySelector('.nav');
-    var intro  = document.querySelector('.team-intro');
-    var navH   = nav   ? nav.offsetHeight   : 64;
-    var introH = intro ? intro.offsetHeight : 0;
-    var canvasH = Math.max(window.innerHeight - navH - introH, 680);
+    var canvasH = computeCanvasHeight();
     constellationCanvas.style.height = canvasH + 'px';
 
     buildTagPanel();
     initMobileFilters();
+    renderAlumni();
     window.addEventListener('resize', onResize);
 
     setTimeout(function () {

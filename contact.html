@@ -3,8 +3,42 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/svg+xml" href="images/favicon/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
+  <link rel="manifest" href="images/favicon/site.webmanifest">
   <title>Contact — Amsterdam Emotional Memory Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400..700&family=Archivo:wdth,wght@62..125,400..700&display=swap">
   <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Scroll-reveal gate. Sections that animate in start at opacity:0, but only
+       if this script runs and decides they may: the CSS is written as
+       `.js .reveal`, so anything that stops this line from executing leaves
+       the page simply, fully visible. Three failure paths, one switch:
+
+         no JavaScript   — the class is never added
+         broken main.js  — blocked, 404, a throw before the observer is armed:
+                           the timer takes the class back off after 2.5s
+         automation      — a screenshot service, a link-preview crawler,
+                           Lighthouse. These never scroll, so an
+                           IntersectionObserver never fires for anything below
+                           the fold and the page gets captured half empty.
+                           They are handed the page with nothing hidden.
+
+       Inline and in <head> on purpose: it has to settle before first paint,
+       or the content flashes in and back out. -->
+  <script>
+    (function (h) {
+      if (navigator.webdriver) return;
+      h.classList.add('js');
+      var t = setTimeout(function () { h.classList.remove('js'); }, 2500);
+      window.__revealArmed = function () { clearTimeout(t); };
+    })(document.documentElement);
+  </script>
   <link rel="stylesheet" href="css/contact.css" />
 </head>
 <body class="page-contact">
@@ -12,12 +46,18 @@
   <!-- NAV -------------------------------------------------- -->
   <nav class="nav" role="navigation" aria-label="Main navigation">
     <div class="nav__inner">
-      <a href="index.html" class="nav__brand">Amsterdam Emotional Memory Lab</a>
+      <a href="index.html" class="nav__brand">
+        <span class="nav__brand-badge">
+          <img src="images/logo/aeml-mark.svg" alt="" class="nav__brand-icon">
+        </span>
+        <span class="nav__brand-text">Amsterdam Emotional Memory Lab</span>
+      </a>
       <ul class="nav__links" role="list">
         <li><a href="index.html">Home</a></li>
         <li><a href="research.html">Research Questions</a></li>
         <li><a href="people.html">Team</a></li>
         <li><a href="publications.html">Publications</a></li>
+        <li><a href="media.html">In the Media</a></li>
         <li><a href="contact.html">Contact</a></li>
       </ul>
       <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-nav">
@@ -29,17 +69,17 @@
       <a href="research.html" role="menuitem">Research Questions</a>
       <a href="people.html" role="menuitem">Team</a>
       <a href="publications.html" role="menuitem">Publications</a>
+      <a href="media.html" role="menuitem">In the Media</a>
       <a href="contact.html" role="menuitem">Contact</a>
     </div>
   </nav>
 
   <!-- BANNER ----------------------------------------------- -->
-  <header class="banner contact-banner" role="banner">
+  <header class="banner" role="banner">
     <div class="banner__bg" aria-hidden="true"></div>
-    <div class="banner__overlay contact-banner__overlay" aria-hidden="true"></div>
+    <div class="banner__overlay" aria-hidden="true"></div>
     <div class="banner__content">
       <h1 class="banner__title">Contact</h1>
-      <p class="banner__sub">Amsterdam Emotional Memory Lab</p>
     </div>
   </header>
 
@@ -50,7 +90,7 @@
       <div class="contact-panel__visual" aria-hidden="true">
         <div class="contact-panel__icon">
           <!-- Flask / experiment icon -->
-          <svg width="120" height="120" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width="140" height="140" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M26 10h12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
             <path d="M28 10v16L15 46a4 4 0 0 0 3.46 6h27.08A4 4 0 0 0 49 46L36 26V10" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
             <path d="M20 42h24" stroke="currentColor" stroke-width="1.6" opacity="0.4"/>
@@ -62,7 +102,6 @@
       </div>
 
       <div class="contact-panel__body">
-        <p class="contact-panel__label">Research Participation</p>
         <h2 class="contact-panel__heading">Participate in our Studies</h2>
         <p class="contact-panel__text">
           Are you interested in taking part in one of our ongoing experimental studies?
@@ -85,7 +124,6 @@
     <div class="contact-panel__inner contact-panel__inner--rtl">
 
       <div class="contact-panel__body">
-        <p class="contact-panel__label">Vacancies</p>
         <h2 class="contact-panel__heading">Join the Lab</h2>
         <p class="contact-panel__text">
           Interested in joining the Amsterdam Emotional Memory Lab as a PhD candidate
@@ -103,7 +141,7 @@
       <div class="contact-panel__visual" aria-hidden="true">
         <div class="contact-panel__icon">
           <!-- CV / document icon -->
-          <svg width="120" height="120" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width="140" height="140" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M14 6h28l10 10v42H14V6z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
             <path d="M42 6v10h10" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
             <line x1="22" y1="27" x2="42" y2="27" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -121,7 +159,6 @@
 
     <div class="contact-address__info">
       <div class="contact-address__content">
-        <p class="contact-address__label">Address</p>
         <h2 class="contact-address__heading">Find&nbsp;Us</h2>
         <address>
           <p class="contact-address__name">Amsterdam Emotional Memory Lab</p>
@@ -166,13 +203,18 @@
     <div class="container">
       <div class="footer__inner">
         <div class="footer__left">
-          <p>&copy; <span id="year"></span> Amsterdam Emotional Memory Lab</p>
-          <p>Department of Clinical Psychology &mdash; University of Amsterdam</p>
-          <p>Nieuwe Achtergracht 129-B, 1018 WS Amsterdam, The Netherlands</p>
+          <span class="footer__brand-card">
+            <img src="images/logo/aeml-mark-white.svg" alt="Amsterdam Emotional Memory Lab" class="footer__brand-logo">
+          </span>
+          <div class="footer__left-text">
+            <p>&copy; <span id="year"></span> Amsterdam Emotional Memory Lab</p>
+            <p>Department of Clinical Psychology &mdash; University of Amsterdam</p>
+            <p>Nieuwe Achtergracht 129-B, 1018 WS Amsterdam, The Netherlands</p>
+          </div>
         </div>
         <div class="footer__right">
           <div class="footer__social">
-            <a href="https://www.linkedin.com/company/amsterdam-emotional-memory-lab/" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <a href="https://www.linkedin.com/in/amsterdam-emotional-memory-lab-83078542a/" target="_blank" rel="noopener" aria-label="LinkedIn">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <rect width="24" height="24" rx="3" fill="currentColor"/>
                 <rect x="3" y="8" width="4" height="13" fill="var(--navy)"/>

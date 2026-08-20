@@ -15,9 +15,12 @@
       return p.page;
     });
 
-    // Count occurrences of each last name to detect conflicts
+    // Count occurrences of each last name across the whole roster (current +
+    // alumni) to detect conflicts — e.g. Eline de Vries (current) vs Olivier
+    // de Vries (alumni) share a surname even though only one of them is linked.
+    var everyone = all.concat(people.alumni || []);
     var lastNameCount = {};
-    all.forEach(function (p) {
+    everyone.forEach(function (p) {
       var ln = p.name.trim().split(/\s+/).pop();
       lastNameCount[ln] = (lastNameCount[ln] || 0) + 1;
     });
@@ -128,19 +131,30 @@
     if (vp) metaBits.push(vp);
     var metaText = metaBits.join(', ');
 
-    var preprintBadge = pub.preprint ? '<span class="pub-item__preprint">Preprint</span>' : '';
-
-    var keyTagsHtml = '';
-    if (Array.isArray(pub.rq) && pub.rq.length) {
-      keyTagsHtml = '<span class="pub-tag pub-tag--key">Key publication</span>'
-        + pub.rq.map(function (slug) { return '<span class="pub-tag pub-tag--rq">' + rqShort(slug) + '</span>'; }).join('');
-    }
-    var contentTagsHtml = (pub.tags && pub.tags.length)
-      ? pub.tags.map(function (t) { return '<span class="pub-tag">' + t + '</span>'; }).join('')
+    var preprintBadge = pub.preprint
+      ? '<span class="pub-mark pub-mark--preprint">Preprint</span>'
       : '';
 
-    var tagsHtml = (keyTagsHtml || contentTagsHtml)
-      ? '<div class="pub-item__tags">' + keyTagsHtml + contentTagsHtml + '</div>'
+    /* One mark, not three chips: "Key publication" and the research
+       question(s) it belongs to share a single red mark. Both halves are
+       their own <span> so the flex `gap` on .pub-mark only ever falls between
+       them — a raw text node next to an element would get spaced too. */
+    var keyMarkHtml = '';
+    if (Array.isArray(pub.rq) && pub.rq.length) {
+      keyMarkHtml = '<span class="pub-mark pub-mark--key">'
+        + '<span>Key publication</span>'
+        + '<span class="pub-mark__rq">' + pub.rq.map(rqShort).join(' · ') + '</span>'
+        + '</span>';
+    }
+
+    /* Free-text topics are not clickable — the filters at the top of the page
+       are the control. So they read as text rather than as chips. */
+    var topicsHtml = (pub.tags && pub.tags.length)
+      ? '<span class="pub-item__topics">' + pub.tags.join(' · ') + '</span>'
+      : '';
+
+    var tagsHtml = (keyMarkHtml || topicsHtml)
+      ? '<div class="pub-item__tags">' + keyMarkHtml + topicsHtml + '</div>'
       : '';
 
     return '<div class="pub-item">'

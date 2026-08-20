@@ -1,0 +1,248 @@
+/* ============================================================
+   In the Media page
+
+   Entries are full-bleed alternating bands rather than cards on a
+   backdrop — the same device the contact panels and the profile-page
+   sections use: white/blush alternation, a huge faint watermark, and the
+   content block pushed toward one edge so the page zigzags as you scroll.
+   ============================================================ */
+
+.page-media .nav {
+  background: rgba(7, 22, 44, 0.62);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+/* ---- Band ------------------------------------------------- */
+.media-entry {
+  position: relative;
+  overflow: hidden;
+  padding: 4rem 0;
+}
+
+/* The white/blush alternation, the zigzag and the watermark year already
+   separate one entry from the next. The 4px red left stripe that also ran down
+   every entry has gone — it was on seven components site-wide, which left it
+   marking nothing in particular. It survives only where it separates a region
+   (the contact address panel, the publication year headers) or identifies a
+   research question (the home and research cards). */
+.media-entry:nth-child(odd)  { background: var(--white); }
+.media-entry:nth-child(even) { background: var(--blush); }
+
+/* ---- Watermark year --------------------------------------
+   Only on the first entry of each year (js/media.js adds the class),
+   so it marks where a new year begins instead of repeating itself. It
+   sits on the opposite edge from the figure. */
+.media-entry__watermark {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: clamp(7rem, 15vw, 12rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.06em;
+  color: var(--navy);
+  opacity: 0.045;
+  pointer-events: none;
+  user-select: none;
+}
+
+.media-entry:nth-child(odd)  .media-entry__watermark { right: -0.5rem; }
+.media-entry:nth-child(even) .media-entry__watermark { left: -0.5rem; opacity: 0.065; }
+
+/* ---- Content block ----------------------------------------
+   Odd: figure left, block pushed toward the left edge.
+   Even: figure right, block pushed toward the right edge. */
+.media-entry__inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1040px;
+  padding: 0 2.5rem;
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  align-items: center;
+  gap: 3rem;
+}
+
+.media-entry:nth-child(odd) .media-entry__inner {
+  margin-left: clamp(1rem, 7vw, 7rem);
+  margin-right: auto;
+}
+
+.media-entry:nth-child(even) .media-entry__inner {
+  grid-template-columns: minmax(0, 1fr) 300px;
+  margin-left: auto;
+  margin-right: clamp(1rem, 7vw, 7rem);
+}
+
+.media-entry:nth-child(even) .media-entry__figure { order: 2; }
+
+/* Reveal — slides in from the side the figure sits on.
+   Gated on `html.js` for the same reason as `.reveal` in style.css: entries
+   may only start hidden if something is running that is going to show them. */
+.js .media-entry__inner {
+  opacity: 0;
+  transform: translateX(-26px);
+  transition: opacity var(--dur-slow) var(--ease-out),
+              transform var(--dur-slow) var(--ease-out);
+}
+.js .media-entry:nth-child(even) .media-entry__inner { transform: translateX(26px); }
+.js .media-entry.is-in .media-entry__inner { opacity: 1; transform: none; }
+
+/* ---- Date + outlet label ----------------------------------
+   One of the three places on the site that keep the all-caps treatment (the
+   nav and the outlet mark below are the others): this is a date-and-source
+   stamp, which is what small caps are actually for. The nine decorative
+   micro-labels that merely imitated it are now sentence case.
+   No leading rule: it repeated identically on every entry down the page,
+   the clearest case of a decorative stub doing no work a real dateline
+   convention (tracked caps + the middle dot already in the string) doesn't
+   already do on its own. */
+.media-entry__label {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 1rem;
+}
+
+/* ---- Title ------------------------------------------------ */
+.media-entry__title {
+  font-size: var(--fs-xl);
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.25;
+  margin-bottom: 0.9rem;
+}
+
+.media-entry__title-link {
+  color: inherit;
+  transition: color var(--transition);
+}
+.media-entry__title-link:hover { color: var(--red); }
+
+.media-entry__title-link svg {
+  width: 13px;
+  height: 13px;
+  margin-left: 0.45em;
+  vertical-align: 3px;
+  opacity: 0.35;
+  transition: opacity var(--transition);
+}
+.media-entry__title-link:hover svg { opacity: 0.85; }
+
+/* ---- Description ------------------------------------------
+   Two link colours carrying two meanings: blue for a lab member's
+   profile (the same treatment as author links on the publications
+   page), red for the outbound link to the item itself. */
+.media-entry__desc {
+  font-size: var(--fs-md);
+  color: var(--blue-dark);
+  line-height: 1.85;
+  max-width: 640px;
+}
+
+.media-person-link {
+  color: var(--blue-mid);
+  border-bottom: 1px solid rgba(70, 114, 162, 0.28);
+  transition: color var(--transition), border-color var(--transition);
+}
+.media-person-link:hover {
+  color: var(--red);
+  border-color: rgba(176, 42, 60, 0.45);
+}
+
+.media-entry__desc a:not(.media-person-link) {
+  color: var(--red);
+  border-bottom: 1px solid rgba(176, 42, 60, 0.40);
+  transition: border-color var(--transition);
+}
+.media-entry__desc a:not(.media-person-link):hover { border-color: var(--red); }
+
+/* ---- Figure — fixed 4:3 box, identical whether it holds a photo or
+   the placeholder tile, so dropping an image into data/media.js later
+   never shifts the layout ----------------------------------------- */
+.media-entry__figure {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--blue-dark);
+  box-shadow: 0 12px 32px -14px rgba(7, 22, 44, 0.55);
+}
+
+.media-entry__figure img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.media-entry__figure--placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  padding: 1rem;
+  text-align: center;
+}
+
+.media-entry__glyph {
+  display: flex;
+  color: var(--blush);
+  opacity: 0.42;
+}
+
+.media-entry__outlet-mark {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  line-height: 1.5;
+  color: rgba(247, 232, 228, 0.72);
+}
+
+/* ---- Empty state ------------------------------------------ */
+.media-empty {
+  background: var(--white);
+  text-align: center;
+  padding: 5rem 1.5rem;
+  color: rgba(7, 22, 44, 0.38);
+  font-size: var(--fs-md);
+}
+
+/* ---- Responsive ------------------------------------------- */
+/* Stacked well before the mobile breakpoint: side by side, the fixed
+   figure column squeezes the description too hard below ~900px. */
+@media (max-width: 900px) {
+  .media-entry { padding: 3rem 0; }
+
+  .media-entry:nth-child(odd) .media-entry__inner,
+  .media-entry:nth-child(even) .media-entry__inner {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    max-width: 620px;
+    margin-left: clamp(1.5rem, 6vw, 4rem);
+    margin-right: auto;
+  }
+
+  /* Figure always above the text once stacked */
+  .media-entry:nth-child(even) .media-entry__figure { order: -1; }
+  .media-entry__figure { aspect-ratio: 16 / 9; }
+
+  .media-entry__watermark { font-size: clamp(5rem, 20vw, 8rem); }
+  .media-entry:nth-child(even) .media-entry__watermark { left: auto; right: -0.5rem; }
+}
+
+@media (max-width: 600px) {
+  .media-entry { padding: 2.25rem 0; }
+  .media-entry:nth-child(odd) .media-entry__inner,
+  .media-entry:nth-child(even) .media-entry__inner {
+    padding: 0 1.25rem;
+    margin-left: 0.5rem;
+  }
+  .media-entry__title { font-size: var(--fs-lg); }
+  .media-entry__watermark { display: none; }
+}

@@ -3,8 +3,42 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/svg+xml" href="images/favicon/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
+  <link rel="manifest" href="images/favicon/site.webmanifest">
   <title>Amsterdam Emotional Memory Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400..700&family=Archivo:wdth,wght@62..125,400..700&display=swap">
   <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Scroll-reveal gate. Sections that animate in start at opacity:0, but only
+       if this script runs and decides they may: the CSS is written as
+       `.js .reveal`, so anything that stops this line from executing leaves
+       the page simply, fully visible. Three failure paths, one switch:
+
+         no JavaScript   — the class is never added
+         broken main.js  — blocked, 404, a throw before the observer is armed:
+                           the timer takes the class back off after 2.5s
+         automation      — a screenshot service, a link-preview crawler,
+                           Lighthouse. These never scroll, so an
+                           IntersectionObserver never fires for anything below
+                           the fold and the page gets captured half empty.
+                           They are handed the page with nothing hidden.
+
+       Inline and in <head> on purpose: it has to settle before first paint,
+       or the content flashes in and back out. -->
+  <script>
+    (function (h) {
+      if (navigator.webdriver) return;
+      h.classList.add('js');
+      var t = setTimeout(function () { h.classList.remove('js'); }, 2500);
+      window.__revealArmed = function () { clearTimeout(t); };
+    })(document.documentElement);
+  </script>
 </head>
 <body>
 
@@ -13,13 +47,19 @@
        ====================================================== -->
   <nav class="nav" role="navigation" aria-label="Main navigation">
     <div class="nav__inner">
-      <a href="index.html" class="nav__brand">Amsterdam Emotional Memory Lab</a>
+      <a href="index.html" class="nav__brand">
+        <span class="nav__brand-badge">
+          <img src="images/logo/aeml-mark.svg" alt="" class="nav__brand-icon">
+        </span>
+        <span class="nav__brand-text">Amsterdam Emotional Memory Lab</span>
+      </a>
 
       <ul class="nav__links" role="list">
         <li><a href="index.html">Home</a></li>
         <li><a href="research.html">Research Questions</a></li>
         <li><a href="people.html">Team</a></li>
         <li><a href="publications.html">Publications</a></li>
+        <li><a href="media.html">In the Media</a></li>
         <li><a href="contact.html">Contact</a></li>
       </ul>
 
@@ -35,6 +75,7 @@
       <a href="research.html" role="menuitem">Research Questions</a>
       <a href="people.html" role="menuitem">People</a>
       <a href="publications.html" role="menuitem">Publications</a>
+      <a href="media.html" role="menuitem">In the Media</a>
       <a href="contact.html" role="menuitem">Contact</a>
     </div>
   </nav>
@@ -56,13 +97,20 @@
        ====================================================== -->
   <section class="hero reveal" id="mission">
     <div class="hero__inner">
-      <p class="hero__label">Our Mission</p>
-      <h2 class="hero__heading">About the Lab</h2>
-      <p class="hero__text">
-        Our mission is to understand how emotional memories (trans)form. 
-        Specifically, we investigate how emotional experiences are stored, how they manifest and drive behaviour, 
-        and how they evolve over time both spontaneously and as the result of therapeutic interventions.
-      </p>
+      <div class="hero__copy">
+        <h2 class="hero__heading">About the Lab</h2>
+        <p class="hero__text">
+          Our mission is to understand how emotional memories (trans)form.
+          Specifically, we investigate how emotional experiences are stored, how they manifest and drive behaviour,
+          and how they evolve over time both spontaneously and as the result of therapeutic interventions.
+        </p>
+      </div>
+
+      <!-- Animated lab logo, mounted by js/logo-reveal/logo-reveal.js. The blush
+           arch behind it is drawn by .hero__mark::before. -->
+      <div class="hero__mark" aria-hidden="true">
+        <div class="hero__mark-stage" id="logo-reveal"></div>
+      </div>
     </div>
   </section>
 
@@ -75,10 +123,14 @@
         <h2 class="research__title">Key Research Questions</h2>
       </div>
 
+      <!-- No "Explore this question" under each card. The whole card is a
+           link, so the label was a second call to action for the same click,
+           and the identical wording three times said nothing about where any
+           one of the three actually went. The arrow it sat beside stays. -->
       <div class="cards-grid">
 
         <!-- Card 1 -->
-        <a href="research.html#manifest" class="card">
+        <a href="research.html#manifest" class="card" style="--i:0">
           <div class="card__icon" aria-hidden="true">
             <!-- diamond with crosshairs: definition / precision -->
             <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -97,7 +149,6 @@
             anxiety, depression, and other disorders.
           </p>
           <div class="card__footer">
-            <span class="card__link">Explore this question</span>
             <svg class="card__arrow" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
               <path d="M4 9h10M9 4l5 5-5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -105,7 +156,7 @@
         </a>
 
         <!-- Card 2 -->
-        <a href="research.html#measure" class="card">
+        <a href="research.html#measure" class="card" style="--i:1">
           <div class="card__icon" aria-hidden="true">
             <!-- concentric circles: ripple / manifestation -->
             <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -120,7 +171,6 @@
             controlled conditions and measure them in all their richness.
           </p>
           <div class="card__footer">
-            <span class="card__link">Explore this question</span>
             <svg class="card__arrow" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
               <path d="M4 9h10M9 4l5 5-5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -128,7 +178,7 @@
         </a>
 
         <!-- Card 3 -->
-        <a href="research.html#change" class="card">
+        <a href="research.html#change" class="card" style="--i:2">
           <div class="card__icon" aria-hidden="true">
             <!-- two offset overlapping squares: transformation / change between states -->
             <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -145,7 +195,6 @@
             reveal about psychological and clinical therapies.
           </p>
           <div class="card__footer">
-            <span class="card__link">Explore this question</span>
             <svg class="card__arrow" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
               <path d="M4 9h10M9 4l5 5-5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -157,7 +206,19 @@
   </section>
 
   <!-- ======================================================
-       LINKEDIN FEED PLACEHOLDER
+       LINKEDIN FEED
+
+       TO SWITCH THE FEED ON: put the embed URL in `data-embed` below and the
+       iframe replaces the empty state automatically. Nothing else to change.
+
+       Get the URL from https://www.linkedin.com/developers/tools/embed — it
+       looks like https://www.linkedin.com/pages/embed/12345678. Note that
+       LinkedIn only issues these for *company* pages; the lab's current URL
+       is a personal-profile (/in/) one, which has no official embed. If the
+       feed matters, the page needs to be a company page.
+
+       While `data-embed` is empty — or if the browser blocks the iframe — the
+       empty state below is what visitors see.
        ====================================================== -->
   <section class="linkedin section reveal" id="news">
     <div class="container">
@@ -165,21 +226,29 @@
         <h2 class="linkedin__title">Latest from the Lab</h2>
       </div>
 
-      <div class="linkedin__feed">
-        <!-- LINKEDIN PAGE PLUGIN: paste the embed code from
-             https://www.linkedin.com/developers/tools/embed
-             directly below this comment. Remove the placeholder
-             paragraph once the embed is in place. -->
-        <svg class="linkedin__icon" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <rect width="40" height="40" rx="6" fill="currentColor"/>
-          <rect x="8" y="15" width="7" height="18" fill="white"/>
-          <circle cx="11.5" cy="10.5" r="3.5" fill="white"/>
-          <path d="M18 15h7v3s2-3 6-3c5 0 7 3 7 8v10h-7V24c0-2-1-3-3-3s-3 1-3 3v9h-7V15z" fill="white"/>
-        </svg>
-        <p>
-          LinkedIn feed will be embedded here &mdash;
-          <a href="#">link to paste embed code</a>.
-        </p>
+      <div class="linkedin-feed"
+           id="linkedin-feed"
+           data-embed=""
+           data-profile="https://www.linkedin.com/in/amsterdam-emotional-memory-lab-83078542a/">
+        <div class="linkedin-feed__empty">
+          <span class="linkedin-feed__mark" aria-hidden="true">
+            <svg width="30" height="30" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="40" height="40" rx="6" fill="currentColor"/>
+              <rect x="8" y="15" width="7" height="18" fill="white"/>
+              <circle cx="11.5" cy="10.5" r="3.5" fill="white"/>
+              <path d="M18 15h7v3s2-3 6-3c5 0 7 3 7 8v10h-7V24c0-2-1-3-3-3s-3 1-3 3v9h-7V15z" fill="white"/>
+            </svg>
+          </span>
+          <p class="linkedin-feed__msg">No posts yet.</p>
+          <a class="linkedin-feed__link"
+             href="https://www.linkedin.com/in/amsterdam-emotional-memory-lab-83078542a/"
+             target="_blank" rel="noopener">
+            Follow the lab on LinkedIn
+            <svg width="15" height="15" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+              <path d="M4 9h10M9 4l5 5-5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
       </div>
     </div>
   </section>
@@ -191,14 +260,19 @@
     <div class="container">
       <div class="footer__inner">
         <div class="footer__left">
-          <p>&copy; <span id="year"></span> Amsterdam Emotional Memory Lab</p>
-          <p>Department of Clinical Psychology &mdash; University of Amsterdam</p>
-          <p>Nieuwe Achtergracht 129-B, 1018 WS Amsterdam, The Netherlands</p>
+          <span class="footer__brand-card">
+            <img src="images/logo/aeml-mark-white.svg" alt="Amsterdam Emotional Memory Lab" class="footer__brand-logo">
+          </span>
+          <div class="footer__left-text">
+            <p>&copy; <span id="year"></span> Amsterdam Emotional Memory Lab</p>
+            <p>Department of Clinical Psychology &mdash; University of Amsterdam</p>
+            <p>Nieuwe Achtergracht 129-B, 1018 WS Amsterdam, The Netherlands</p>
+          </div>
         </div>
         <div class="footer__right">
           <div class="footer__social">
             <!-- LinkedIn -->
-            <a href="https://www.linkedin.com/company/amsterdam-emotional-memory-lab/"
+            <a href="https://www.linkedin.com/in/amsterdam-emotional-memory-lab-83078542a/"
                target="_blank" rel="noopener" aria-label="LinkedIn">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <rect width="24" height="24" rx="3" fill="currentColor"/>
@@ -216,6 +290,56 @@
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
+  <script>
+    /* Swap the empty state for the real feed once an embed URL is configured
+       on the container. The iframe is same-size either way, so turning the
+       feed on never shifts the rest of the page.
+
+       We cannot read inside the iframe to tell whether LinkedIn returned any
+       posts — it is cross-origin — so "no posts yet" is driven by whether an
+       embed is configured at all, not by counting posts. Leave `data-embed`
+       empty until the page actually has something to show. */
+    (function () {
+      var el = document.getElementById('linkedin-feed');
+      if (!el) return;
+      var src = (el.getAttribute('data-embed') || '').trim();
+      if (!src) return;
+
+      var frame = document.createElement('iframe');
+      frame.src = src;
+      frame.className = 'linkedin-feed__frame';
+      frame.title = 'Latest posts from the Amsterdam Emotional Memory Lab on LinkedIn';
+      frame.loading = 'lazy';
+      frame.setAttribute('frameborder', '0');
+      frame.setAttribute('allowfullscreen', '');
+      el.replaceChildren(frame);
+    })();
+  </script>
   <script src="js/main.js"></script>
+  <script type="module">
+    import { mountLogoReveal } from './js/logo-reveal/logo-reveal.js';
+
+    const stage = document.getElementById('logo-reveal');
+    if (stage) {
+      // Hold the reveal until the mission section has scrolled into view, so the
+      // house never rises behind a still-faded-in panel.
+      const start = () => setTimeout(function () {
+        mountLogoReveal(stage, { showName: true, riverTint: '#9EC0D8' });
+      }, 260);
+
+      if ('IntersectionObserver' in window) {
+        const obs = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            obs.disconnect();
+            start();
+          });
+        }, { threshold: 0.25 });
+        obs.observe(stage);
+      } else {
+        start();
+      }
+    }
+  </script>
 </body>
 </html>

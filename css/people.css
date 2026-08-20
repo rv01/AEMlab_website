@@ -2,48 +2,19 @@
    Team page  +  Individual profile pages
    ============================================================ */
 
-.page-people .nav {
-  background: rgba(7, 22, 44, 0.88);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-}
+/* The nav keeps the shared translucent treatment: this page has the same
+   amsterdam2.jpg banner behind it as every other one. */
 
-/* ---- Team intro ------------------------------------------ */
+/* The banner keeps the shared interior-page height — the constellation
+   runs straight out of the bottom of it, and the tag filters sit in a
+   blush strip underneath the canvas rather than above it. */
+
+/* ---- Tag filter strip — below the constellation. The page title now
+   lives in the banner like every other page ----------------------- */
 .team-intro {
   background: var(--blush);
-  padding: 2rem 2rem 2rem;
+  padding: 1.5rem 2rem 1.75rem;
   text-align: center;
-}
-
-.team-intro__label {
-  font-size: var(--fs-xs);
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--red);
-  margin-bottom: 0.65rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.65rem;
-}
-.team-intro__label::before,
-.team-intro__label::after {
-  content: '';
-  display: block;
-  width: 22px;
-  height: 2px;
-  background: var(--red);
-  flex-shrink: 0;
-}
-
-.team-intro__title {
-  font-size: clamp(1.75rem, 3vw, 2.5rem);
-  color: var(--navy);
-  font-weight: 700;
-  letter-spacing: -0.025em;
-  line-height: 1.1;
-  margin-bottom: 1.25rem;
 }
 
 /* ---- Tag filter row --------------------------------------- */
@@ -68,13 +39,15 @@
   gap: 0.35rem;
 }
 
-/* Base section label — used on publications page (light bg) */
+/* Base section label — used on publications page (light bg).
+   Sentence case rather than letterspaced all-caps: at 0.75rem the caps
+   treatment made these read as decoration, and they were two of the nine
+   micro-labels across the site all wearing the same costume. */
 .team-filters__section-label {
-  font-size: var(--fs-xs);
-  font-weight: 700;
-  letter-spacing: 0.10em;
-  text-transform: uppercase;
-  color: rgba(7,22,44,0.38);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  letter-spacing: 0.005em;
+  color: rgba(7,22,44,0.48);
 }
 
 /* Team page: muted dark on blush — same as base, no override needed */
@@ -93,7 +66,7 @@
 
 .research-toggle__chevron {
   display: none;
-  transition: transform 220ms ease;
+  transition: transform var(--dur-base) var(--ease-out);
   color: rgba(7,22,44,0.45);
 }
 
@@ -104,7 +77,59 @@
   gap: 0.45rem;
 }
 
+/* ---- Alumni ------------------------------------------------
+   Deliberately not a card grid — no boxes, no shadows, no photos. The
+   constellation above is where portraits belong; this is a plain directory
+   of names, closer to a table than to another row of tiles. A top border
+   per entry (rather than a bounding box) is what keeps 20+ short entries
+   reading as one organised list instead of a wall of near-identical cards. */
+.team-alumni {
+  background: var(--white);
+  padding: 4rem 0 4.5rem;
+}
+
+/* No leading rule: the red on a section title otherwise set in the same
+   navy/white type is the marker. A stub bar next to a label was doing no
+   work a section already alternating white/blush bands didn't do twice. */
+.team-alumni__heading {
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  letter-spacing: 0;
+  color: var(--red);
+  margin-bottom: 2rem;
+}
+
+.team-alumni__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  column-gap: 2rem;
+  row-gap: 1.5rem;
+}
+
+.team-alumni__entry {
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(7,22,44,0.10);
+}
+
+.team-alumni__name {
+  display: block;
+  font-size: var(--fs-base);
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.4;
+}
+
+.team-alumni__role {
+  display: block;
+  font-size: var(--fs-sm);
+  color: rgba(7,22,44,0.55);
+  line-height: 1.4;
+}
+
 /* ---- Tag buttons ------------------------------------------ */
+/* Pills are for controls. These are buttons, so they keep the shape; the
+   non-interactive chips that used to sit alongside them on the publications
+   page have been demoted to plain text. */
 .tag-btn {
   font-family: var(--font-base);
   font-size: 0.875rem;
@@ -113,10 +138,16 @@
   border-radius: 20px;
   cursor: pointer;
   line-height: 1.5;
-  transition: background 140ms ease, border-color 140ms ease, color 140ms ease, transform 120ms ease;
+  transition: background var(--dur-fast) var(--ease-out),
+              border-color var(--dur-fast) var(--ease-out),
+              color var(--dur-fast) var(--ease-out),
+              transform var(--dur-fast) var(--ease-out);
 }
-.tag-btn:hover  { transform: translateY(-1px); }
-.tag-btn:active { transform: translateY(0); }
+/* Press feedback lives in css/style.css with the rest of the site's controls
+   (a scale dip). `:not(:active)` hands the transform over to it cleanly —
+   people.css loads after style.css, so a bare `:hover` would otherwise win the
+   cascade during a press and the button would never visibly depress. */
+.tag-btn:hover:not(:active) { transform: translateY(-1px); }
 
 /* Default styles — publications page (light background) */
 .tag-btn--position {
@@ -137,24 +168,6 @@
 
 /* Team page uses same tag pill styles as publications — blush bg suits both */
 
-/* ---- Clear button ----------------------------------------- */
-/* Default — publications page (light background) */
-.tag-clear {
-  font-family: var(--font-base);
-  font-size: var(--fs-sm);
-  color: rgba(7,22,44,0.38);
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 3px 4px;
-  display: none;
-  margin-top: 0.15rem;
-}
-.tag-clear.visible { display: inline; }
-.tag-clear:hover   { color: var(--navy); text-decoration: underline; }
-
-/* Team page clear button uses base style — no dark override needed */
-
 /* ---- Constellation canvas --------------------------------- */
 .constellation-canvas {
   width: 100%;
@@ -162,7 +175,10 @@
   position: relative;
   overflow: hidden;
   background: #06121F;
-  box-shadow: inset 0 14px 36px rgba(6,18,31,0.65);
+  /* Recessed at both ends now that the canvas sits between the banner
+     above and the blush filter strip below — hard edges, no gradients. */
+  box-shadow: inset 0 14px 36px rgba(6,18,31,0.65),
+              inset 0 -14px 36px rgba(6,18,31,0.65);
 }
 
 #bg-canvas {
@@ -185,8 +201,19 @@
   cursor: grab;
   touch-action: none;  /* lets pointer events fire on touch without scroll conflict */
   z-index: 2;
-  transition: opacity 350ms ease;
+  opacity: 0;
+  transition: opacity var(--dur-base) var(--ease-out);
   will-change: transform;
+}
+
+/* Staggered fade-in target. A class, not an inline style: an inline
+   `style.opacity` set by JS would sit at the top of the cascade forever and
+   silently defeat `.dimmed` below it, since nothing short of `!important`
+   can then override an inline value. Keeping both states as same-specificity
+   classes lets normal source order decide — `.dimmed` is declared after
+   `.is-visible`, so a filtered-out node dims even once it has faded in. */
+.p-node.is-visible {
+  opacity: 1;
 }
 
 .p-node.dragging {
@@ -206,7 +233,8 @@
   box-shadow:
     0 0 0 2px rgba(247,232,228,0.12),
     0 6px 28px rgba(6,18,31,0.50);
-  transition: transform 220ms ease, box-shadow 220ms ease;
+  transition: transform var(--dur-base) var(--ease-out),
+              box-shadow var(--dur-base) var(--ease-out);
 }
 
 .p-node:not(.dimmed):hover .p-node__img-wrap {
@@ -233,7 +261,7 @@
   background: rgba(6,18,31,0.10);
   border-radius: 50%;
   pointer-events: none;
-  transition: opacity 220ms ease;
+  transition: opacity var(--dur-base) var(--ease-out);
 }
 .p-node:not(.dimmed):hover .p-node__overlay { opacity: 0; }
 
@@ -252,7 +280,7 @@
 .p-node__label-name {
   display: block;
   font-family: var(--font-base);
-  font-size: 0.76rem;
+  font-size: 0.82rem;
   font-weight: 700;
   color: rgba(247,232,228,0.92);
   letter-spacing: 0.005em;
@@ -262,9 +290,9 @@
 .p-node__label-role {
   display: block;
   font-family: var(--font-base);
-  font-size: 0.66rem;
+  font-size: 0.72rem;
   font-weight: 500;
-  color: rgba(247,232,228,0.52);
+  color: rgba(247,232,228,0.64);
   text-shadow: 0 1px 3px rgba(0,0,0,0.8);
 }
 
@@ -307,7 +335,7 @@
 .profile-hero__photo-col {
   display: flex;
   justify-content: center;
-  animation: slideInLeft 0.72s cubic-bezier(0.22, 1, 0.36, 1) both 0.10s;
+  animation: slideInLeft 0.72s var(--ease-out) both 0.10s;
 }
 
 .profile-photo {
@@ -323,17 +351,16 @@
 }
 
 .profile-hero__info {
-  animation: slideInRight 0.72s cubic-bezier(0.22, 1, 0.36, 1) both 0.22s;
+  animation: slideInRight 0.72s var(--ease-out) both 0.22s;
 }
 
 .profile-back {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  font-size: var(--fs-xs);
-  font-weight: 700;
-  letter-spacing: 0.10em;
-  text-transform: uppercase;
+  gap: 0.4rem;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  letter-spacing: 0.005em;
   color: rgba(247,232,228,0.72);
   margin-bottom: 1.25rem;
   transition: color var(--transition);
@@ -354,12 +381,11 @@
   margin-bottom: 0.15rem;
 }
 
-.profile-affiliation {
-  font-size: var(--fs-sm);
-  color: rgba(247,232,228,0.75);
-  font-weight: 500;
-  margin-bottom: 1.75rem;
-}
+/* `.profile-affiliation` lived here and printed "Department of Clinical
+   Psychology — University of Amsterdam" under every name. Everyone in the lab
+   shares that affiliation, and the footer of the same page states it again, so
+   under an individual name it carried no information at all. Removed from all
+   12 profile pages along with this rule. */
 
 .profile-hero__links {
   display: flex;
@@ -386,66 +412,37 @@
 }
 .profile-link svg { flex-shrink: 0; }
 
-/* ---- Profile body ----------------------------------------- */
-.profile-body {
-  /* sections handle their own backgrounds and padding */
-}
 
 .profile-section {
   position: relative;
   overflow: hidden;
   padding: 3rem 0;
   opacity: 0;
-  animation: fadeUp 0.65s ease forwards;
+  animation: fadeUp 0.65s var(--ease-out) forwards;
 }
 
+/* The white/blush alternation is what separates one section from the next.
+   There used to be a 4px red left stripe here as well — the same stripe that
+   ran down media entries, publication rows, the address panel, the year
+   headers and both card types. Seven components sharing one device meant it
+   had stopped marking anything; it now appears only where it separates a
+   region (the address panel, the year headers) or identifies a research
+   question (the two card types). */
 .profile-section:nth-child(odd)  { background: var(--white); }
 .profile-section:nth-child(even) { background: var(--blush); }
 
-/* Full-height red left stripe */
-.profile-section::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-  background: var(--red);
-}
+/* The giant watermark numeral that used to sit here is gone. js/profile.js
+   emits at most two sections ("Research Interests" and "Background"), so a
+   14rem "01" was numbering a list that never reaches 03 — structure implied
+   where there is none. It also left the prose crammed into one half of the
+   page with the numeral alone in the other half.
+   The same motif still runs on media.html, where it marks the start of a year
+   and is therefore counting something real.
 
-/* Large watermark section number */
-.profile-section::after {
-  content: attr(data-num);
-  position: absolute;
-  right: -0.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: clamp(8rem, 18vw, 14rem);
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: -0.06em;
-  color: var(--navy);
-  opacity: 0.045;
-  pointer-events: none;
-  user-select: none;
-}
-
-.profile-section:nth-child(even)::after { opacity: 0.065; }
-
-/* Stagger: odd = number left / text right; even = number right / text left */
-.profile-section:nth-child(odd)::after {
-  right: auto;
-  left: -0.5rem;
-  transform: translateY(-50%);
-}
-
-.profile-section:nth-child(odd) .profile-section__inner {
+   With the numeral gone there is nothing for the copy to sit beside, so it is
+   centred on a comfortable measure instead of being pushed to one edge. */
+.profile-section .profile-section__inner {
   margin-left: auto;
-  margin-right: clamp(2rem, 4vw, 5rem);
-}
-
-.profile-section:nth-child(even) .profile-section__inner {
-  margin-left: clamp(2rem, 4vw, 5rem);
   margin-right: auto;
 }
 
@@ -456,39 +453,104 @@
 
 /* Content container */
 .profile-section__inner {
-  max-width: 720px;
+  max-width: 840px;
   margin: 0 auto;
   padding: 0 2.5rem;
   position: relative;
   z-index: 1;
 }
 
-/* Section heading — label style matching contact page */
+/* Section heading. Sentence case at a readable size — as letterspaced 0.75rem
+   all-caps this was a heading disguised as an eyebrow label. No leading rule:
+   each section already sits on its own white/blush band, so a stub bar next
+   to the heading was a second marker for a boundary the background already
+   draws. The red text against navy body copy carries it alone. */
 .profile-section h2 {
-  font-size: var(--fs-xs);
+  font-size: var(--fs-lg);
   font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  letter-spacing: 0;
   color: var(--red);
   margin-bottom: 1.25rem;
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-}
-
-.profile-section h2::before {
-  content: '';
-  display: block;
-  width: 22px;
-  height: 2px;
-  background: var(--red);
-  flex-shrink: 0;
 }
 
 .profile-section p {
   font-size: var(--fs-md);
   color: var(--blue-dark);
   line-height: 1.88;
+}
+.profile-section p + p { margin-top: 1.25rem; }
+
+.profile-section p a {
+  color: var(--red);
+  border-bottom: 1px solid rgba(176,42,60,0.35);
+  transition: color var(--transition), border-color var(--transition);
+}
+.profile-section p a:hover {
+  color: var(--navy);
+  border-color: rgba(7,22,44,0.45);
+}
+
+/* ---- Publications within the lab ---------------------------
+   The section heading (h2, red rule) matches every other section on this
+   page. What sits under it is deliberately NOT another one of those framed
+   panels — no box, no border, no fill. It's a plain compact list, the same
+   restrained register as `.rq-card__papers` on the research-questions page
+   (small title + one muted meta line per entry, thin rule between rows).
+   This is a secondary reference list, not the point of the page.
+
+   Title and meta are `<div>`s, not `<p>`s, on purpose: `.profile-section p`
+   and `.profile-section p a` above exist for the bio prose, and a `<p>`
+   here would inherit their larger size/line-height and their loud red
+   underlined link treatment — exactly the "too big, too in-your-face"
+   result this replaced. A `<div>` sits outside those selectors entirely,
+   so this list's own (smaller, quieter) rules are the only ones that apply. */
+.profile-papers {
+  margin-top: 0.25rem;
+}
+
+.profile-paper {
+  padding: 0.55rem 0;
+  border-bottom: 1px solid rgba(7,22,44,0.08);
+}
+.profile-paper:last-child {
+  border-bottom: none;
+}
+
+.profile-paper__title {
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.4;
+  margin-bottom: 0.15rem;
+}
+.profile-paper__title-link {
+  color: inherit;
+  transition: color var(--transition);
+}
+.profile-paper__title-link:hover {
+  color: var(--red);
+}
+.profile-paper__title-link svg {
+  width: 10px;
+  height: 10px;
+  margin-left: 0.35em;
+  vertical-align: 1px;
+  opacity: 0.4;
+  transition: opacity var(--transition);
+}
+.profile-paper__title-link:hover svg { opacity: 0.85; }
+
+.profile-paper__meta {
+  font-size: 0.78rem;
+  color: rgba(7,22,44,0.55);
+  line-height: 1.5;
+}
+
+.profile-paper__empty {
+  padding: 0.5rem 0;
+  font-size: var(--fs-sm);
+  color: rgba(7,22,44,0.5);
+  font-style: italic;
 }
 
 /* ---- Keyframes -------------------------------------------- */
@@ -518,16 +580,23 @@
   .profile-hero__links     { justify-content: center; }
 }
 
+@media (max-width: 900px) {
+  .team-alumni__grid { grid-template-columns: repeat(3, 1fr); }
+}
+
 @media (max-width: 767px) {
-  .team-intro  { padding: 1.5rem 1.25rem 1.5rem; }
+  .team-intro  { padding: 1.25rem 1.25rem 1.5rem; }
   .research-toggle { cursor: pointer; }
   .research-toggle__chevron { display: block; }
   #research-tags.collapsed { display: none; }
   .profile-section { padding: 2rem 0; }
   .profile-section__inner { padding: 0 1.25rem; }
-  .profile-section:nth-child(odd) .profile-section__inner,
-  .profile-section:nth-child(even) .profile-section__inner {
-    margin-left: auto;
-    margin-right: auto;
-  }
+  /* The odd/even margin stagger these used to undo is gone — the copy is
+     centred at every width now that there is no watermark to sit beside. */
+  .team-alumni { padding: 3rem 0 3.5rem; }
+  .team-alumni__grid { grid-template-columns: repeat(2, 1fr); column-gap: 1.25rem; row-gap: 1.25rem; }
+}
+
+@media (max-width: 480px) {
+  .team-alumni__grid { grid-template-columns: 1fr; }
 }

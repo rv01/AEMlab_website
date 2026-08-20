@@ -8,19 +8,6 @@
   backdrop-filter: blur(10px);
 }
 
-/* ---- Banner ---------------------------------------------- */
-.pub-banner {
-  height: clamp(180px, 22vw, 280px);
-}
-
-.pub-banner .banner__bg {
-  background-position: center 40%;
-}
-
-.pub-banner__overlay {
-  background: rgba(7, 22, 44, 0.65);
-}
-
 /* ---- Filter bar — blush, red label decoration ------------ */
 .pub-filter-bar {
   background: var(--blush);
@@ -36,27 +23,6 @@
 
 .pub-filter-heading {
   margin-bottom: 1rem;
-}
-
-.pub-filter-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.65rem;
-  font-size: var(--fs-xs);
-  font-weight: 700;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-  color: var(--red);
-  margin-bottom: 0.3rem;
-}
-
-.pub-filter-label::before {
-  content: '';
-  display: block;
-  width: 22px;
-  height: 2px;
-  background: var(--red);
-  flex-shrink: 0;
 }
 
 .pub-filter-hint {
@@ -83,8 +49,8 @@
   border-radius: 6px;
   overflow: hidden;
   box-shadow: 0 2px 12px rgba(7,22,44,0.10), 0 0 0 1px rgba(7,22,44,0.06);
-  animation: yearSettle 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
-  transition: box-shadow 280ms ease;
+  animation: yearSettle 0.55s var(--ease-out) both;
+  transition: box-shadow var(--dur-base) var(--ease-out);
 }
 
 .year-section.is-collapsed {
@@ -109,7 +75,7 @@
   text-align: left;
   font-family: var(--font-base);
   position: relative;
-  transition: background 280ms ease;
+  transition: background var(--dur-base) var(--ease-out);
 }
 
 /* 4px red left accent stripe — matches contact page */
@@ -123,15 +89,19 @@
   background: var(--red);
 }
 
-.year-header:hover,
-.year-section.is-collapsed .year-header {
+/* `:not(:active)` lets the shared press state in css/style.css win while the
+   bar is being pressed — publications.css loads after style.css, so a bare
+   `:hover` would otherwise take the cascade and the header would never
+   visibly depress. */
+.year-header:hover:not(:active),
+.year-section.is-collapsed .year-header:not(:active) {
   background: var(--blue-dark);
 }
 
 /* Year number wrapper — translateX centering animated via JS */
 .year-header__year-wrap {
   flex-shrink: 0;
-  transition: transform 420ms cubic-bezier(0.34, 1.26, 0.64, 1);
+  transition: transform var(--dur-base) var(--ease-spring);
 }
 
 .year-header__year {
@@ -147,7 +117,7 @@
   flex: 1 0 0;
   height: 1px;
   background: rgba(247,232,228,0.15);
-  transition: opacity 260ms ease;
+  transition: opacity var(--dur-base) var(--ease-out);
 }
 
 .year-section.is-collapsed .year-header__bar {
@@ -160,8 +130,8 @@
   height: 18px;
   flex-shrink: 0;
   color: rgba(247,232,228,0.40);
-  transition: transform 360ms cubic-bezier(0.34, 1.26, 0.64, 1),
-              color 200ms ease;
+  transition: transform var(--dur-base) var(--ease-spring),
+              color var(--dur-fast) var(--ease-out);
   display: block;
 }
 
@@ -177,7 +147,7 @@
 .year-body {
   display: grid;
   grid-template-rows: 1fr;
-  transition: grid-template-rows 380ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: grid-template-rows var(--dur-slow) var(--ease-inout);
   background: var(--white);
 }
 
@@ -187,7 +157,7 @@
 
 .year-body__inner {
   overflow: hidden;
-  transition: opacity 300ms ease;
+  transition: opacity var(--dur-base) var(--ease-out);
 }
 
 .year-body.collapsed .year-body__inner {
@@ -201,16 +171,19 @@
 }
 
 .pub-item.pub-enter {
-  animation: pubEnter 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: pubEnter 0.45s var(--ease-out) both;
   animation-delay: var(--pub-delay, 0s);
 }
 
-/* ---- Publication entry ----------------------------------- */
+/* ---- Publication entry -----------------------------------
+   The hover no longer lights a red left border. That stripe was on seven
+   components site-wide, and here it fired on any of ~105 rows the pointer
+   crossed, which made it the busiest instance of the busiest motif. A
+   background shift alone marks the row perfectly well. */
 .pub-item {
   padding: 1.25rem 1.75rem;
   border-bottom: 1px solid rgba(7,22,44,0.06);
-  border-left: 3px solid transparent;
-  transition: background var(--transition), border-left-color var(--transition);
+  transition: background var(--transition);
 }
 
 .pub-item:last-child {
@@ -218,8 +191,7 @@
 }
 
 .pub-item:hover {
-  background: rgba(7,22,44,0.022);
-  border-left-color: rgba(176,42,60,0.30);
+  background: rgba(7,22,44,0.035);
 }
 
 /* ---- Entry text ------------------------------------------ */
@@ -277,47 +249,62 @@
   line-height: 1.5;
 }
 
-.pub-item__preprint {
-  display: inline-block;
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  color: var(--blue-mid);
-  border: 1.5px solid rgba(70,114,162,0.38);
+/* ---- Marks and topics ------------------------------------
+   This row used to carry up to six chips per entry, in three different shapes
+   — a 20px-radius bordered filter pill, a 10px-radius filled tag, and a
+   3px-radius bordered preprint badge — repeated down ~105 rows. That is where
+   most of the site's "too many pills" feeling came from.
+
+   The rule now is: a rounded pill is something you can press (the filters at
+   the top of the page); a small square mark is a static flag; and anything
+   that is neither is plain text. So "Key publication" and its research
+   question collapse into one mark, "Preprint" takes the same mark shape in a
+   different colour, and the free-text topics — which were never clickable —
+   are simply a line of text.
+   ---------------------------------------------------------- */
+.pub-mark {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.015em;
+  line-height: 1.7;
+  padding: 1px 8px;
   border-radius: 3px;
-  padding: 1px 6px;
-  line-height: 1.5;
-  margin-left: 0.5rem;
+  white-space: nowrap;
 }
 
-/* ---- Tags ------------------------------------------------ */
-.pub-item__tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-  margin-top: 0.55rem;
-}
-
-.pub-tag {
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  padding: 2px 9px;
-  border-radius: 10px;
-  background: rgba(28,52,91,0.08);
-  color: var(--blue-dark);
-}
-
-/* "Key publication" + its research-question label — same pill shape
-   as the topic tags, coloured red to match the filter pill above */
-.pub-tag--key {
+.pub-mark--key {
   background: var(--red);
   color: var(--white);
 }
+/* The research question rides inside the same mark instead of trailing it as
+   a second and third chip. */
+.pub-mark__rq {
+  font-weight: 500;
+  opacity: 0.78;
+}
 
-.pub-tag--rq {
-  background: rgba(176,42,60,0.10);
-  color: var(--red);
+.pub-mark--preprint {
+  color: var(--blue-mid);
+  border: 1px solid rgba(70,114,162,0.38);
+  background: rgba(70,114,162,0.05);
+  margin-left: 0.5rem;
+}
+
+.pub-item__tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.3rem 0.7rem;
+  margin-top: 0.5rem;
+}
+
+.pub-item__topics {
+  font-size: var(--fs-sm);
+  color: rgba(7,22,44,0.50);
+  line-height: 1.6;
 }
 
 /* ---- No results ------------------------------------------ */
@@ -333,7 +320,6 @@
 
 /* ---- Responsive ------------------------------------------ */
 @media (max-width: 767px) {
-  .pub-banner { height: clamp(150px, 38vw, 200px); }
   .pub-filter-bar { padding: 1.5rem 1.25rem 1.75rem; }
   .pub-content .container { padding: 0 0.75rem; }
   .pub-content { padding: 1.5rem 0 4rem; }

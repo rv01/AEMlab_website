@@ -59,6 +59,14 @@
       switcher.classList.toggle('has-active', !!found);
     }
 
+    // A pending sequenced expand. Any new interaction cancels it: without
+    // this, clicking a second question while an arrival was still queued
+    // would open that one and then have the stale timer re-open the first.
+    var pending = null;
+    function cancelPending() {
+      if (pending) { clearTimeout(pending); pending = null; }
+    }
+
     // scroll: whether to bring the card into view at all.
     // sequenced: scroll to the header first, then expand once the scroll
     // has had time to land — used when arriving from a link (e.g. a
@@ -69,6 +77,8 @@
       var sequenced = opts && opts.sequenced;
       var card = cards.filter(function (c) { return c.getAttribute('data-rq') === slug; })[0];
       var header = card && card.querySelector('.rq-card__header');
+
+      cancelPending();
 
       if (slug) {
         history.replaceState(null, '', '#' + slug);
@@ -84,7 +94,7 @@
         // Start the expand while the scroll is still finishing (not after
         // it stops) so the two motions blend into one continuous gesture
         // instead of a scroll ... pause ... expand sequence.
-        setTimeout(function () { applyActive(slug); }, 380);
+        pending = setTimeout(function () { pending = null; applyActive(slug); }, 380);
       } else {
         applyActive(slug);
       }

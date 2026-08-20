@@ -48,11 +48,20 @@
     });
   }
 
-  /* ---- Scroll reveal (.reveal → .revealed) --------------- */
+  /* ---- Scroll reveal (.reveal → .revealed) ---------------
+     The head gate in each page hides `.reveal` and starts a 2.5s timer that
+     un-hides it again. Calling __revealArmed() cancels that timer, and is the
+     promise that this function will show the content — so it is only called
+     once there is an observer (or a fallback) actually watching something.
+     With no elements to reveal we stay quiet and let the timer run, which is
+     what lets media.html hand the same gate to js/media.js. */
   function initReveal() {
     var els = document.querySelectorAll('.reveal');
+    if (!els.length) return;
+
     if (!('IntersectionObserver' in window)) {
       els.forEach(function (el) { el.classList.add('revealed'); });
+      if (window.__revealArmed) window.__revealArmed();
       return;
     }
     var obs = new IntersectionObserver(function (entries) {
@@ -64,6 +73,7 @@
       });
     }, { threshold: 0.10 });
     els.forEach(function (el) { obs.observe(el); });
+    if (window.__revealArmed) window.__revealArmed();
   }
 
   /* ---- Boot ---------------------------------------------- */

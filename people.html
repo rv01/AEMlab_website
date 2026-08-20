@@ -3,7 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/svg+xml" href="images/favicon/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
+  <link rel="manifest" href="images/favicon/site.webmanifest">
   <title>Team — Amsterdam Emotional Memory Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400..700&family=Archivo:wdth,wght@62..125,400..700&display=swap">
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/people.css" />
 </head>
@@ -12,12 +21,18 @@
   <!-- NAV -------------------------------------------------- -->
   <nav class="nav" role="navigation" aria-label="Main navigation">
     <div class="nav__inner">
-      <a href="index.html" class="nav__brand">Amsterdam Emotional Memory Lab</a>
+      <a href="index.html" class="nav__brand">
+        <span class="nav__brand-badge">
+          <img src="images/logo/aeml-mark.svg" alt="" class="nav__brand-icon">
+        </span>
+        <span class="nav__brand-text">Amsterdam Emotional Memory Lab</span>
+      </a>
       <ul class="nav__links" role="list">
         <li><a href="index.html">Home</a></li>
         <li><a href="research.html">Research Questions</a></li>
         <li><a href="people.html">Team</a></li>
         <li><a href="publications.html">Publications</a></li>
+        <li><a href="media.html">In the Media</a></li>
         <li><a href="contact.html">Contact</a></li>
       </ul>
       <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-nav">
@@ -29,13 +44,27 @@
       <a href="research.html" role="menuitem">Research Questions</a>
       <a href="people.html" role="menuitem">Team</a>
       <a href="publications.html" role="menuitem">Publications</a>
+      <a href="media.html" role="menuitem">In the Media</a>
       <a href="contact.html" role="menuitem">Contact</a>
     </div>
   </nav>
 
-  <!-- TEAM INTRO — title + tag filters --------------------- -->
+  <!-- BANNER ----------------------------------------------- -->
+  <header class="banner" role="banner">
+    <div class="banner__bg" aria-hidden="true"></div>
+    <div class="banner__overlay" aria-hidden="true"></div>
+    <div class="banner__content">
+      <h1 class="banner__title">Meet our Team</h1>
+    </div>
+  </header>
+
+  <!-- CONSTELLATION CANVAS --------------------------------- -->
+  <div class="constellation-canvas" id="constellation" aria-label="Team constellation">
+    <canvas id="bg-canvas"></canvas>
+  </div>
+
+  <!-- TAG FILTERS — below the constellation ---------------- -->
   <div class="team-intro">
-    <h1 class="team-intro__title">Meet our Team</h1>
     <div class="team-filters">
       <div class="team-filters__groups">
         <div class="team-filters__section">
@@ -49,28 +78,35 @@
           </button>
           <div class="team-filters__group" id="research-tags"></div>
         </div>
-        <button class="tag-clear" id="tag-clear" aria-label="Clear all filters">Clear all</button>
       </div>
     </div>
   </div>
 
-  <!-- CONSTELLATION CANVAS --------------------------------- -->
-  <div class="constellation-canvas" id="constellation" aria-label="Team constellation">
-    <canvas id="bg-canvas"></canvas>
-  </div>
+  <!-- ALUMNI -------------------------------------------------- -->
+  <section class="team-alumni">
+    <div class="container">
+      <h2 class="team-alumni__heading">Alumni</h2>
+      <div class="team-alumni__grid" id="alumni-grid"></div>
+    </div>
+  </section>
 
   <!-- FOOTER ----------------------------------------------- -->
   <footer class="footer" role="contentinfo">
     <div class="container">
       <div class="footer__inner">
         <div class="footer__left">
-          <p>&copy; <span id="year"></span> Amsterdam Emotional Memory Lab</p>
-          <p>Department of Clinical Psychology &mdash; University of Amsterdam</p>
-          <p>Nieuwe Achtergracht 129-B, 1018 WS Amsterdam, The Netherlands</p>
+          <span class="footer__brand-card">
+            <img src="images/logo/aeml-mark-white.svg" alt="Amsterdam Emotional Memory Lab" class="footer__brand-logo">
+          </span>
+          <div class="footer__left-text">
+            <p>&copy; <span id="year"></span> Amsterdam Emotional Memory Lab</p>
+            <p>Department of Clinical Psychology &mdash; University of Amsterdam</p>
+            <p>Nieuwe Achtergracht 129-B, 1018 WS Amsterdam, The Netherlands</p>
+          </div>
         </div>
         <div class="footer__right">
           <div class="footer__social">
-            <a href="https://www.linkedin.com/company/amsterdam-emotional-memory-lab/" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <a href="https://www.linkedin.com/in/amsterdam-emotional-memory-lab-83078542a/" target="_blank" rel="noopener" aria-label="LinkedIn">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <rect width="24" height="24" rx="3" fill="currentColor"/>
                 <rect x="3" y="8" width="4" height="13" fill="var(--navy)"/>
