@@ -693,27 +693,20 @@ p  { font-size: var(--fs-md); }
   color: var(--navy);
 }
 
-/* The two states size themselves rather than sharing one reserved height:
-   they are never on screen together, so there is no layout shift to guard
-   against, and forcing the empty state to the embed's height just leaves a
-   cavernous box with one line in it. */
 .linkedin-feed {
   max-width: 560px;
   margin: 0 auto;
   border: 1px solid rgba(7,22,44,0.14);
   border-radius: var(--radius);
   overflow: hidden;
-  display: flex;
-}
-
-.linkedin-feed__frame {
-  width: 100%;
-  height: 520px;   /* LinkedIn's page plugin renders around this tall */
-  border: none;
   display: block;
+  /* Roughly header + two posts at the widget's typical post height; the rest
+     scrolls instead of growing the section as more posts get published. */
+  max-height: 1750px;
+  overflow-y: auto;
 }
 
-/* ---- Empty state ---- */
+/* ---- Empty state (noscript fallback) ---- */
 .linkedin-feed__empty {
   flex: 1;
   display: flex;
