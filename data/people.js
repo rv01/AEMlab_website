@@ -204,6 +204,19 @@ var people = {
         { label: "LinkedIn", url: "https://www.linkedin.com/in/floris-tijhuis-6101a0189/" },
         { label: "UvA Profile", url: "https://www.uva.nl/profiel/t/i/f.b.tijhuis/f.b.tijhuis.html" }
       ]
+    },
+    {
+      id: "Olivia",
+      name: "Olivia Gadberry",
+      title: "",
+      role: "PhD Candidate",
+      photo: "images/people/Olivia.jpg",
+      photoBio: "images/people/Olivia.jpg",
+      page: "pages/Olivia.html",
+      tags: ["Autobiographical memory", "Clinical interventions", "Theory development", "Psychopathology"],
+      researchInterests: "I am a PhD candidate on a project investigating Imagery Rescripting, a psychological intervention that aims to alleviate the symptoms associated with distressing memories. This work is supervised by Dr. Lotte Stemerding, Dr. Sophie Rameckers, Prof. dr. Merel Kindt, and Prof. dr. Marleen Rijkeboer. I am working on designing and executing studies that aim to identify optimal intervention conditions and specific components of Imagery Rescripting that may contribute to improvements in psychological symptoms. The ultimate goal of this research is to inform how Imagery Rescripting can best be implemented in clinical practice. As someone fascinated by emotional memory as a transdiagnostic factor in mental health, I am very excited to be investigating the working mechanisms of a treatment that is promising for numerous psychological symptom profiles.",
+      background: "I obtained my bachelor's degree in psychology (2023) and research master's degree in clinical and health psychology (cum laude, 2025) at Leiden University. My research internship focused on borderline personality disorder and dissociation; in my master's thesis, I explored the efficacy of CBT through the lens of therapists' interpersonal skills. I transitioned for a brief time to criminology research after graduating and worked as a junior researcher at the Nederlands Studiecentrum Criminaliteit en Rechtshandhaving (NSCR). There, I worked on a statistically focused project, in which I investigated the use of Multiple Systems Estimation to uncover a more accurate annual number of victims of violent crime in the Netherlands. I found my way back to Clinical Psychology by starting my PhD at the University of Amsterdam in the Fall of 2026.",
+      links: []
     }
   ],
 
