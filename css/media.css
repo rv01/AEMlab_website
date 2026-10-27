@@ -160,6 +160,7 @@
   transition: color var(--transition);
 }
 .media-entry__title-link:hover { color: var(--red); }
+.media-entry__title-end { white-space: nowrap; }
 
 .media-entry__title-link svg {
   width: 13px;

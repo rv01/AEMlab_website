@@ -144,11 +144,19 @@
       + '</div>';
   }
 
+  /* The icon travels with the title's last word (no-wrap), so it can never
+     wrap onto a line of its own or hop lines between languages. */
+  function withIcon(title) {
+    var i = title.lastIndexOf(' ');
+    return esc(title.slice(0, i + 1))
+      + '<span class="media-entry__title-end">' + esc(title.slice(i + 1)) + ICON_LINK + '</span>';
+  }
+
   function renderEntry(item, isYearStart) {
     var t = text(item);
     var titleHtml = item.url
       ? '<a href="' + esc(item.url) + '" target="_blank" rel="noopener" class="media-entry__title-link">'
-        + esc(t.title) + ICON_LINK + '</a>'
+        + withIcon(t.title) + '</a>'
       : esc(t.title);
 
     var watermark = isYearStart
