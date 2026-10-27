@@ -13,6 +13,45 @@
   backdrop-filter: blur(10px);
 }
 
+/* ---- Language switch ---------------------------------------
+   A pill pair (pill = a control you can press) in the banner's lower-right
+   corner. One face, one size; only the fill says which language is on. */
+.lang-switch {
+  position: absolute;
+  z-index: 3;
+  right: clamp(1.25rem, 4vw, 2.5rem);
+  bottom: 1.1rem;
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 999px;
+  background: rgba(7, 22, 44, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+.lang-switch__btn {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.85);
+  font: 500 var(--fs-sm)/1 var(--font-base);
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+}
+.lang-switch__btn:not([aria-pressed="true"]):hover { color: var(--white); background: rgba(255, 255, 255, 0.14); }
+.lang-switch__btn:active { transform: scale(0.94); }
+.lang-switch__btn[aria-pressed="true"] { background: var(--blush); color: var(--navy); font-weight: 600; cursor: default; }
+.lang-switch { --focus-ring: var(--blush); }
+
+/* Below ~600px the title fills the banner's width, so the switch drops under
+   it (centred) instead of sharing its row; the banner grows to make room. */
+@media (max-width: 600px) {
+  .page-media .banner { height: 200px; padding-bottom: 3.25rem; }
+  .lang-switch { right: auto; left: 50%; transform: translateX(-50%); bottom: 1rem; }
+}
+
 /* ---- Band ------------------------------------------------- */
 .media-entry {
   position: relative;

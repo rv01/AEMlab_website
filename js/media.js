@@ -23,8 +23,27 @@
       + '<circle cx="24" cy="31" r="5" stroke="currentColor" stroke-width="2"/></svg>'
   };
 
-  const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
-                  'July', 'August', 'September', 'October', 'November', 'December'];
+  /* The page is Dutch by default; the switch under the banner flips it to
+     English. The choice is remembered, and ?lang=en / ?lang=nl overrides it so
+     a link can point at either version. Site chrome (nav, footer) stays as it is. */
+  var UI = {
+    nl: {
+      title: 'In de media',
+      docTitle: 'In de media — Amsterdam Emotional Memory Lab',
+      empty: 'Hier staat nog niets — kom binnenkort terug.',
+      months: ['januari', 'februari', 'maart', 'april', 'mei', 'juni',
+               'juli', 'augustus', 'september', 'oktober', 'november', 'december']
+    },
+    en: {
+      title: 'In the Media',
+      docTitle: 'In the Media — Amsterdam Emotional Memory Lab',
+      empty: 'Nothing here yet — check back soon.',
+      months: ['January', 'February', 'March', 'April', 'May', 'June',
+               'July', 'August', 'September', 'October', 'November', 'December']
+    }
+  };
+  var STORE_KEY = 'aeml-media-lang';
+  var lang = 'nl';
 
   /* ---- Helpers ------------------------------------------ */
   function esc(s) {
@@ -39,16 +58,27 @@
     return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
-  /* "2025-12-04" -> "4 December 2025". Parsed by hand rather than via
+  /* "2025-12-04" -> "4 december 2025" / "4 December 2025". Parsed by hand rather than via
      Date() so the day never shifts with the viewer's timezone. */
   function formatDate(iso) {
     var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || '');
     if (!m) return esc(iso);
-    return Number(m[3]) + ' ' + MONTHS[Number(m[2]) - 1] + ' ' + m[1];
+    return Number(m[3]) + ' ' + UI[lang].months[Number(m[2]) - 1] + ' ' + m[1];
   }
 
   function yearOf(iso) {
     return (iso || '').slice(0, 4);
+  }
+
+  /* Text for the current language, falling back to the other one. */
+  function text(item) {
+    var other = lang === 'nl' ? 'en' : 'nl';
+    var a = item[lang] || {}, b = item[other] || {};
+    return {
+      title: a.title || b.title || '',
+      description: a.description || b.description || '',
+      imageAlt: a.imageAlt || b.imageAlt || ''
+    };
   }
 
   function byDateDesc(a, b) {
@@ -100,10 +130,10 @@
   }
 
   /* ---- Rendering ---------------------------------------- */
-  function renderFigure(item) {
+  function renderFigure(item, t) {
     if (item.image) {
       return '<div class="media-entry__figure">'
-        + '<img src="' + esc(item.image) + '" alt="' + esc(item.imageAlt || '') + '">'
+        + '<img src="' + esc(item.image) + '" alt="' + esc(t.imageAlt) + '">'
         + '</div>';
     }
     /* No photo yet — a tile of the same proportions, so adding an
@@ -115,10 +145,11 @@
   }
 
   function renderEntry(item, isYearStart) {
+    var t = text(item);
     var titleHtml = item.url
       ? '<a href="' + esc(item.url) + '" target="_blank" rel="noopener" class="media-entry__title-link">'
-        + esc(item.title) + ICON_LINK + '</a>'
-      : esc(item.title);
+        + esc(t.title) + ICON_LINK + '</a>'
+      : esc(t.title);
 
     var watermark = isYearStart
       ? '<span class="media-entry__watermark" aria-hidden="true">' + yearOf(item.date) + '</span>'
@@ -127,12 +158,12 @@
     return '<section class="media-entry' + (isYearStart ? ' media-entry--year-start' : '') + '">'
       + watermark
       + '<div class="media-entry__inner">'
-      + renderFigure(item)
+      + renderFigure(item, t)
       + '<div class="media-entry__body">'
       + '<p class="media-entry__label"><span>' + formatDate(item.date)
       + ' &middot; ' + esc(item.outlet) + '</span></p>'
       + '<h2 class="media-entry__title">' + titleHtml + '</h2>'
-      + '<p class="media-entry__desc">' + linkPeople(item.description) + '</p>'
+      + '<p class="media-entry__desc">' + linkPeople(t.description) + '</p>'
       + '</div>'
       + '</div>'
       + '</section>';
@@ -141,9 +172,16 @@
   /* ---- Reveal on scroll ---------------------------------
      Entries are built after main.js has already collected its .reveal
      elements, so this page runs its own observer over the bands. */
-  function initReveal(list) {
+  function initReveal(list, instant) {
     var entries = list.querySelectorAll('.media-entry');
     if (!entries.length) return;
+
+    /* Switching language re-renders in place: the reader has already seen
+       these bands, so they appear at once rather than sliding in again. */
+    if (instant) {
+      entries.forEach(function (el) { el.classList.add('is-in'); });
+      return;
+    }
 
     if (!('IntersectionObserver' in window)) {
       entries.forEach(function (el) { el.classList.add('is-in'); });
@@ -164,14 +202,14 @@
     if (window.__revealArmed) window.__revealArmed();
   }
 
-  function render() {
+  function render(instant) {
     var list = document.getElementById('media-list');
     if (!list) return;
 
     var items = (typeof mediaItems === 'undefined' ? [] : mediaItems.slice()).sort(byDateDesc);
 
     if (!items.length) {
-      list.innerHTML = '<p class="media-empty">Nothing here yet — check back soon.</p>';
+      list.innerHTML = '<p class="media-empty">' + UI[lang].empty + '</p>';
       return;
     }
 
@@ -185,9 +223,46 @@
       return renderEntry(item, isYearStart);
     }).join('');
 
-    initReveal(list);
+    initReveal(list, instant);
+  }
+
+  /* ---- Language switch ---------------------------------- */
+  function readLang() {
+    var q = /[?&]lang=(nl|en)\b/.exec(location.search);
+    if (q) return q[1];
+    try {
+      var saved = localStorage.getItem(STORE_KEY);
+      if (saved === 'nl' || saved === 'en') return saved;
+    } catch (e) { /* storage blocked — fine, stay on the default */ }
+    return 'nl';
+  }
+
+  function applyLang(next, instant) {
+    lang = next;
+    document.documentElement.lang = lang;
+    document.title = UI[lang].docTitle;
+    var h1 = document.getElementById('media-title');
+    if (h1) h1.textContent = UI[lang].title;
+    document.querySelectorAll('.lang-switch__btn').forEach(function (b) {
+      b.setAttribute('aria-pressed', b.getAttribute('data-lang') === lang ? 'true' : 'false');
+    });
+    render(instant);
+  }
+
+  function initSwitch() {
+    document.querySelectorAll('.lang-switch__btn').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var next = b.getAttribute('data-lang');
+        if (next === lang) return;
+        try { localStorage.setItem(STORE_KEY, next); } catch (e) { /* ignore */ }
+        applyLang(next, true);
+      });
+    });
   }
 
   /* ---- Boot --------------------------------------------- */
-  document.addEventListener('DOMContentLoaded', render);
+  document.addEventListener('DOMContentLoaded', function () {
+    initSwitch();
+    applyLang(readLang(), false);
+  });
 })();
