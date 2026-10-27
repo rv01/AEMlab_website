@@ -30,14 +30,14 @@
 
 const mediaItems = [
   {
-    date: "2026-07-01",
+    date: "2026-10-03",
     type: "event",
     outlet: "Weekend van de Wetenschap",
     title: "The lab at Weekend van de Wetenschap",
-    description: "On 3 October 2026 the Amsterdam Emotional Memory Lab takes part in Weekend van de Wetenschap, the national science weekend. Visitors get to see the range of ways we study emotional memory, from an experiment on smell and memory to a live demonstration of fear conditioning and how you actually measure it. More about the event <a href=\"https://weekendvandewetenschap.nl/\" target=\"_blank\" rel=\"noopener\">here</a>.",
-    url: "https://weekendvandewetenschap.nl/",
-    image: "images/media/weekend_wetenschap.png",
-    imageAlt: "Logo of Weekend van de Wetenschap, the national science weekend."
+    description: "On 3 October 2026 the Amsterdam Emotional Memory Lab took part in Weekend van de Wetenschap, the national science weekend. Children took on an experimenter role and administered electric shocks to their parents to see how fear conditioning works. Parents and children both tried to guess mystery smells while learning how powerfully smell connects to our emotional memory. All in all, a fun and educational day for all! More about the event <a href=\"https://lnkd.in/p/dY4DN6Ac\" target=\"_blank\" rel=\"noopener\">here</a>.",
+    url: "https://lnkd.in/p/dY4DN6Ac",
+    image: "images/media/weekend_wetenschap.jpg",
+    imageAlt: "Six members of the lab in matching white T-shirts posing together at the Weekend van de Wetenschap stand."
   },
   {
     date: "2026-06-12",
